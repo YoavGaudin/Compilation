@@ -7,7 +7,12 @@ void printPreservedWord();
 %option yylineno noyywrap
 %option   outfile="flex_example1.c" header-file="flex_example1.h"
 
-PRESERVED_WORD     ([{PRIMITIVE_TYPE} | {SEQUENSER} | {TYPE_CONSTRUCTOR} | {LOOP}])
+PRIMITIVE_TYPE     (int|char|float|double)
+SEQUENSER          (return|goto|continue|break)
+TYPE_CONSTRUCTOR   (struct)
+LOOP               (for|while|do)
+PRESERVED_WORD     ({PRIMITIVE_TYPE}|{SEQUENSER}|{TYPE_CONSTRUCTOR}|{LOOP})
+
 DIGIT              ([0-9])
 CHAR               ([a-zA-Z])
 whitespace         ([\t\n ])
@@ -17,10 +22,6 @@ ID                 ({CHAR}({CHAR}*{DIGIT}*)*)
 SIGNES             ([\~\!\@\#\$\%\^\&\*\(\)\_\+])
 ANY                ({DIGIT}*{CHAR}*{whitespace}*{SIGNES}*)
 STRING             (\"{ANY}*\")
-PRIMITIVE_TYPE     ([int] | [char] | [float] | [double])
-SEQUENSER          ([return | goto | continue | break])
-TYPE_CONSTRUCTOR   ([struct])
-LOOP               ([for | while | do])
 
 %%
 {PRESERVED_WORD}            printPreservedWord();
