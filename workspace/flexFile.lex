@@ -27,7 +27,10 @@ NUM                ({INT}|{REAL})
 WORD               ({CHAR}+)
 ID                 ({CHAR}({CHAR}*{DIGIT}*)*)
 SIGNE              ([\~\!\@\#\$\^\&\(\)\_\?])
-OPERATOR           ([\+\-\*\/\%\=])
+REG_OPERATOR       ([\+\-\*\/\%\=])
+ASSIGN_OPERATOR    (=|\+=|\-=|\*=|\/=)
+COMP_OPERATOR      (<|>|<=|>=|==|!=)
+OPERATOR           ({REG_OPERATOR}|{COMP_OPERATOR}|{ASSIGN_OPERATOR})
 BRACKET            ([\(\)\{\}\[\]])
 END_OF_COMMAND     (\;)
 END_OF_LINE        (\n)
@@ -71,10 +74,14 @@ void printOperator(void)
     opName = "divop";
   if(strcmp(yytext, "-") == 0)
     opName = "subop";
-  if(strcmp(yytext, "=") == 0)
-    opName = "assign";
   if(strcmp(yytext, "%") == 0)
     opName = "modop";
+  if(strcmp(yytext, "=") == 0 || strcmp(yytext, "+=") == 0 || strcmp(yytext, "-=") == 0
+     || strcmp(yytext, "*=") == 0 || strcmp(yytext, "/=") == 0)
+    opName = "assign";
+  if(strcmp(yytext, "<") == 0 || strcmp(yytext, ">") == 0 || strcmp(yytext, "<=") == 0
+     || strcmp(yytext, ">=") == 0 || strcmp(yytext, "==") == 0 || strcmp(yytext, "!=") == 0)
+    opName = "relop";  
   printf("<%s,%s>", opName, yytext);
 }
 
