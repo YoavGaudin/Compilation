@@ -13,9 +13,9 @@ PRIMITIVE_TYPE     (integer|char|real)
 SEQUENSER          (return|goto|continue|break)
 TYPE_CONSTRUCTOR   (defstruct)
 LOOP               (for|while|do)
-CONDITIONAL        (if|else|switch|case|default)
+CONDITIONAL        (if|then|else|switch|case|default)
 FUNCTION           (main|write|read)
-RESERVED_WORD     ({PRIMITIVE_TYPE}|{SEQUENSER}|{TYPE_CONSTRUCTOR}|{LOOP}|{FUNCTION}|{CONDITIONAL}|var)
+RESERVED_WORD      ({PRIMITIVE_TYPE}|{SEQUENSER}|{TYPE_CONSTRUCTOR}|{LOOP}|{FUNCTION}|{CONDITIONAL}|var)
 
 DIGIT              ([0-9])
 CHAR               ([a-zA-Z])
@@ -31,12 +31,12 @@ OPERATOR           ([\+\-\*\/\%\=])
 BRACKET            ([\(\)\{\}\[\]])
 END_OF_COMMAND     (\;)
 END_OF_LINE        (\n)
-UNCHANGABLE        ({BRACKET}|{END_OF_LINE}|{END_OF_COMMAND}|{whitespace}|\:|\,|\.)
-ANY                ({DIGIT}*{CHAR}*{whitespace}*{SIGNE}*{OPERATOR}*{BRACKET}*{END_OF_COMMAND}*)
+UNCHANGABLE        ({BRACKET}|{END_OF_LINE}|{END_OF_COMMAND}|{whitespace}|\:|\,|\.\\)
+ANY                ({DIGIT}*{CHAR}*{whitespace}*{SIGNE}*{OPERATOR}*{BRACKET}*{END_OF_COMMAND}*{UNCHANGABLE}*)
 STRING             (\"{ANY}*\")
 
 %%
-{RESERVED_WORD}            printPreservedWord();
+{RESERVED_WORD}             printPreservedWord();
 {NUM}                       showToken("num");
 {ID}                        showToken("id");
 {STRING}                    showToken("str");

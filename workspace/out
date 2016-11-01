@@ -16,6 +16,6 @@
 <id,n>lex fails to recognize this (")!
 );
 	<write>(<id,a>);
-	<if> <id,b><assign,=><assign,=><num,1> <id,then> <write>(<id,a>);
+	<if> <id,b><assign,=><assign,=><num,1> <then> <write>(<id,a>);
 	<id,c>[<id,re2>] <assign,=> <num,1.02>;
 }
