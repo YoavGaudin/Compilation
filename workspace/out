@@ -1,0 +1,21 @@
+<divop,/><divop,/> <id,This> <id,is> <id,an> <id,example>
+<defstruct> { <divop,/><divop,/> <id,Define> <id,a> <id,compound> <id,type>
+    <id,i1>: <integer>;
+    <id,re1>,<id,re2>: <real>;
+} <id,SomeStruct>;
+
+<main>
+<var>
+	<id,a>,<id,b>:<integer>;
+	<id,c>: <id,SomeStruct>;
+{
+	<id,a> <assign,=> <num,2>;
+	<id,b> <assign,=><id,a><addop,+><num,5>;
+	<write>(lex fails to recognize this (")!
+<id,This> <id,is> <id,a>:lex fails to recognize this (\)!
+<id,n>lex fails to recognize this (")!
+);
+	<write>(<id,a>);
+	<if> <id,b><assign,=><assign,=><num,1> <id,then> <write>(<id,a>);
+	<id,c>[<id,re2>] <assign,=> <num,1.02>;
+}
