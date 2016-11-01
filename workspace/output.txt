@@ -1,11 +1,43 @@
-name=number lexeme=12 len(lexeme)=2
-name=email address lexeme=email@foo.com len(lexeme)=13
-name=number lexeme=11 len(lexeme)=2
-name=single-digit lexeme=1 len(lexeme)=1
-name=number lexeme=17 len(lexeme)=2
-name=word lexeme=someone len(lexeme)=7
+<num,12>
+<num,344>
+<id,d>
+<id,f>
+<id,g>
+lex fails to recognize this (")!
+<id,a>
+<id,l>
+<id,e>
+<id,x>
+lex fails to recognize this (")!
+<id,e>
+<id,m>
+<id,a>
+<id,i>
+<id,l>
 lex fails to recognize this (@)!
-name=word lexeme=goo len(lexeme)=3
+<id,f>
+<id,o>
+<id,o>
 lex fails to recognize this (.)!
-name=word lexeme=net len(lexeme)=3
-name=number lexeme=99 len(lexeme)=2
+<id,c>
+<id,o>
+<id,m>
+<num,11>
+<num,1>
+<num,17>
+<id,s>
+<id,o>
+<id,m>
+<id,e>
+<id,o>
+<id,n>
+<id,e>
+lex fails to recognize this (@)!
+<id,g>
+<id,o>
+<id,o>
+lex fails to recognize this (.)!
+<id,n>
+<id,e>
+<id,t>
+<num,99>
