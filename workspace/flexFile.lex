@@ -12,7 +12,9 @@ whitespace  ([\t\n ])
 NUM         ({DIGIT}+)
 WORD        ({CHAR}+)
 ID          ({CHAR}[{CHAR}{NUM}]*)
-STRING      (\"[{NUM}{DIGIT}{whitespace}]+\")
+SIGNES      ([\!\@\#\$\%\^\&\*\(\)\_\+])
+ANY         ({DIGIT}*{CHAR}*{whitespace}*{SIGNES}*)
+STRING      (\"{ANY}*\")
 
 %%
 {NUM}                       showToken("num");
