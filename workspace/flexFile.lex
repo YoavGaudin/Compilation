@@ -10,8 +10,9 @@ DIGIT       ([0-9])
 CHAR        ([a-zA-Z])
 whitespace  ([\t\n ])
 NUM         ({DIGIT}+)
+WORD        ({CHAR}+)
 ID          ({CHAR}[{CHAR}{NUM}]*)
-STRING      ()
+STRING      (\"[{NUM}{DIGIT}{whitespace}]+\")
 
 %%
 {NUM}                       showToken("num");
