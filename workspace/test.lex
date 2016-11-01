@@ -1,7 +1,6 @@
 %{
 #include <stdio.h>
 void showToken(char *);
-void printPreservedWord();
 %}
 
 %option yylineno noyywrap
@@ -12,33 +11,24 @@ CHAR               ([a-zA-Z])
 whitespace         ([\t\n ])
 NUM                ({DIGIT}+)
 WORD               ({CHAR}+)
-ID                 ({CHAR}[{CHAR} | {NUM}]*)
+ID                 ({CHAR}[{CHAR}{NUM}]*)
 SIGNES             ([\~\!\@\#\$\%\^\&\*\(\)\_\+])
 ANY                ({DIGIT}*{CHAR}*{whitespace}*{SIGNES}*)
 STRING             (\"{ANY}*\")
 PRIMITIVE_TYPE     ([int | char | float | double])
-SEQUENSER          ([return | goto | continue | break])
-TYPE_CONSTRUCTOR   ([struct])
-LOOP               ([for | while | do])
-PRESERVED_WORD     ([{PRIMITIVE_TYPE} | {SEQUENSER} | {TYPE_CONSTRUCTOR} | {LOOP}])
+SEQUENSER          (return | goto | continue | break)
+TYPE_CONSTRUCTOR   (struct)
+LOOP               (for | while | do)
+PRESERVED_WORD     ({PRIMITIVE_TYPE} | {SEQUENSER} | {TYPE_CONSTRUCTOR} | {LOOP})
 
 %%
-{NUM}                       showToken("num");
-{ID}                        showToken("id");
-{STRING}                    showToken("str");
-{PRESERVED_WORD}            printPreservedWord();
+{PRIMITIVE_TYPE}                       showToken("num");
 {whitespace}                ;
 .                           printf("lex fails to recognize this (%s)!\n", yytext);
 %%
 
 void showToken(char *name)
 {
-    printf("<%s,%s>\n", name, yytext);
-}
-
-void printPreservedWord(void)
-{
     printf("<%s>\n", yytext);
 }
-
 

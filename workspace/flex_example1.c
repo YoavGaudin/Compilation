@@ -398,8 +398,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 6
-#define YY_END_OF_BUFFER 7
+#define YY_NUM_RULES 7
+#define YY_END_OF_BUFFER 8
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -407,10 +407,10 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static yyconst flex_int16_t yy_accept[18] =
+static yyconst flex_int16_t yy_accept[21] =
     {   0,
-        0,    0,    7,    5,    4,    4,    5,    1,    2,    0,
-        0,    3,    0,    0,    1,    2,    0
+        0,    0,    8,    6,    5,    5,    4,    6,    1,    2,
+        2,    4,    0,    0,    3,    0,    0,    1,    2,    0
     } ;
 
 static yyconst YY_CHAR yy_ec[256] =
@@ -418,17 +418,17 @@ static yyconst YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    2,    4,    5,    4,    4,    4,    4,    1,    4,
-        4,    4,    4,    1,    1,    1,    1,    6,    6,    6,
-        6,    6,    6,    6,    6,    6,    6,    1,    1,    1,
-        1,    1,    1,    4,    7,    8,    7,    8,    8,    8,
-        8,    7,    8,    8,    8,    8,    7,    7,    8,    8,
-        8,    7,    8,    8,    7,    8,    8,    8,    8,    8,
-        1,    1,    1,    4,    4,    1,    8,    8,    8,    8,
+        1,    4,    5,    6,    5,    5,    5,    5,    1,    5,
+        5,    5,    5,    1,    1,    1,    1,    7,    7,    7,
+        7,    7,    7,    7,    7,    7,    7,    1,    1,    1,
+        1,    1,    1,    5,    8,    9,   10,    9,   11,    9,
+        9,    8,   11,    9,    9,   11,   10,   10,   11,   11,
+       11,   10,   11,   11,   10,   11,    9,    9,   11,    9,
+        1,    1,    1,    5,   12,    1,    9,    9,    9,    9,
 
-        8,    8,    8,    8,    8,    8,    8,    8,    8,    8,
-        8,    8,    8,    8,    8,    8,    8,    8,    8,    8,
-        8,    8,    9,    1,    9,    1,    1,    1,    1,    1,
+        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
+        9,    9,   13,   13,   13,    5,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -445,41 +445,48 @@ static yyconst YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static yyconst YY_CHAR yy_meta[10] =
+static yyconst YY_CHAR yy_meta[14] =
     {   0,
-        1,    1,    1,    1,    1,    1,    2,    1,    2
+        1,    1,    1,    2,    1,    1,    1,    2,    1,    2,
+        1,    1,    2
     } ;
 
-static yyconst flex_uint16_t yy_base[19] =
+static yyconst flex_uint16_t yy_base[22] =
     {   0,
-        0,    0,   20,   21,   21,   21,    8,   13,    0,    0,
-        0,   21,    0,    0,   12,    0,   21,   15
+        0,    0,   28,   29,   29,   29,   29,   12,   20,    0,
+        0,   29,    0,    0,   29,    0,    0,   19,    0,   29,
+       23
     } ;
 
-static yyconst flex_int16_t yy_def[19] =
+static yyconst flex_int16_t yy_def[22] =
     {   0,
-       17,    1,   17,   17,   17,   17,   17,   17,   18,    7,
-        7,   17,    7,    7,   17,   18,    0,   17
+       20,    1,   20,   20,   20,   20,   20,   20,   20,   21,
+       21,   20,    8,    8,   20,    8,    8,   20,   21,    0,
+       20
     } ;
 
-static yyconst flex_uint16_t yy_nxt[31] =
+static yyconst flex_uint16_t yy_nxt[43] =
     {   0,
-        4,    5,    6,    4,    7,    8,    9,    9,    4,   10,
-       10,   11,   12,   13,   14,   14,   16,   15,   15,   17,
-        3,   17,   17,   17,   17,   17,   17,   17,   17,   17
+        4,    5,    6,    7,    4,    8,    9,   10,   10,   11,
+       11,   12,   12,   13,   13,   13,   14,   15,   16,   17,
+       17,   17,   17,   14,   19,   18,   18,   20,    3,   20,
+       20,   20,   20,   20,   20,   20,   20,   20,   20,   20,
+       20,   20
     } ;
 
-static yyconst flex_int16_t yy_chk[31] =
+static yyconst flex_int16_t yy_chk[43] =
     {   0,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    7,
-        7,    7,    7,    7,    7,    7,   18,   15,    8,    3,
-       17,   17,   17,   17,   17,   17,   17,   17,   17,   17
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    8,    8,    8,    8,    8,    8,    8,
+        8,    8,    8,    8,   21,   18,    9,    3,   20,   20,
+       20,   20,   20,   20,   20,   20,   20,   20,   20,   20,
+       20,   20
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static yyconst flex_int32_t yy_rule_can_match_eol[7] =
+static yyconst flex_int32_t yy_rule_can_match_eol[8] =
     {   0,
-0, 0, 1, 1, 0, 0,     };
+0, 0, 1, 0, 1, 0, 0,     };
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
@@ -499,7 +506,8 @@ char *yytext;
 #line 2 "flexFile.lex"
 #include <stdio.h>
 void showToken(char *);
-#line 503 "flex_example1.c"
+void printPreservedWord();
+#line 511 "flex_example1.c"
 
 #define INITIAL 0
 
@@ -717,9 +725,9 @@ YY_DECL
 		}
 
 	{
-#line 19 "flexFile.lex"
+#line 25 "flexFile.lex"
 
-#line 723 "flex_example1.c"
+#line 731 "flex_example1.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -746,13 +754,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 18 )
+				if ( yy_current_state >= 21 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 21 );
+		while ( yy_base[yy_current_state] != 29 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -788,37 +796,42 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 20 "flexFile.lex"
+#line 26 "flexFile.lex"
 showToken("num");
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 21 "flexFile.lex"
+#line 27 "flexFile.lex"
 showToken("id");
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 22 "flexFile.lex"
+#line 28 "flexFile.lex"
 showToken("str");
 	YY_BREAK
 case 4:
-/* rule 4 can match eol */
 YY_RULE_SETUP
-#line 23 "flexFile.lex"
-;
+#line 29 "flexFile.lex"
+printPreservedWord();
 	YY_BREAK
 case 5:
+/* rule 5 can match eol */
 YY_RULE_SETUP
-#line 24 "flexFile.lex"
-printf("lex fails to recognize this (%s)!\n", yytext);
+#line 30 "flexFile.lex"
+;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 25 "flexFile.lex"
+#line 31 "flexFile.lex"
+printf("lex fails to recognize this (%s)!\n", yytext);
+	YY_BREAK
+case 7:
+YY_RULE_SETUP
+#line 32 "flexFile.lex"
 ECHO;
 	YY_BREAK
-#line 822 "flex_example1.c"
+#line 835 "flex_example1.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1111,7 +1124,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 18 )
+			if ( yy_current_state >= 21 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1139,11 +1152,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 18 )
+		if ( yy_current_state >= 21 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 17);
+	yy_is_jam = (yy_current_state == 20);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1831,7 +1844,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 25 "flexFile.lex"
+#line 32 "flexFile.lex"
 
 
 
@@ -1839,5 +1852,11 @@ void showToken(char *name)
 {
     printf("<%s,%s>\n", name, yytext);
 }
+
+void printPreservedWord(void)
+{
+    printf("<%s>\n", yytext);
+}
+
 
 
