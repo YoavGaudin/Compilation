@@ -11,7 +11,7 @@ var
 {
 	a = 2;
 	b =a+5;
-	write("This is a:\n");
+	write("This is >>>a:\n");
 	write(a);
 	if b==1 then write(a);
 	c[re2] = 1.02;
