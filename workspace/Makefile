@@ -5,7 +5,7 @@ all: flex_example1
 flex_example1: flex_example1.c flex_example1.h
 	gcc -ll flex_example1.c -o flex_example1
 
-flex_example1.c flex_example1.h: flexFile.lex
+flex_example1.c flex_example1.h: part1.lex
 	flex part1.lex
 
 # Utility targets

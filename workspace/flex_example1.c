@@ -570,8 +570,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "flexFile.lex"
-#line 2 "flexFile.lex"
+#line 1 "part1.lex"
+#line 2 "part1.lex"
 #include <stdio.h>
 void showToken(char *);
 void printReservedWord();
@@ -764,7 +764,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 41 "flexFile.lex"
+#line 42 "part1.lex"
 
 #line 770 "flex_example1.c"
 
@@ -861,48 +861,48 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 42 "flexFile.lex"
+#line 43 "part1.lex"
 {}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 43 "flexFile.lex"
+#line 44 "part1.lex"
 printReservedWord();
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 44 "flexFile.lex"
+#line 45 "part1.lex"
 showToken("num");
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 45 "flexFile.lex"
+#line 46 "part1.lex"
 showToken("id");
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 46 "flexFile.lex"
+#line 47 "part1.lex"
 showToken("str");
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 47 "flexFile.lex"
+#line 48 "part1.lex"
 printUnchangable();
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 48 "flexFile.lex"
+#line 49 "part1.lex"
 printOperator();
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 49 "flexFile.lex"
+#line 50 "part1.lex"
 printf("lex fails to recognize this (%s)!\n", yytext);
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 50 "flexFile.lex"
+#line 51 "part1.lex"
 ECHO;
 	YY_BREAK
 #line 909 "flex_example1.c"
@@ -1915,7 +1915,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 50 "flexFile.lex"
+#line 51 "part1.lex"
 
 
 
