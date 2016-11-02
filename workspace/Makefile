@@ -6,7 +6,7 @@ flex_example1: flex_example1.c flex_example1.h
 	gcc -ll flex_example1.c -o flex_example1
 
 flex_example1.c flex_example1.h: flexFile.lex
-	flex flexFile.lex
+	flex part1.lex
 
 # Utility targets
 .PHONY: clean test

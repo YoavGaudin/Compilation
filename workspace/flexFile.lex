@@ -1,7 +1,7 @@
 %{
 #include <stdio.h>
 void showToken(char *);
-void printPreservedWord();
+void printReservedWord();
 void printUnchangable();
 void printOperator();
 %}
@@ -26,7 +26,7 @@ REAL               ({INT}.{UINT})
 NUM                ({INT}|{REAL})
 WORD               ({CHAR}+)
 ID                 ({CHAR}({CHAR}*{DIGIT}*)*)
-SIGNE              ([\~\!\@\#\$\^\&\(\)\_\?])
+SIGN               ([\~\!\@\#\$\^\&\(\)\_\?])
 REG_OPERATOR       ([\+\-\*\/\%\=])
 ASSIGN_OPERATOR    (=|\+=|\-=|\*=|\/=)
 COMP_OPERATOR      (<|>|<=|>=|==|!=)
@@ -35,11 +35,12 @@ BRACKET            ([\(\)\{\}\[\]])
 END_OF_COMMAND     (\;)
 END_OF_LINE        (\n)
 UNCHANGABLE        ({BRACKET}|{END_OF_LINE}|{END_OF_COMMAND}|{whitespace}|\:|\,|\.\\)
-ANY                ({DIGIT}*{CHAR}*{whitespace}*{SIGNE}*{OPERATOR}*{BRACKET}*{END_OF_COMMAND}*{UNCHANGABLE}*)
-STRING             (\"{ANY}*\")
-
+ANY                ({DIGIT}*{CHAR}*{whitespace}*{SIGN}*{OPERATOR}*{BRACKET}*{END_OF_COMMAND}*{UNCHANGABLE}*)
+STRING             (\".*\")
+COMMENT		   (\/\/.*)
 %%
-{RESERVED_WORD}             printPreservedWord();
+{COMMENT}		    {}
+{RESERVED_WORD}             printReservedWord();
 {NUM}                       showToken("num");
 {ID}                        showToken("id");
 {STRING}                    showToken("str");
@@ -53,7 +54,7 @@ void showToken(char *name)
     printf("<%s,%s>", name, yytext);
 }
 
-void printPreservedWord(void)
+void printReservedWord(void)
 {
     printf("<%s>", yytext);
 }
