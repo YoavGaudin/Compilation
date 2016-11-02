@@ -327,7 +327,7 @@ extern int yylex (void);
 #undef YY_DECL
 #endif
 
-#line 51 "part1.lex"
+#line 54 "part1.lex"
 
 
 #line 334 "flex_example1.h"

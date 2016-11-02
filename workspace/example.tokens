@@ -11,7 +11,7 @@
 {
 	<id,a> <assign,=> <num,2>;
 	<id,b> <assign,=><id,a><addop,+><num,5>;
-	<write>(<str,This is a:\n>);
+	<write>(<str,"This is a:\n">);
 	<write>(<id,a>);
 	<if> <id,b><relop,==><num,1> <then> <write>(<id,a>);
 	<id,c>[<id,re2>] <assign,=> <num,1.02>;

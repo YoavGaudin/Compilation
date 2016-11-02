@@ -385,8 +385,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 9
-#define YY_END_OF_BUFFER 10
+#define YY_NUM_RULES 10
+#define YY_END_OF_BUFFER 11
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -396,18 +396,18 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[108] =
     {   0,
-        0,    0,   10,    8,    6,    6,    8,    8,    7,    7,
-        7,    7,    8,    7,    3,    7,    7,    7,    4,    4,
-        4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
-        4,    4,    7,    0,    5,    7,    3,    6,    1,    0,
-        3,    4,    4,    4,    4,    4,    4,    4,    2,    4,
-        4,    4,    2,    4,    4,    4,    4,    4,    4,    4,
-        4,    3,    1,    3,    3,    4,    4,    4,    4,    4,
-        4,    4,    4,    4,    4,    4,    4,    4,    2,    4,
-        4,    3,    4,    4,    4,    4,    2,    4,    2,    4,
-        4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
+        0,    0,   11,    9,    7,    1,    9,    9,    8,    8,
+        8,    8,    9,    8,    4,    8,    8,    8,    5,    5,
+        5,    5,    5,    5,    5,    5,    5,    5,    5,    5,
+        5,    5,    8,    0,    6,    8,    4,    7,    2,    0,
+        4,    5,    5,    5,    5,    5,    5,    5,    3,    5,
+        5,    5,    3,    5,    5,    5,    5,    5,    5,    5,
+        5,    4,    2,    4,    4,    5,    5,    5,    5,    5,
+        5,    5,    5,    5,    5,    5,    5,    5,    3,    5,
+        5,    4,    5,    5,    5,    5,    3,    5,    3,    5,
+        5,    5,    5,    5,    5,    5,    5,    5,    5,    5,
 
-        4,    4,    4,    4,    4,    4,    0
+        5,    5,    5,    5,    5,    5,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -552,9 +552,9 @@ static yyconst flex_int16_t yy_chk[262] =
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static yyconst flex_int32_t yy_rule_can_match_eol[10] =
+static yyconst flex_int32_t yy_rule_can_match_eol[11] =
     {   0,
-0, 0, 0, 0, 0, 1, 0, 0, 0,     };
+1, 0, 0, 0, 0, 0, 1, 0, 0, 0,     };
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
@@ -577,7 +577,9 @@ void showToken(char *);
 void printReservedWord();
 void printUnchangable();
 void printOperator();
-#line 581 "flex_example1.c"
+void printErr();
+int curr_line = 1;
+#line 583 "flex_example1.c"
 
 #define INITIAL 0
 
@@ -764,9 +766,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 42 "part1.lex"
+#line 44 "part1.lex"
 
-#line 770 "flex_example1.c"
+#line 772 "flex_example1.c"
 
 	if ( !(yy_init) )
 		{
@@ -860,52 +862,58 @@ do_action:	/* This label is used only to access EOF actions. */
 			goto yy_find_action;
 
 case 1:
+/* rule 1 can match eol */
 YY_RULE_SETUP
-#line 43 "part1.lex"
-{}
+#line 45 "part1.lex"
+{curr_line++; printf("\n");}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 44 "part1.lex"
-printReservedWord();
+#line 46 "part1.lex"
+{}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 45 "part1.lex"
-showToken("num");
+#line 47 "part1.lex"
+printReservedWord();
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 46 "part1.lex"
-showToken("id");
+#line 48 "part1.lex"
+showToken("num");
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 47 "part1.lex"
-showToken("str");
+#line 49 "part1.lex"
+showToken("id");
 	YY_BREAK
 case 6:
-/* rule 6 can match eol */
 YY_RULE_SETUP
-#line 48 "part1.lex"
-printUnchangable();
+#line 50 "part1.lex"
+showToken("str");
 	YY_BREAK
 case 7:
+/* rule 7 can match eol */
 YY_RULE_SETUP
-#line 49 "part1.lex"
-printOperator();
+#line 51 "part1.lex"
+printUnchangable();
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 50 "part1.lex"
-printf("lex fails to recognize this (%s)!\n", yytext);
+#line 52 "part1.lex"
+printOperator();
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 51 "part1.lex"
+#line 53 "part1.lex"
+printErr();
+	YY_BREAK
+case 10:
+YY_RULE_SETUP
+#line 54 "part1.lex"
 ECHO;
 	YY_BREAK
-#line 909 "flex_example1.c"
+#line 917 "flex_example1.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1915,7 +1923,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 51 "part1.lex"
+#line 54 "part1.lex"
 
 
 
@@ -1956,4 +1964,9 @@ void printOperator(void)
   printf("<%s,%s>", opName, yytext);
 }
 
+void printErr()
+{
+  printf("\nLexical error: '%s' in line number %d\n", yytext, curr_line);
+  exit(1);
+}
 
