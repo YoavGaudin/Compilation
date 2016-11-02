@@ -1929,6 +1929,10 @@ void yyfree (void * ptr )
 
 void showToken(char *name)
 {
+    if(yytext[0] == '"'){
+        yytext[yyleng-1] = '\0';
+	yytext++;
+    }
     printf("<%s,%s>", name, yytext);
 }
 
