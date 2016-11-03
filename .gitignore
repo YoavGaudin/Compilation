@@ -1,0 +1,4 @@
+workspace/*.c
+workspace/*.h
+workspace/part1
+workspace/myOut.Tokens
