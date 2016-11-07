@@ -1,0 +1,7 @@
+<id,hello> 				 		 <id,tabs> <id,and> <id,spaces> <id,check>
+<str,two string in a row><str,second>
+<str,><str,> 
+
+
+<relop,==> 
+Lexical error: '|' in line number 6

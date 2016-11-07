@@ -38,7 +38,7 @@ BRACKET            ([\(\)\{\}\[\]])
 END_OF_COMMAND     (\;)
 END_OF_LINE        (\n)
 UNCHANGABLE        ({BRACKET}|{END_OF_LINE}|{END_OF_COMMAND}|{whitespace}|\:|\,)
-STRING             (\".*\")
+STRING             (\"[^\"\n]*\")
 COMMENT		   (\/\/.*)
 
 %%

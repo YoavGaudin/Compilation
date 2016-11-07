@@ -1,0 +1,13 @@
+<real> <integer> <write> <read> <while> <do> <if> <then> <else>
+<main> <var> <call> <return> <defstruct> <extern>
+
+() [] {} , : ;
+
+<relop,==> <relop,<>> <relop,<> <relop,<=> <relop,>> <relop,>=>
+<addop,+> <addop,->
+<mulop,*> <mulop,/>
+<assign,=>
+<and,&&>
+<or,||>
+<not,!> 
+Lexical error: '\' in line number 12
