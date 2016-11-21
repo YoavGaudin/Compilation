@@ -2,4 +2,6 @@ workspace/*.c
 workspace/*.h
 workspace/part1
 workspace/myOut.tokens
+*.ova.*
+*.zip
 .gitignore~
