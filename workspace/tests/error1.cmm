@@ -1,0 +1,10 @@
+/*This is an example */
+main
+???
+	var a,b:integer;
+{
+	a = 2;
+	b =a+5;
+	write(a);
+	if b==1 then write(a);
+}

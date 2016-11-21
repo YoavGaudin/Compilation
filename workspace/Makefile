@@ -11,9 +11,7 @@ part1.c part1.h: part1.lex
 # Utility targets
 .PHONY: clean test
 clean:
-	rm -f part1 part1.c part1.h myoutput.txt
+	rm -f part1 part1.c part1.h 
 
 test: part1
-	./part1 < input.txt > myoutput.txt
-	diff -u output.txt myoutput.txt
-
+	./run_tests.sh

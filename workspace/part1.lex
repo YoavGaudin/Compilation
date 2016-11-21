@@ -29,11 +29,13 @@ REAL               ({INT}\.{UINT})
 NUM                ({INT}|{REAL})
 WORD               ({CHAR}+)
 ID                 ({CHAR}({CHAR}*{DIGIT}*)*)
-REG_OPERATOR       ([\+\-\*\/])
-ASSIGN_OPERATOR    (=)
-COMP_OPERATOR      (<|>|<=|>=|==|<>)
-BINARY_OPERATOR    (&&|\|\||\!)
-OPERATOR           ({REG_OPERATOR}|{COMP_OPERATOR}|{ASSIGN_OPERATOR}|{BINARY_OPERATOR})
+MUL_OP	    	   ([\*\/])
+ADD_OP	    	   ([\+\-])
+ASSIGN_OP 	   (=)
+RELATION_OP	   (<|>|<=|>=|==|<>)
+OR_OP		   (\|\|)
+AND_OP		   (&&)
+NOT_OP		   (\!)
 BRACKET            ([\(\)\{\}\[\]])
 END_OF_COMMAND     (\;)
 END_OF_LINE        (\n)
@@ -49,7 +51,13 @@ COMMENT		   (\/\/.*)
 {ID}                        showToken("id");
 {STRING}                    showToken("str");
 {UNCHANGABLE}               printUnchangable();
-{OPERATOR}                  printOperator();
+{MUL_OP}		    printOperator("mulop");
+{ADD_OP}		    printOperator("addop");
+{ASSIGN_OP}		    printOperator("assign");
+{RELATION_OP}		    printOperator("relop");
+{AND_OP}		    printOperator("and");
+{OR_OP}			    printOperator("or");
+{NOT_OP}		    printOperator("not");
 .                           printErr();
 %%
 
@@ -72,24 +80,8 @@ void printUnchangable(void)
     printf("%s", yytext);
 }
 
-void printOperator(void)
+void printOperator(const char *opName)
 {
-  char *opName = "OP_NAME";
-  if(strcmp(yytext, "*") == 0 || strcmp(yytext, "/") == 0)
-    opName = "mulop";
-  if(strcmp(yytext, "+") == 0 || strcmp(yytext, "-") == 0)
-    opName = "addop";
-  if(strcmp(yytext, "=") == 0)
-    opName = "assign";
-  if(strcmp(yytext, "<") == 0 || strcmp(yytext, ">") == 0 || strcmp(yytext, "<=") == 0
-     || strcmp(yytext, ">=") == 0 || strcmp(yytext, "==") == 0 || strcmp(yytext, "<>") == 0)
-    opName = "relop";
-  if(strcmp(yytext, "&&") == 0)
-    opName = "and";
-  if(strcmp(yytext, "||") == 0)
-    opName = "or";
-  if(strcmp(yytext, "!") == 0)
-    opName = "not";
   printf("<%s,%s>", opName, yytext);
 }
 
