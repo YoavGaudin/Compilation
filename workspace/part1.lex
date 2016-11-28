@@ -5,7 +5,6 @@ void printReservedWord();
 void printUnchangable();
 void printOperator();
 void printErr();
-int curr_line = 1;
 %}
 
 %option yylineno noyywrap
@@ -44,9 +43,9 @@ STRING             (\"[^\"\n]*\")
 COMMENT		   (\/\/.*)
 
 %%
-{END_OF_LINE}		    {curr_line++; printf("\n");}
+{END_OF_LINE}		    printf("\n");
 {COMMENT}		    {}
-{RESERVED_WORD}              printReservedWord();
+{RESERVED_WORD}             printReservedWord();
 {NUM}                       showToken("num");
 {ID}                        showToken("id");
 {STRING}                    showToken("str");
@@ -87,6 +86,6 @@ void printOperator(const char *opName)
 
 void printErr()
 {
-  printf("\nLexical error: '%s' in line number %d\n", yytext, curr_line);
+  printf("\nLexical error: '%s' in line number %d\n", yytext, yylineno);
   exit(1);
 }
