@@ -1,0 +1,21 @@
+
+() <id,find> <id,tokens> <else> <id,than>
+<id,a><assign,=><num,3>
+<str,a=3>
+<write>(<str,a=2>) 
+<id,char><mulop,*> <id,ThisIsDummyCode> {
+	<id,token>[<id,i>] <assign,=> <num,1>;
+	<return> <id,token>[<num,0>];
+}
+
+<id,void> <id,invalidOp>{
+	
+	
+	
+	
+	
+	<str,//lets confuse the parser>
+	<str,(more trials {} [] , ; :>
+	<str,>
+	<str,(more trials >
+Lexical error: '"' in line number 20

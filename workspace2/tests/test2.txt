@@ -1,0 +1,13 @@
+real integer write read while do if then else
+main var call return defstruct extern
+
+() [] {} , : ;
+
+== <> < <= > >=
++ -
+* /
+=
+&&
+||
+! \		\\single backspace is invalid
+
