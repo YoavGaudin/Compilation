@@ -1,0 +1,23 @@
+/* Reverse polish notation calculator.  */
+%{
+  #include <iostream>
+  #include <string>
+
+  using namespace std;
+
+  int yylex (void);
+  void yyerror (char const *);
+%}
+
+%define api.value.type {double}
+%token NUM
+%right '='
+%left '+' '-'
+%left '*' '/'
+
+%%
+
+/* Grammar */
+
+%%
+
