@@ -1,8 +1,10 @@
 /* Reverse polish notation calculator.  */
 %{
+  #define __cplusplus
   #include <iostream>
   #include <string>
-
+  #include "helper_files/part2_helpers.h"
+  
   using namespace std;
 
   int yylex (void);
@@ -11,13 +13,23 @@
 
 %define api.value.type {double}
 %token NUM
+%token NUM
+%token NUM
+%token NUM
+%token NUM
+%token NUM
+%token NUM
+%token NUM
+%token NUM
+%token NUM
 %right '='
 %left '+' '-'
 %left '*' '/'
 
 %%
-
 /* Grammar */
+
+
 
 %%
 

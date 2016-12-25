@@ -23,6 +23,38 @@ ParserNode *concatList(ParserNode *listHead,ParserNode *newItem);
 
 void dumpParseTree(void);
 
+  /* DATA STRUCTURES LIST */
+  
+typedef struct
+{
+  int i;
+  char c;
+} alexStruct;
+
+typedef struct
+{
+  int i;
+  char c;
+} yoavStruct;
+
+  /* UNION OF DATA STRUCTURES */
+
+  typedef union
+{
+  alexStruct as
+  yoavStruct ys;
+  char* str;
+  int i;
+  double d;
+  char c;
+  
+} STYPE;
+
+#define YYSTYPE STYPE	// Tell Bison to use STYPE as the stack type
+
+#endif
+
+  
 #ifdef __cplusplus
 } // extern "C"
 #endif
