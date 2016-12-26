@@ -7,127 +7,371 @@
 
   using namespace std;
 
-  int yylex (voID);
-  voID yyerror (char const *);
+  int yylex (void);
+  void yyerror (char const *);
+  
+  ParserNode *parseTree;
 %}
 
+%token RWORD
 %token<i> INT
 %token<d> REAL
 %token<str> ID
 %token<str> STRING
 
-%right 
 %left ADD_OP MUL_OP AND_OP OR_OP REL_OP
 %right ASSIGN_OP NOT_OP
 
 %%
 
-PROGRAM: TDEFS FDEFS MAIN_FUNCTION {}
+PROGRAM: 
+		TDEFS FDEFS MAIN_FUNCTION {
+			*parseTree = makeNode("PROGRAM", null, $1.node);
+			$$.node = *parseTree;
+			concatList($$.node, $2.node);
+			concatList($$.node, $3.node);
+		}
 
 TDEFS: 
-		TDEFS 'defstruct' '{' DECLARLIST '}' ID ';' 
-		| /*epsilon*/
+		TDEFS "defstruct" '{' DECLARLIST '}' ID ';' {
+			$$.node = makeNode("TDEFS", null, $1.node);
+			concatList($$.node, makeNode("defstruct", null, null));
+			concatList($$.node, makeNode("{", null, null));
+			concatList($$.node, $4.node);
+			concatList($$.node, makeNode("}", null, null));
+			concatList($$.node, makeNode("ID", $6.str, null));
+			concatList($$.node, makeNode(";", null, null));
+		}		
+	|
+		/*epsilon*/
 		
 FDEFS: 
-		FDEFS TYPE ID '(' FUNC_ARGLIST_FULL ')' BLK
-		| FDEFS 'extern' TYPE ID '(' FUNC_ARGLIST_FULL ')' ';' 
-		| /*epsilon*/
+		FDEFS TYPE ID '(' FUNC_ARGLIST_FULL ')' BLK {
+			$$.node = makeNode("FDEFS", null, $1.node);
+			concatList($$.node, $2.node);
+			concatList($$.node, makeNode("ID", $3.str, null));
+			concatList($$.node, makeNode("(", null, null));
+			concatList($$.node, $5.node);
+			concatList($$.node, makeNode(")", null, null));
+			concatList($$.node, $7.node);
+			
+		}
+	|
+		FDEFS "extern" TYPE ID '(' FUNC_ARGLIST_FULL ')' ';' {
+			$$.node = makeNode("FDEFS", null, $1.node);
+			concatList($$.node, makeNode("extern", null, null));
+			concatList($$.node, $3.node);
+			concatList($$.node, makeNode("ID", $4.str, null));
+			concatList($$.node, makeNode("(", null, null));
+			concatList($$.node, $6.node);
+			concatList($$.node, makeNode(")", null, null));
+			concatList($$.node, makeNode(";", null, null));
+		}		
+	|
+		/*epsilon*/
 
 FUNC_ARGLIST_FULL: 
-		FUNC_ARGLIST 
-		| /*epsilon*/
+		FUNC_ARGLIST {
+			$$.node = makeNode("FUNC_ARGLIST_FULL", null, $1.node);
+		}
+	|
+		/*epsilon*/
 		
 FUNC_ARGLIST: 
-		FUNC_ARGLIST ',' DCL
-		| DCL
+		FUNC_ARGLIST ',' DCL {
+			$$.node = makeNode("FUNC_ARGLIST", null, $1.node);
+			concatList($$.node, makeNode(",", null, null));
+			concatList($$.node, $3.node);
+		}
+	|
+		DCL {
+			$$.node = makeNode("FUNC_ARGLIST", null, $1.node);
+		}
 		
 MAIN_FUNCTION: 
-		main BLK 
-		| /*epsilon*/
+		"main" BLK {
+			$$.node = makeNode("MAIN_FUNCTION", null, makeNode("main", null, null));
+			concatList($$.node, $2.node);
+		} 
+	|
+		/*epsilon*/
 		
 BLK: 
-	DECLARATIONS '{' LIST '}'
+		DECLARATIONS '{' LIST '}' {
+			$$.node = makeNode("BLK", null, $1.node);
+			concatList($$.node, makeNode("{", null, null));
+			concatList($$.node, $3.node);
+			concatList($$.node, makeNode("}", null, null));
+		}
 	
 DECLARATIONS:
-		'var' DECLARLIST 
-		| /*epsilon*/
+		"var" DECLARLIST  {
+			$$.node = makeNode("DECLARATIONS", null, makeNode("var", null, null));
+			concatList($$.node, $2.node);
+		}
+	|
+		/*epsilon*/
 		
 DECLARLIST:
-		DECLARLIST DCL ';' 
-		| DCL ';'
+		DECLARLIST DCL ';' {
+			$$.node = makeNode("DECLARLIST", null, $1.node);
+			concatList($$.node, $2.node);
+			concatList($$.node, makeNode(";", null, null))
+		}
+	|
+		DCL ';' {
+			$$.node = makeNode("DECLARLIST", null, $1.node);
+			concatList($$.node, makeNode(";", null, null));
+		}
 		
 DCL: 
-	ID ':' TYPE 
-	| ID ':' ID 
-	| ID ',' DCL
+		ID ':' TYPE {
+			$$.node = makeNode("DCL", null, makeNode("ID", $1.str, null));
+			concatList($$.node, makeNode(":", null, null));
+			concatList($$.node, $3.node);
+		} 
+	|
+		ID ':' ID {
+			$$.node = makeNode("DCL", null, makeNode("ID", $1.str, null));
+			concatList($$.node, makeNode(":", null, null));
+			concatList($$.node, $3.node);
+		} 
+	|
+		ID ',' DCL {
+			$$.node = makeNode("DCL", null, makeNode("ID", $1.str, null));
+			concatList($$.node, makeNode(":", null, null));
+			concatList($$.node, $3.node);
+		}
 	
 TYPE: 
-	'integer' 
-	| 'real'
+		"integer" {
+			$$.node = makeNode("TYPE", null, makeNode("integer", null, null));
+		}
+	|
+		"real" {
+			$$.node = makeNode("TYPE", null, makeNode("real", null, null));
+		}
 	
 LIST: 
-	LIST STMT 
-	| /*epsilon*/
+		LIST STMT {
+			$$.node = makeNode("LIST", null, $1.node);
+			concatList($$.node, $2.node);
+		}
+	|
+		/*epsilon*/
 	
 STMT: 
-	ASSN 
-	| CNTRL 
-	| READ 
-	| WRITE
-	| STMT_RETURN 
-	| BLK
+		ASSN {
+			$$.node = makeNode("STMT", null, $1.node);
+		}
+	|
+		CNTRL {
+			$$.node = makeNode("STMT", null, $1.node);
+		}
+	|
+		READ {
+			$$.node = makeNode("STMT", null, $1.node);
+		}
+	|
+		WRITE {
+			$$.node = makeNode("STMT", null, $1.node);
+		}
+	|
+		STMT_RETURN {
+			$$.node = makeNode("STMT", null, $1.node);
+		}
+	|
+		BLK {
+			$$.node = makeNode("STMT", null, $1.node);
+		}
 	
 STMT_RETURN: 
-	'return' '(' EXP ')' ';'
+		"return" '(' EXP ')' ';' {
+			$$.node = makeNode("STMT_RETURN", null, makeNode("return", null, null));
+			concatList($$.node, makeNode("(", null, null));
+			concatList($$.node, $3.node);
+			concatList($$.node, makeNode(")", null, null));
+			concatList($$.node, makeNode(";", null, null));
+		}
 	
 WRITE: 
-	'write' '(' EXP ')' ';' 
-	| 'write' '(' str ')' ';'
+		"write" '(' EXP ')' ';' {
+		1        2  3
+			$$.node = makeNode("WRITE", null, makeNode("write", null, null));
+			concatList($$.node, makeNode("(", null, null));	
+			concatList($$.node, $3.node);
+			concatList($$.node, makeNode(")", null, null));
+			concatList($$.node, makeNode(";", null, null));
+		}
+	|
+		"write" '(' STRING ')' ';' {
+			$$.node = makeNode("WRITE", null, makeNode("write", null, null));
+			concatList($$.node, makeNode("(", null, null));
+			concatList($$.node, makeNode("STRING", $3.str, null));
+			concatList($$.node, makeNode(")", null, null));
+			concatList($$.node, makeNode(";", null, null));
+		}
 	
 READ: 
-	'read' '(' LVAL ')' ';'
+		"read" '(' LVAL ')' ';' {
+			$$.node = makeNode("READ", null, makeNode("read", null, null));
+			concatList($$.node, makeNode("(", null, null));	
+		}
 	
 ASSN: 
-	LVAL ASSIGN_OP EXP ';'
+		LVAL ASSIGN_OP EXP ';' {
+			$$.node = makeNode("ASSN", null, $1.node);
+			concatList($$.node, makeNode("ASSIGN_OP", null, null));
+			concatList($$.node, $3.node);
+			concatList($$.node, makeNode(";", null, null));
+		}
 
 LVAL: 
-	ID 
-	| STREF
+		ID {
+			$$.node = makeNode("LVAL", null, makeNode("ID", $1.str, null));
+		}
+	|
+		STREF {
+			$$.node = makeNode("LVAL", null, $1.node);
+		}
 CNTRL: 
-	'if' BEXP 'then' STMT 'else' STMT
-	| 'if' BEXP 'then' STMT
-	| 'while' BEXP 'do' STMT
+		"if" BEXP "then" STMT "else" STMT {
+			$$.node = makeNode("CNTRL", null, makeNode("if", null, null));
+			concatList($$.node, $2.node);
+			concatList($$.node, makeNode("then", null, null));
+			concatList($$.node, $4.node);
+			concatList($$.node, makeNode("else", null, null));
+			concatList($$.node, $6.node);
+		}
+	|
+		"if" BEXP "then" STMT {
+			$$.node = makeNode("CNTRL", null, makeNode("if", null, null));
+			concatList($$.node, $2.node);
+			concatList($$.node, makeNode("then", null, null));
+			concatList($$.node, $4.node);
+		}
+	|
+		"while" BEXP "do" STMT {
+			$$.node = makeNode("CNTRL", null, makeNode("while", null, null));
+			concatList($$.node, $2.node);
+			concatList($$.node, makeNode("do", null, null));
+			concatList($$.node, $4.node);
+		}
 	
 BEXP: 
-	BEXP OR_OP BEXP
-	| BEXP AND_OP BEXP
-	| NOT_OP BEXP
-	| EXP REL_OP EXP
-	| '(' BEXP ')'
+		BEXP OR_OP BEXP {
+			$$.node = makeNode("BEXP", null, $1.node);
+			concatList($$.node, makeNode("OR_OP", null, null));
+			concatList($$.node, $3.node);
+		}
+	|
+		BEXP AND_OP BEXP {
+			$$.node = makeNode("BEXP", null, $1.node);
+			concatList($$.node, makeNode("AND_OP", null, null));
+			concatList($$.node, $3.node);
+		}
+	|
+		NOT_OP BEXP {
+			$$.node = makeNode("BEXP", null, makeNode("NOT_OP", null, null));
+			concatList($$.node, $2.node);
+		}
+	|
+		EXP REL_OP EXP {
+			$$.node = makeNode("BEXP", null, $1.node);
+			concatList($$.node, makeNode("REL_OP", null, null));
+			concatList($$.node, $3.node);
+		}
+	|
+		'(' BEXP ')' {
+			$$.node = makeNode("BEXP", null, makeNode("(", null, null));
+			concatList($$.node, $2.node);
+			concatList($$.node, makeNode(")", null, null));
+		}
 	
-EXP: EXP ADD_OP EXP
-	| EXP MUL_OP EXP
-	| '(' EXP ')'
-	| '(' TYPE ')' EXP
-	| ID
-	| STREF
-	| NUM
-	| CALL
+EXP: 
+		EXP ADD_OP EXP {
+			$$.node = makeNode("EXP", null, $1.node);
+			concatList($$.node, makeNode("ADD_OP", null, null));
+			concatList($$.node, $3.node);
+		}
+	|
+		EXP MUL_OP EXP {
+			$$.node = makeNode("EXP", null, $1.node);
+			concatList($$.node, makeNode("MUL_OP", null, null));
+			concatList($$.node, $3.node);
+		}
+	|
+		'(' EXP ')' {
+			$$.node = makeNode("EXP", null, makeNode("(", null, null));
+			concatList($$.node, $2.node);
+			concatList($$.node, makeNode(")", null, null));
+		}
+	|
+		'(' TYPE ')' EXP {
+			$$.node = makeNode("EXP", null, makeNode("(", null, null));
+			concatList($$.node, $2.node);
+			concatList($$.node, makeNode(")", null, null));
+			concatList($$.node, $4.node);
+		}
+	|
+		ID {
+			$$.node = makeNode("EXP", null, makeNode("ID" null, null));
+		}
+	|
+		STREF {
+			$$.node = makeNode("EXP", null, $1.node);
+		}
+	|
+		NUM {
+			$$.node = makeNode("EXP", null, makeNode("NUM" null, null));
+		}
+	|
+		CALL {
+			$$.node = makeNode("EXP", null, $1.node);
+		}
 	
 STREF: 
-	ID '[' ID ']' 
-	| STREF '[' ID ']'
+		ID '[' ID ']' {
+			$$.node = makeNode("STREF", null, makeNode("ID", $1.str, null));
+			concatList($$.node, makeNode("[", null, null));
+			concatList($$.node, makeNode("ID", $3.str, null));
+			concatList($$.node, makeNode("]", null, null));
+		}
+	|
+		STREF '[' ID ']' {
+			$$.node = makeNode("STREF", null, $1.node);
+			concatList($$.node, makeNode("[", null, null));
+			concatList($$.node, makeNode("ID", $3.str, null));
+			concatList($$.node, makeNode("]", null, null));
+		}
 	
 CALL: 
-	'call' ID '(' CALL_ARGS_FULL ')'
+		"call" ID '(' CALL_ARGS_FULL ')' {
+			$$.node = makeNode("CALL", null, makeNode("call", null, null));
+			concatList($$.node, makeNode("ID", $2.str, null));
+			concatList($$.node, makeNode("(", null, null));
+			concatList($$.node, $4.node);
+			concatList($$.node, makeNode(")", null, null));
+		}
 	
 CALL_ARGS_FULL: 
-	CALL_ARGS 
-	| /*epsilon*/
+		CALL_ARGS {
+			$$.node = makeNode("CALL_ARGS_FULL", null, $1.node);
+		}
+	|
+		/*epsilon*/
 	
 CALL_ARGS:
-	EXP 
-	| CALL_ARGS ',' EXP
+		EXP {
+			$$.node = makeNode("CALL_ARGS", null, $1.node);
+		}
+	|
+		CALL_ARGS ',' EXP {
+			$$.node = makeNode("CALL_ARGS", null, $1.node);
+			concatList($$.node, makeNode(",", null, null));
+			concatList($$.node, $3.node);
+		}
 	
 %%
+
 

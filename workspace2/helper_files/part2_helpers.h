@@ -33,6 +33,7 @@ typedef struct
 
 typedef struct
 {
+	
   int i;
   char c;
 } yoavStruct;
@@ -43,6 +44,7 @@ typedef union
 {
   alexStruct as
   yoavStruct ys;
+  ParserNode *node;
   char* str;
   int i;
   double d;

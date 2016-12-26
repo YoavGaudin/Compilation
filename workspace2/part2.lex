@@ -46,7 +46,7 @@ COMMENT		   (\/\/.*)
 
 {END_OF_LINE}		     printf("\n");
 {COMMENT}		     {}
-{RESERVED_WORD}              printReservedWord();
+{RESERVED_WORD}              {printReservedWord(); return RWORD;}
 {INT}                        {showToken("num"); yylval.i = atoi(yytext); return INT;}
 {REAL}                       {showToken("num"); yylval.d = atof(yytext); return REAL;}
 {ID}                         {showToken("id"); yylval.str = strdup(yytext); return ID;}
