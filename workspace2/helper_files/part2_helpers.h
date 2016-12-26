@@ -39,7 +39,7 @@ typedef struct
 
   /* UNION OF DATA STRUCTURES */
 
-  typedef union
+typedef union
 {
   alexStruct as
   yoavStruct ys;

@@ -7,8 +7,8 @@
 
   using namespace std;
 
-  int yylex (void);
-  void yyerror (char const *);
+  int yylex (voID);
+  voID yyerror (char const *);
 %}
 
 %token<i> INT
@@ -22,9 +22,112 @@
 
 %%
 
-  /* Grammar */
+PROGRAM: TDEFS FDEFS MAIN_FUNCTION {}
 
+TDEFS: 
+		TDEFS 'defstruct' '{' DECLARLIST '}' ID ';' 
+		| /*epsilon*/
+		
+FDEFS: 
+		FDEFS TYPE ID '(' FUNC_ARGLIST_FULL ')' BLK
+		| FDEFS 'extern' TYPE ID '(' FUNC_ARGLIST_FULL ')' ';' 
+		| /*epsilon*/
 
+FUNC_ARGLIST_FULL: 
+		FUNC_ARGLIST 
+		| /*epsilon*/
+		
+FUNC_ARGLIST: 
+		FUNC_ARGLIST ',' DCL
+		| DCL
+		
+MAIN_FUNCTION: 
+		main BLK 
+		| /*epsilon*/
+		
+BLK: 
+	DECLARATIONS '{' LIST '}'
+	
+DECLARATIONS:
+		'var' DECLARLIST 
+		| /*epsilon*/
+		
+DECLARLIST:
+		DECLARLIST DCL ';' 
+		| DCL ';'
+		
+DCL: 
+	ID ':' TYPE 
+	| ID ':' ID 
+	| ID ',' DCL
+	
+TYPE: 
+	'integer' 
+	| 'real'
+	
+LIST: 
+	LIST STMT 
+	| /*epsilon*/
+	
+STMT: 
+	ASSN 
+	| CNTRL 
+	| READ 
+	| WRITE
+	| STMT_RETURN 
+	| BLK
+	
+STMT_RETURN: 
+	'return' '(' EXP ')' ';'
+	
+WRITE: 
+	'write' '(' EXP ')' ';' 
+	| 'write' '(' str ')' ';'
+	
+READ: 
+	'read' '(' LVAL ')' ';'
+	
+ASSN: 
+	LVAL ASSIGN_OP EXP ';'
 
+LVAL: 
+	ID 
+	| STREF
+CNTRL: 
+	'if' BEXP 'then' STMT 'else' STMT
+	| 'if' BEXP 'then' STMT
+	| 'while' BEXP 'do' STMT
+	
+BEXP: 
+	BEXP OR_OP BEXP
+	| BEXP AND_OP BEXP
+	| NOT_OP BEXP
+	| EXP REL_OP EXP
+	| '(' BEXP ')'
+	
+EXP: EXP ADD_OP EXP
+	| EXP MUL_OP EXP
+	| '(' EXP ')'
+	| '(' TYPE ')' EXP
+	| ID
+	| STREF
+	| NUM
+	| CALL
+	
+STREF: 
+	ID '[' ID ']' 
+	| STREF '[' ID ']'
+	
+CALL: 
+	'call' ID '(' CALL_ARGS_FULL ')'
+	
+CALL_ARGS_FULL: 
+	CALL_ARGS 
+	| /*epsilon*/
+	
+CALL_ARGS:
+	EXP 
+	| CALL_ARGS ',' EXP
+	
 %%
 
