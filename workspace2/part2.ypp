@@ -13,11 +13,9 @@
   ParserNode *parseTree;
 %}
 
-%token RWORD
-%token<i> INT
-%token<d> REAL
-%token<str> ID
-%token<str> STRING
+%token NUM
+%token ID
+%token STRING
 
 %left ADD_OP MUL_OP AND_OP OR_OP REL_OP
 %right ASSIGN_OP NOT_OP
@@ -373,5 +371,4 @@ CALL_ARGS:
 		}
 	
 %%
-
 

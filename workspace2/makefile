@@ -14,7 +14,7 @@ part2.tab.cpp part2.tab.hpp: part2.ypp helper_files/part2_helpers.h
 # Utility targets
 .PHONY: clean test
 clean:
-	rm -f part1 part1.c part1.h part2 part2.ypp part2.hpp part2.tab.cpp part2.tab.hpp
+	rm -f part2-lex.c part2-lex.h part2 part2.tab.cpp part2.tab.hpp
 
-test: part1
+test: part2
 	./run_tests.sh

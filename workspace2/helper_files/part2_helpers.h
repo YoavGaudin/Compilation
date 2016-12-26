@@ -52,7 +52,7 @@ typedef union
   
 } STYPE;
 
-#define YYSTYPE STYPE	// Tell Bison to use STYPE as the stack type
+#define YYSTYPE ParserNode	// Tell Bison to use STYPE as the stack type
 
 #endif
 

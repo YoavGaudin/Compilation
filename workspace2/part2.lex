@@ -52,7 +52,6 @@ COMMENT		   (\/\/.*)
 {ID}                         {showToken("id"); yylval.str = strdup(yytext); return ID;}
 {STRING}                     {showToken("str"); yylval.str = strdup(yytext); return STRING;}
 {UNCHANGABLE}                {printUnchangable(); return yytext[0];}
-{{whitespace}|{END_OF_LINE}} ;
 {MUL_OP}		     {printOperator("mulop"); return MUL_OP;}
 {ADD_OP}		     {printOperator("addop"); return ADD_OP;}
 {ASSIGN_OP}		     {printOperator("assign"); return ASSIGN_OP;}
