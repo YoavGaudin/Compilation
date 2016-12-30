@@ -6,59 +6,21 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct node {
-    char * type;
-    char * value;
+    std::string type;
+    std::string value;
     struct node *sibling;
     struct node *child;
 } ParserNode;
 
-ParserNode *makeNode(const char* type,const char* value, ParserNode *child);
+ParserNode *makeNode(std::string type, std::string value, ParserNode *child);
 
-ParserNode *concatList(ParserNode *listHead,ParserNode *newItem);
+ParserNode *concatList(ParserNode *listHead, ParserNode *newItem);
 
 void dumpParseTree(void);
 
   /* DATA STRUCTURES LIST */
-  
-typedef struct
-{
-  int i;
-  char c;
-} alexStruct;
 
-typedef struct
-{
-	
-  int i;
-  char c;
-} yoavStruct;
-
-  /* UNION OF DATA STRUCTURES */
-
-typedef union
-{
-  alexStruct as;
-  yoavStruct ys;
-  ParserNode *node;
-  char* str;
-  int i;
-  double d;
-  char c;
-  
-} STYPE;
-
-#define YYSTYPE ParserNode	// Tell Bison to use STYPE as the stack type
-
-#endif
-
-  
-#ifdef __cplusplus
-} // extern "C"
-#endif
+#define YYSTYPE ParserNode*	// Tell Bison to use STYPE as the stack type
 
 #endif //COMMON_H
