@@ -1,14 +1,16 @@
 %{
 #include <stdio.h>
+#include "helper_files/part2_helpers.h"
+#include "part2.tab.hpp"
 void showToken(char *);
 void printReservedWord();
 void printUnchangable();
-void printOperator();
+void printOperator(const char*);
 void printErr();
 %}
 
 %option yylineno noyywrap
-%option   outfile="part1.c" header-file="part1.h"
+%option   outfile="part2-lex.c" header-file="part2-lex.h"
 
 PRIMITIVE_TYPE     (integer|real)
 SEQUENSER          (return)
@@ -46,19 +48,32 @@ COMMENT		   (\/\/.*)
 
 {END_OF_LINE}		     printf("\n");
 {COMMENT}		     {}
-{RESERVED_WORD}              {printReservedWord(); return RWORD;}
-{INT}                        {showToken("num"); yylval.i = atoi(yytext); return INT;}
-{REAL}                       {showToken("num"); yylval.d = atof(yytext); return REAL;}
-{ID}                         {showToken("id"); yylval.str = strdup(yytext); return ID;}
-{STRING}                     {showToken("str"); yylval.str = strdup(yytext); return STRING;}
-{UNCHANGABLE}                {printUnchangable(); return yytext[0];}
-{MUL_OP}		     {printOperator("mulop"); return MUL_OP;}
-{ADD_OP}		     {printOperator("addop"); return ADD_OP;}
-{ASSIGN_OP}		     {printOperator("assign"); return ASSIGN_OP;}
-{RELATION_OP}	             {printOperator("relop"); return REL_OP;}
-{AND_OP}		     {printOperator("and"); return AND_OP;}
-{OR_OP}			     {printOperator("or"); return OR_OP;}
-{NOT_OP}		     {printOperator("not"); return NOT_OP;}
+(intger)	{printReservedWord(); yylval.type = "Reserved"; yylval.value = "integer"; return Integer;}
+(real)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "real"; return Real;}
+(return)	{printReservedWord(); yylval.type = "Reserved"; yylval.value = "return"; return Return;}
+(defstruct)	{printReservedWord(); yylval.type = "Reserved"; yylval.value = "defstruct"; return Defstruct;}
+(while)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "while"; return While;}
+(do)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "do"; return Do;}
+(if)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "if"; return If;}
+(then)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "then"; return Then;}
+(else)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "else"; return Else;}
+(main)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "main"; return Main;}
+(write)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "write"; return Write;}
+(read)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "read"; return Read;}
+(call)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "call"; return Call;}
+(var)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "var"; return Var;}
+(extern)	{printReservedWord(); yylval.type = "Reserved"; yylval.value = "extern"; return Extern;}
+{NUM}           {showToken("num"); yylval.type = "NUM"; yylval.value = yytext; return NUM;}
+{ID}            {showToken("id");  yylval.type = "ID"; yylval.value = yytext; return ID;}
+{STRING}        {showToken("str"); yylval.type = "STRING"; yylval.value = yytext; return STRING;}
+{UNCHANGABLE}   {printUnchangable(); return yytext[0];}
+{MUL_OP}	{printOperator("mulop");  yylval.type = "MUL_OP"; return MUL_OP;}
+{ADD_OP}	{printOperator("addop");  yylval.type = "ADD_OP"; return ADD_OP;}
+{ASSIGN_OP}	{printOperator("assign"); yylval.type = "ASSIGN_OP"; return ASSIGN_OP;}
+{RELATION_OP}	{printOperator("relop");  yylval.type = "REL_OP"; return REL_OP;}
+{AND_OP}	{printOperator("and"); 	  yylval.type = "AND_OP"; return AND_OP;}
+{OR_OP}		{printOperator("or"); 	  yylval.type = "OR_OP"; return OR_OP;}
+{NOT_OP}	{printOperator("not"); 	  yylval.type = "NOT_OP"; return NOT_OP;}
 .                            {printErr();}
 
 %%

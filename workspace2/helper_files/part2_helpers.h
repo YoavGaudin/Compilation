@@ -42,7 +42,7 @@ typedef struct
 
 typedef union
 {
-  alexStruct as
+  alexStruct as;
   yoavStruct ys;
   ParserNode *node;
   char* str;

@@ -5,4 +5,5 @@ workspace/myOut.tokens
 *.ova.*
 *.zip
 .metadata
+*.swp
 .gitignore~
