@@ -880,92 +880,92 @@ YY_RULE_SETUP
 case 3:
 YY_RULE_SETUP
 #line 51 "part2.lex"
-{printReservedWord(); yylval->type = "Reserved"; yylval->value = "integer"; return Integer;}
+{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("integer"); return Integer;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 52 "part2.lex"
-{printReservedWord(); yylval->type = "Reserved"; yylval->value = "real"; return Real;}
+{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("real"); return Real;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 53 "part2.lex"
-{printReservedWord(); yylval->type = "Reserved"; yylval->value = "return"; return Return;}
+{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("return"); return Return;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 54 "part2.lex"
-{printReservedWord(); yylval->type = "Reserved"; yylval->value = "defstruct"; return Defstruct;}
+{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("defstruct"); return Defstruct;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 55 "part2.lex"
-{printReservedWord(); yylval->type = "Reserved"; yylval->value = "while"; return While;}
+{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("while"); return While;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 56 "part2.lex"
-{printReservedWord(); yylval->type = "Reserved"; yylval->value = "do"; return Do;}
+{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("do"); return Do;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 57 "part2.lex"
-{printReservedWord(); yylval->type = "Reserved"; yylval->value = "if"; return If;}
+{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("if"); return If;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 58 "part2.lex"
-{printReservedWord(); yylval->type = "Reserved"; yylval->value = "then"; return Then;}
+{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("then"); return Then;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 59 "part2.lex"
-{printReservedWord(); yylval->type = "Reserved"; yylval->value = "else"; return Else;}
+{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("else"); return Else;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 60 "part2.lex"
-{printReservedWord(); yylval->type = "Reserved"; yylval->value = "main"; return Main;}
+{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("main"); return Main;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 61 "part2.lex"
-{printReservedWord(); yylval->type = "Reserved"; yylval->value = "write"; return Write;}
+{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("write"); return Write;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 62 "part2.lex"
-{printReservedWord(); yylval->type = "Reserved"; yylval->value = "read"; return Read;}
+{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("read"); return Read;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
 #line 63 "part2.lex"
-{printReservedWord(); yylval->type = "Reserved"; yylval->value = "call"; return Call;}
+{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("call"); return Call;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
 #line 64 "part2.lex"
-{printReservedWord(); yylval->type = "Reserved"; yylval->value = "var"; return Var;}
+{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("var"); return Var;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
 #line 65 "part2.lex"
-{printReservedWord(); yylval->type = "Reserved"; yylval->value = "extern"; return Extern;}
+{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("extern"); return Extern;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
 #line 66 "part2.lex"
-{showToken("num"); yylval->type = "NUM"; yylval->value = yytext; return NUM;}
+{showToken(strdup("num")); yylval->type = strdup("NUM"); yylval->value = strdup(yytext); return NUM;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 67 "part2.lex"
-{showToken("id");  yylval->type = "ID"; yylval->value = yytext; return ID;}
+{showToken(strdup("id"));  yylval->type = strdup("ID"); yylval->value = strdup(yytext); return ID;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 68 "part2.lex"
-{showToken("str"); yylval->type = "STRING"; yylval->value = yytext; return STRING;}
+{showToken(strdup("str")); yylval->type = strdup("STRING"); yylval->value = strdup(yytext); return STRING;}
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
@@ -976,37 +976,37 @@ YY_RULE_SETUP
 case 22:
 YY_RULE_SETUP
 #line 70 "part2.lex"
-{printOperator("mulop");  yylval->type = "MUL_OP"; return MUL_OP;}
+{printOperator("mulop");  yylval->type = strdup("MUL_OP"); return MUL_OP;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
 #line 71 "part2.lex"
-{printOperator("addop");  yylval->type = "ADD_OP"; return ADD_OP;}
+{printOperator("addop");  yylval->type = strdup("ADD_OP"); return ADD_OP;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
 #line 72 "part2.lex"
-{printOperator("assign"); yylval->type = "ASSIGN_OP"; return ASSIGN_OP;}
+{printOperator("assign"); yylval->type = strdup("ASSIGN_OP"); return ASSIGN_OP;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
 #line 73 "part2.lex"
-{printOperator("relop");  yylval->type = "REL_OP"; return REL_OP;}
+{printOperator("relop");  yylval->type = strdup("REL_OP"); return REL_OP;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 74 "part2.lex"
-{printOperator("and"); 	  yylval->type = "AND_OP"; return AND_OP;}
+{printOperator("and"); 	  yylval->type = strdup("AND_OP"); return AND_OP;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 75 "part2.lex"
-{printOperator("or"); 	  yylval->type = "OR_OP"; return OR_OP;}
+{printOperator("or"); 	  yylval->type = strdup("OR_OP"); return OR_OP;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
 #line 76 "part2.lex"
-{printOperator("not"); 	  yylval->type = "NOT_OP"; return NOT_OP;}
+{printOperator("not"); 	  yylval->type = strdup("NOT_OP"); return NOT_OP;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP

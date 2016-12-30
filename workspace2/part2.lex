@@ -48,32 +48,32 @@ COMMENT		   (\/\/.*)
 
 {END_OF_LINE}		     printf("\n");
 {COMMENT}		     {}
-(intger)	{printReservedWord(); yylval->type = "Reserved"; yylval->value = "integer"; return Integer;}
-(real)		{printReservedWord(); yylval->type = "Reserved"; yylval->value = "real"; return Real;}
-(return)	{printReservedWord(); yylval->type = "Reserved"; yylval->value = "return"; return Return;}
-(defstruct)	{printReservedWord(); yylval->type = "Reserved"; yylval->value = "defstruct"; return Defstruct;}
-(while)		{printReservedWord(); yylval->type = "Reserved"; yylval->value = "while"; return While;}
-(do)		{printReservedWord(); yylval->type = "Reserved"; yylval->value = "do"; return Do;}
-(if)		{printReservedWord(); yylval->type = "Reserved"; yylval->value = "if"; return If;}
-(then)		{printReservedWord(); yylval->type = "Reserved"; yylval->value = "then"; return Then;}
-(else)		{printReservedWord(); yylval->type = "Reserved"; yylval->value = "else"; return Else;}
-(main)		{printReservedWord(); yylval->type = "Reserved"; yylval->value = "main"; return Main;}
-(write)		{printReservedWord(); yylval->type = "Reserved"; yylval->value = "write"; return Write;}
-(read)		{printReservedWord(); yylval->type = "Reserved"; yylval->value = "read"; return Read;}
-(call)		{printReservedWord(); yylval->type = "Reserved"; yylval->value = "call"; return Call;}
-(var)		{printReservedWord(); yylval->type = "Reserved"; yylval->value = "var"; return Var;}
-(extern)	{printReservedWord(); yylval->type = "Reserved"; yylval->value = "extern"; return Extern;}
-{NUM}           {showToken("num"); yylval->type = "NUM"; yylval->value = yytext; return NUM;}
-{ID}            {showToken("id");  yylval->type = "ID"; yylval->value = yytext; return ID;}
-{STRING}        {showToken("str"); yylval->type = "STRING"; yylval->value = yytext; return STRING;}
+(intger)	{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("integer"); return Integer;}
+(real)		{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("real"); return Real;}
+(return)	{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("return"); return Return;}
+(defstruct)	{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("defstruct"); return Defstruct;}
+(while)		{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("while"); return While;}
+(do)		{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("do"); return Do;}
+(if)		{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("if"); return If;}
+(then)		{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("then"); return Then;}
+(else)		{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("else"); return Else;}
+(main)		{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("main"); return Main;}
+(write)		{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("write"); return Write;}
+(read)		{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("read"); return Read;}
+(call)		{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("call"); return Call;}
+(var)		{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("var"); return Var;}
+(extern)	{printReservedWord(); yylval->type = strdup("Reserved"); yylval->value = strdup("extern"); return Extern;}
+{NUM}           {showToken(strdup("num")); yylval->type = strdup("NUM"); yylval->value = strdup(yytext); return NUM;}
+{ID}            {showToken(strdup("id"));  yylval->type = strdup("ID"); yylval->value = strdup(yytext); return ID;}
+{STRING}        {showToken(strdup("str")); yylval->type = strdup("STRING"); yylval->value = strdup(yytext); return STRING;}
 {UNCHANGABLE}   {printUnchangable(); return yytext[0];}
-{MUL_OP}	{printOperator("mulop");  yylval->type = "MUL_OP"; return MUL_OP;}
-{ADD_OP}	{printOperator("addop");  yylval->type = "ADD_OP"; return ADD_OP;}
-{ASSIGN_OP}	{printOperator("assign"); yylval->type = "ASSIGN_OP"; return ASSIGN_OP;}
-{RELATION_OP}	{printOperator("relop");  yylval->type = "REL_OP"; return REL_OP;}
-{AND_OP}	{printOperator("and"); 	  yylval->type = "AND_OP"; return AND_OP;}
-{OR_OP}		{printOperator("or"); 	  yylval->type = "OR_OP"; return OR_OP;}
-{NOT_OP}	{printOperator("not"); 	  yylval->type = "NOT_OP"; return NOT_OP;}
+{MUL_OP}	{printOperator("mulop");  yylval->type = strdup("MUL_OP"); return MUL_OP;}
+{ADD_OP}	{printOperator("addop");  yylval->type = strdup("ADD_OP"); return ADD_OP;}
+{ASSIGN_OP}	{printOperator("assign"); yylval->type = strdup("ASSIGN_OP"); return ASSIGN_OP;}
+{RELATION_OP}	{printOperator("relop");  yylval->type = strdup("REL_OP"); return REL_OP;}
+{AND_OP}	{printOperator("and"); 	  yylval->type = strdup("AND_OP"); return AND_OP;}
+{OR_OP}		{printOperator("or"); 	  yylval->type = strdup("OR_OP"); return OR_OP;}
+{NOT_OP}	{printOperator("not"); 	  yylval->type = strdup("NOT_OP"); return NOT_OP;}
 .                            {printErr();}
 
 %%

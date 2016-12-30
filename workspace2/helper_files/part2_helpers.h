@@ -4,18 +4,17 @@
 #ifndef COMMON_H
 #define COMMON_H
 #include <stdlib.h>
-#include <string.h>
 
 typedef struct node {
-    std::string type;
-    std::string value;
+    char * type;
+    char * value;
     struct node *sibling;
     struct node *child;
 } ParserNode;
 
-ParserNode *makeNode(std::string type, std::string value, ParserNode *child);
+ParserNode *makeNode(const char* type, const char* value, ParserNode *child);
 
-ParserNode *concatList(ParserNode *listHead, ParserNode *newItem);
+ParserNode *concatList(ParserNode *listHead,ParserNode *newItem);
 
 void dumpParseTree(void);
 
