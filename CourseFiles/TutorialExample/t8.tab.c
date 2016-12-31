@@ -62,23 +62,18 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 2 "part2.ypp" /* yacc.c:339  */
+#line 1 "t8.y" /* yacc.c:339  */
 
-  #ifndef __cplusplus
-  #define __cplusplus
-  #endif
-  #include <iostream>
-  #include <string>
-  #include "helper_files/part2_helpers.h"
+/* Example for tutorial 8 - Bison file */
+#include <stdlib.h>
+#include <stdio.h>
+#include "t8.h"
 
-  using namespace std;
+extern int yylex();
 
-  int yylex (void);
-  void yyerror (char const *);
-  
-  ParserNode *parseTree;
+void yyerror(const char* msg);
 
-#line 82 "part2.tab.cpp" /* yacc.c:339  */
+#line 77 "t8.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -97,9 +92,9 @@
 #endif
 
 /* In a future release of Bison, this section will be replaced
-   by #include "part2.tab.hpp".  */
-#ifndef YY_YY_PART2_TAB_HPP_INCLUDED
-# define YY_YY_PART2_TAB_HPP_INCLUDED
+   by #include "t8.tab.h".  */
+#ifndef YY_YY_T8_TAB_H_INCLUDED
+# define YY_YY_T8_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -113,31 +108,9 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    NUM = 258,
-    Defstruct = 259,
-    Extern = 260,
-    Main = 261,
-    Var = 262,
-    Integer = 263,
-    Real = 264,
-    If = 265,
-    Then = 266,
-    Else = 267,
-    While = 268,
-    Do = 269,
-    Return = 270,
-    Write = 271,
-    Read = 272,
-    Call = 273,
-    ID = 274,
-    STRING = 275,
-    ADD_OP = 276,
-    MUL_OP = 277,
-    AND_OP = 278,
-    OR_OP = 279,
-    REL_OP = 280,
-    ASSIGN_OP = 281,
-    NOT_OP = 282
+    EXP_END = 258,
+    NUM_I = 259,
+    NUM_F = 260
   };
 #endif
 
@@ -153,11 +126,11 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_PART2_TAB_HPP_INCLUDED  */
+#endif /* !YY_YY_T8_TAB_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-#line 161 "part2.tab.cpp" /* yacc.c:358  */
+#line 134 "t8.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -397,23 +370,23 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  3
+#define YYFINAL  5
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   168
+#define YYLAST   9
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  37
+#define YYNTOKENS  8
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  26
+#define YYNNTS  3
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  61
+#define YYNRULES  6
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  132
+#define YYNSTATES  11
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   282
+#define YYMAXUTOK   260
 
 #define YYTRANSLATE(YYX)                                                \
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -426,15 +399,15 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-      31,    32,     2,     2,    33,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,    34,    30,
+       2,     2,     7,     6,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,    35,     2,    36,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,    28,     2,    29,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -448,22 +421,14 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27
+       5
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint16 yyrline[] =
+static const yytype_uint8 yyrline[] =
 {
-       0,    29,    29,    36,    45,    49,    60,    70,    74,    77,
-      81,    87,    92,    96,   100,   108,   112,   116,   122,   128,
-     134,   140,   147,   151,   156,   160,   164,   168,   172,   176,
-     180,   184,   189,   198,   206,   215,   221,   229,   233,   237,
-     246,   253,   261,   267,   273,   278,   284,   291,   297,   303,
-     309,   316,   320,   324,   328,   333,   340,   348,   357,   360,
-     364,   368
+       0,    18,    18,    27,    29,    31,    46
 };
 #endif
 
@@ -472,15 +437,8 @@ static const yytype_uint16 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "NUM", "Defstruct", "Extern", "Main",
-  "Var", "Integer", "Real", "If", "Then", "Else", "While", "Do", "Return",
-  "Write", "Read", "Call", "ID", "STRING", "ADD_OP", "MUL_OP", "AND_OP",
-  "OR_OP", "REL_OP", "ASSIGN_OP", "NOT_OP", "'{'", "'}'", "';'", "'('",
-  "')'", "','", "':'", "'['", "']'", "$accept", "PROGRAM", "TDEFS",
-  "FDEFS", "FUNC_ARGLIST_FULL", "FUNC_ARGLIST", "MAIN_FUNCTION", "BLK",
-  "DECLARATIONS", "DECLARLIST", "DCL", "TYPE", "LIST", "STMT",
-  "STMT_RETURN", "WRITE", "READ", "ASSN", "LVAL", "CNTRL", "BEXP", "EXP",
-  "STREF", "CALL", "CALL_ARGS_FULL", "CALL_ARGS", YY_NULLPTR
+  "$end", "error", "$undefined", "EXP_END", "NUM_I", "NUM_F", "'+'",
+  "'*'", "$accept", "WHOLE_EXP", "EXP", YY_NULLPTR
 };
 #endif
 
@@ -489,17 +447,14 @@ static const char *const yytname[] =
    (internal) symbol number NUM (which must be that of a token).  */
 static const yytype_uint16 yytoknum[] =
 {
-       0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-     265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
-     275,   276,   277,   278,   279,   280,   281,   282,   123,   125,
-      59,    40,    41,    44,    58,    91,    93
+       0,   256,   257,   258,   259,   260,    43,    42
 };
 # endif
 
-#define YYPACT_NINF -81
+#define YYPACT_NINF -7
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-81)))
+  (!!((Yystate) == (-7)))
 
 #define YYTABLE_NINF -1
 
@@ -508,22 +463,10 @@ static const yytype_uint16 yytoknum[] =
 
   /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
      STATE-NUM.  */
-static const yytype_int16 yypact[] =
+static const yytype_int8 yypact[] =
 {
-     -81,    22,    16,   -81,    19,   118,    31,   120,    59,   -81,
-     -81,   -81,    49,    97,    56,    63,    60,    31,   -81,    70,
-      50,    31,    -2,    90,    81,   -81,    91,    31,   -81,    31,
-     -81,   -81,   -81,   104,   -81,    31,    73,    82,   102,   -81,
-     -81,   105,    13,    13,   107,   108,   109,   101,   -81,   -81,
-     -81,   -81,   -81,   -81,   -81,   115,   -81,   110,    59,    31,
-     112,   -81,   124,   101,    13,    51,     1,    52,   110,   -81,
-      96,    15,    45,   125,   127,    15,   128,   -81,   -81,   -81,
-     117,   -81,   119,    89,    20,    84,    13,    13,    15,    15,
-      15,    84,    53,    74,   121,    83,   122,   113,    95,   114,
-      15,    15,   -81,   -81,   140,   -81,   -81,   -81,   -81,   111,
-     -81,    86,   126,   129,   130,   131,   -81,   -81,   -81,   111,
-     123,   132,   111,    84,   -81,   -81,   -81,   -81,   -81,    15,
-     -81,   111
+       1,    -7,    -7,     7,    -3,    -7,    -7,     1,     1,     2,
+      -7
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -531,36 +474,20 @@ static const yytype_int16 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       4,     0,     7,     1,     0,    13,     0,     0,    16,    22,
-      23,     2,     0,     0,     0,     0,     0,     0,    12,     0,
-       0,     0,     0,     0,     0,    18,     0,    15,    25,     9,
-      21,    20,    19,     0,    17,     9,    16,     0,     8,    11,
-       3,     0,     0,     0,     0,     0,     0,    37,    14,    31,
-      24,    30,    29,    28,    26,     0,    27,    38,    16,     0,
-       0,    53,     0,    51,     0,     0,     0,     0,    52,    54,
-       0,     0,     0,     0,     0,     0,     0,     5,    10,     6,
-       0,    44,     0,     0,     0,    16,     0,     0,     0,     0,
-       0,    16,     0,     0,     0,     0,     0,     0,     0,     0,
-      59,     0,    46,    49,    40,    43,    42,    47,    48,    45,
-      41,     0,     0,     0,     0,     0,    55,    36,    56,    60,
-       0,    58,    50,    16,    32,    34,    33,    35,    57,     0,
-      39,    61
+       0,     3,     4,     0,     0,     1,     2,     0,     0,     5,
+       6
 };
 
   /* YYPGOTO[NTERM-NUM].  */
-static const yytype_int16 yypgoto[] =
+static const yytype_int8 yypgoto[] =
 {
-     -81,   -81,   -81,   -81,   133,   -81,   -81,    -7,   -81,   141,
-      -6,    -3,   -81,   -80,   -81,   -81,   -81,   -81,    93,   -81,
-     -29,   -62,   -36,   -81,   -81,   -81
+      -7,    -7,    -6
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     1,     2,     5,    37,    38,    11,    49,    19,    14,
-      15,    82,    36,    50,    51,    52,    53,    54,    55,    56,
-      66,    67,    68,    69,   120,   121
+      -1,     3,     4
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -568,88 +495,32 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-      57,    18,    12,    84,    16,   104,     9,    10,    24,    93,
-      95,   110,    85,    98,    70,    30,    61,    31,    61,    32,
-       4,    24,     3,    39,    86,    87,   107,   108,   109,    39,
-     111,    62,    63,    62,    63,    81,    83,    57,   119,   122,
-      64,    88,    89,   130,    65,    90,    92,     6,    61,    57,
-      13,    77,   103,    78,    61,    57,    61,   105,   106,     9,
-      10,     9,    10,    62,    63,    94,    17,   131,    20,    62,
-      63,    62,    63,    88,    89,    13,    92,    90,    64,    26,
-      17,    29,    65,    42,    92,    23,    43,    57,    44,    45,
-      46,    17,    47,    25,    42,    88,    89,    43,    28,    44,
-      45,    46,    48,    47,    88,    89,   112,    88,    89,    33,
-      91,    34,    86,    87,    58,   114,    88,    89,   103,    86,
-      87,   102,    35,     7,     8,   117,     9,    10,     9,    10,
-      21,    22,    88,    89,    40,    59,    74,    60,    71,    72,
-      73,    75,    79,    80,    47,    76,    97,    99,   100,   116,
-     118,   101,   123,   113,   115,   128,   124,     0,    27,   125,
-     126,   127,     0,     0,     0,   129,    96,     0,    41
+       6,     9,    10,     7,     8,     1,     2,     5,     0,     8
 };
 
-static const yytype_int16 yycheck[] =
+static const yytype_int8 yycheck[] =
 {
-      36,     8,     5,    65,     7,    85,     8,     9,    14,    71,
-      72,    91,    11,    75,    43,    21,     3,    19,     3,    22,
-       4,    27,     0,    29,    23,    24,    88,    89,    90,    35,
-      92,    18,    19,    18,    19,    64,    65,    73,   100,   101,
-      27,    21,    22,   123,    31,    25,    31,    28,     3,    85,
-      19,    58,    32,    59,     3,    91,     3,    86,    87,     8,
-       9,     8,     9,    18,    19,    20,     7,   129,    19,    18,
-      19,    18,    19,    21,    22,    19,    31,    25,    27,    19,
-       7,    31,    31,    10,    31,    29,    13,   123,    15,    16,
-      17,     7,    19,    30,    10,    21,    22,    13,    28,    15,
-      16,    17,    29,    19,    21,    22,    32,    21,    22,    19,
-      14,    30,    23,    24,    32,    32,    21,    22,    32,    23,
-      24,    32,    31,     5,     6,    30,     8,     9,     8,     9,
-      33,    34,    21,    22,    30,    33,    35,    32,    31,    31,
-      31,    26,    30,    19,    19,    35,    19,    19,    31,    36,
-      36,    32,    12,    32,    32,    32,    30,    -1,    17,    30,
-      30,    30,    -1,    -1,    -1,    33,    73,    -1,    35
+       3,     7,     8,     6,     7,     4,     5,     0,    -1,     7
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    38,    39,     0,     4,    40,    28,     5,     6,     8,
-       9,    43,    48,    19,    46,    47,    48,     7,    44,    45,
-      19,    33,    34,    29,    47,    30,    19,    46,    28,    31,
-      47,    19,    48,    19,    30,    31,    49,    41,    42,    47,
-      30,    41,    10,    13,    15,    16,    17,    19,    29,    44,
-      50,    51,    52,    53,    54,    55,    56,    59,    32,    33,
-      32,     3,    18,    19,    27,    31,    57,    58,    59,    60,
-      57,    31,    31,    31,    35,    26,    35,    44,    47,    30,
-      19,    57,    48,    57,    58,    11,    23,    24,    21,    22,
-      25,    14,    31,    58,    20,    58,    55,    19,    58,    19,
-      31,    32,    32,    32,    50,    57,    57,    58,    58,    58,
-      50,    58,    32,    32,    32,    32,    36,    30,    36,    58,
-      61,    62,    58,    12,    30,    30,    30,    30,    32,    33,
-      50,    58
+       0,     4,     5,     9,    10,     0,     3,     6,     7,    10,
+      10
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    37,    38,    39,    39,    40,    40,    40,    41,    41,
-      42,    42,    43,    43,    44,    45,    45,    46,    46,    47,
-      47,    47,    48,    48,    49,    49,    50,    50,    50,    50,
-      50,    50,    51,    52,    52,    53,    54,    55,    55,    56,
-      56,    56,    57,    57,    57,    57,    57,    58,    58,    58,
-      58,    58,    58,    58,    58,    59,    59,    60,    61,    61,
-      62,    62
+       0,     8,     9,    10,    10,    10,    10
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     3,     7,     0,     7,     8,     0,     1,     0,
-       3,     1,     2,     0,     4,     2,     0,     3,     2,     3,
-       3,     3,     1,     1,     2,     0,     1,     1,     1,     1,
-       1,     1,     5,     5,     5,     5,     4,     1,     1,     6,
-       4,     4,     3,     3,     2,     3,     3,     3,     3,     3,
-       4,     1,     1,     1,     1,     4,     4,     5,     1,     0,
-       1,     3
+       0,     2,     2,     1,     1,     3,     3
 };
 
 
@@ -1326,527 +1197,69 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 29 "part2.ypp" /* yacc.c:1646  */
+#line 18 "t8.y" /* yacc.c:1646  */
     {
-			(yyval) = makeNode((char*)"PROGRAM", NULL, (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1336 "part2.tab.cpp" /* yacc.c:1646  */
+                    if ((yyvsp[-1]).data_type == DTYPE_I)
+                        printf("\t= %d\n", (yyvsp[-1]).ival);
+                    else
+                        printf("\t= %f\n", (yyvsp[-1]).fval);
+                    return 0;
+                }
+#line 1209 "t8.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 36 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"TDEFS", NULL, (yyvsp[-6]));
-			concatList((yyval), (yyvsp[-5]));
-			concatList((yyval), makeNode((char*)"{", NULL, NULL));
-			concatList((yyval), (yyvsp[-3]));
-			concatList((yyval), makeNode((char*)"}", NULL, NULL));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)";", NULL, NULL));
-		}
-#line 1350 "part2.tab.cpp" /* yacc.c:1646  */
+#line 27 "t8.y" /* yacc.c:1646  */
+    { (yyval).data_type = DTYPE_I; (yyval).ival = (yyvsp[0]).ival; }
+#line 1215 "t8.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 4:
+#line 29 "t8.y" /* yacc.c:1646  */
+    { (yyval).data_type = DTYPE_F; (yyval).fval = (yyvsp[0]).fval; }
+#line 1221 "t8.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 49 "part2.ypp" /* yacc.c:1646  */
+#line 31 "t8.y" /* yacc.c:1646  */
     {
-			(yyval) = makeNode((char*)"FDEFS", NULL, (yyvsp[-6]));
-			concatList((yyval), (yyvsp[-5]));
-			concatList((yyval), (yyvsp[-4]));
-			concatList((yyval), makeNode((char*)"(", NULL, NULL));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
-			concatList((yyval), (yyvsp[0]));
-			
-		}
-#line 1365 "part2.tab.cpp" /* yacc.c:1646  */
+                    if ((yyvsp[-2]).data_type != (yyvsp[0]).data_type) {
+                        printf("Data type mismatch!\n");
+                        exit(3);
+                    }
+                    (yyval).data_type = (yyvsp[-2]).data_type;
+                    if ((yyvsp[-2]).data_type == DTYPE_F) {
+                        printf("%f + %f\n", (yyvsp[-2]).fval, (yyvsp[0]).fval);
+                        (yyval).fval = (yyvsp[-2]).fval + (yyvsp[0]).fval;
+                    } else { /*I*/
+                        printf("%d + %d\n", (yyvsp[-2]).ival, (yyvsp[0]).ival);
+                        (yyval).ival = (yyvsp[-2]).ival + (yyvsp[0]).ival;
+                    }
+                }
+#line 1240 "t8.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 60 "part2.ypp" /* yacc.c:1646  */
+#line 46 "t8.y" /* yacc.c:1646  */
     {
-			(yyval) = makeNode((char*)"FDEFS", NULL, (yyvsp[-7]));
-			concatList((yyval), (yyvsp[-6]));
-			concatList((yyval), (yyvsp[-5]));
-			concatList((yyval), (yyvsp[-4]));
-			concatList((yyval), makeNode((char*)"(", NULL, NULL));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
-			concatList((yyval), makeNode((char*)";", NULL, NULL));
-		}
-#line 1380 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 8:
-#line 74 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"FUNC_ARGLIST_FULL", NULL, (yyvsp[0]));
-		}
-#line 1388 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 10:
-#line 81 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"FUNC_ARGLIST", NULL, (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)",", NULL, NULL));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1398 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 11:
-#line 87 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"FUNC_ARGLIST", NULL, (yyvsp[0]));
-		}
-#line 1406 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 12:
-#line 92 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"MAIN_FUNCTION", NULL, makeNode((char*)"Main", NULL, NULL));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1415 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 14:
-#line 100 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"BLK", NULL, (yyvsp[-3]));
-			concatList((yyval), makeNode((char*)"{", NULL, NULL));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)"}", NULL, NULL));
-		}
-#line 1426 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 15:
-#line 108 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"DECLARATIONS", NULL, (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1435 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 17:
-#line 116 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"DECLARLIST", NULL, (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)";", NULL, NULL));
-		}
-#line 1445 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 18:
-#line 122 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"DECLARLIST", NULL, (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)";", NULL, NULL));
-		}
-#line 1454 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 19:
-#line 128 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"DCL", NULL, (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)":", NULL, NULL));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1464 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 20:
-#line 134 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"DCL", NULL, (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)":", NULL, NULL));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1474 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 21:
-#line 140 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"DCL", NULL, (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)":", NULL, NULL));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1484 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 22:
-#line 147 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"TYPE", NULL, (yyvsp[0]));
-		}
-#line 1492 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 23:
-#line 151 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"TYPE", NULL, (yyvsp[0]));
-		}
-#line 1500 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 24:
-#line 156 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"LIST", NULL, (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1509 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 26:
-#line 164 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
-		}
-#line 1517 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 27:
-#line 168 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
-		}
-#line 1525 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 28:
-#line 172 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
-		}
-#line 1533 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 29:
-#line 176 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
-		}
-#line 1541 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 30:
-#line 180 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
-		}
-#line 1549 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 31:
-#line 184 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
-		}
-#line 1557 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 32:
-#line 189 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"STMT_RETURN", NULL, (yyvsp[-4]));
-			concatList((yyval), makeNode((char*)"(", NULL, NULL));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
-			concatList((yyval), makeNode((char*)";", NULL, NULL));
-		}
-#line 1569 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 33:
-#line 198 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"WRITE", NULL, (yyvsp[-4]));
-			concatList((yyval), makeNode((char*)"(", NULL, NULL));	
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
-			concatList((yyval), makeNode((char*)";", NULL, NULL));
-		}
-#line 1581 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 34:
-#line 206 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"WRITE", NULL, (yyvsp[-4]));
-			concatList((yyval), makeNode((char*)"(", NULL, NULL));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
-			concatList((yyval), makeNode((char*)";", NULL, NULL));
-		}
-#line 1593 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 35:
-#line 215 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"READ", NULL, (yyvsp[-4]));
-			concatList((yyval), makeNode((char*)"(", NULL, NULL));	
-		}
-#line 1602 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 36:
-#line 221 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"ASSN", NULL, (yyvsp[-3]));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)";", NULL, NULL));
-		}
-#line 1613 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 37:
-#line 229 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"LVAL", NULL, (yyvsp[0]));
-		}
-#line 1621 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 38:
-#line 233 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"LVAL", NULL, (yyvsp[0]));
-		}
-#line 1629 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 39:
-#line 237 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"CNTRL", NULL, (yyvsp[-5]));
-			concatList((yyval), (yyvsp[-4]));
-			concatList((yyval), (yyvsp[-3]));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1642 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 40:
-#line 246 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"CNTRL", NULL, (yyvsp[-3]));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1653 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 41:
-#line 253 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"CNTRL", NULL, makeNode((char*)"while", NULL, NULL));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1664 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 42:
-#line 261 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"BEXP", NULL, (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1674 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 43:
-#line 267 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"BEXP", NULL, (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1684 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 44:
-#line 273 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"BEXP", NULL, (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1693 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 45:
-#line 278 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"BEXP", NULL, (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1703 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 46:
-#line 284 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"BEXP", NULL, makeNode((char*)"(", NULL, NULL));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
-		}
-#line 1713 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 47:
-#line 291 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1723 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 48:
-#line 297 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1733 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 49:
-#line 303 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"EXP", NULL, makeNode((char*)"(", NULL, NULL));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
-		}
-#line 1743 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 50:
-#line 309 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"EXP", NULL, makeNode((char*)"(", NULL, NULL));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1754 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 51:
-#line 316 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[0]));
-		}
-#line 1762 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 52:
-#line 320 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[0]));
-		}
-#line 1770 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 53:
-#line 324 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[0]));
-		}
-#line 1778 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 54:
-#line 328 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[0]));
-		}
-#line 1786 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 55:
-#line 333 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"STREF", NULL, (yyvsp[-3]));
-			concatList((yyval), makeNode((char*)"[", NULL, NULL));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)"]", NULL, NULL));
-		}
-#line 1797 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 56:
-#line 340 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"STREF", NULL, (yyvsp[-3]));
-			concatList((yyval), makeNode((char*)"[", NULL, NULL));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)"]", NULL, NULL));
-		}
-#line 1808 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 57:
-#line 348 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"CALL", NULL, (yyvsp[-4]));
-			concatList((yyval), (yyvsp[-3]));
-			concatList((yyval), makeNode((char*)"(", NULL, NULL));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
-		}
-#line 1820 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 58:
-#line 357 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"CALL_ARGS_FULL", NULL, (yyvsp[0]));
-		}
-#line 1828 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 60:
-#line 364 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"CALL_ARGS", NULL, (yyvsp[0]));
-		}
-#line 1836 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 61:
-#line 368 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"CALL_ARGS", NULL, (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)",", NULL, NULL));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1846 "part2.tab.cpp" /* yacc.c:1646  */
+                    if ((yyvsp[-2]).data_type != (yyvsp[0]).data_type) {
+                        printf("Data type mismatch!\n");
+                        exit(3);
+                    }
+                    (yyval).data_type = (yyvsp[-2]).data_type;
+                    if ((yyvsp[-2]).data_type == DTYPE_F) {
+                        printf("%f * %f\n", (yyvsp[-2]).fval, (yyvsp[0]).fval);
+                        (yyval).fval = (yyvsp[-2]).fval * (yyvsp[0]).fval;
+                    } else { /*I*/
+                        printf("%d * %d\n", (yyvsp[-2]).ival, (yyvsp[0]).ival);
+                        (yyval).ival = (yyvsp[-2]).ival * (yyvsp[0]).ival;
+                    }
+                }
+#line 1259 "t8.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1850 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1263 "t8.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2074,9 +1487,17 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 374 "part2.ypp" /* yacc.c:1906  */
+#line 62 "t8.y" /* yacc.c:1906  */
 
 
-void yyerror (char const *){
-   cout << "syntax error" << endl;
+void yyerror(const char* msg)
+{
+    printf("yyerror %s\n", msg);
+    exit(2);
 }
+
+int main(void)
+{
+    return yyparse();
+}
+

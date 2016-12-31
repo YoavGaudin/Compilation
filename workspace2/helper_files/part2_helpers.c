@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include "part2_helpers.h"
 
+using namespace std;
+
 extern ParserNode *parseTree; /* Root of parse tree. Defined in the parser. */
 
 extern int yyparse (void);
@@ -11,16 +13,16 @@ extern int yyparse (void);
 /*                             MAKE a node                                */
 /**************************************************************************/
 
-ParserNode *makeNode(const char* type,const char* value, ParserNode *child)
+ParserNode *makeNode(char* type, char* value, ParserNode *child)
 {
   ParserNode *p;
 
   if ((p = (ParserNode*)(malloc(sizeof(ParserNode)))) == 0)
     fprintf(stderr, "Failed malloc(struct node)\n");
   else {
-    p->type = strdup(type);
+    p->type = type;
     if (value != NULL) {
-      p->value = strdup(value);
+      p->value = value;
     } else {
       p->value = NULL;
     }
@@ -35,7 +37,7 @@ ParserNode *makeNode(const char* type,const char* value, ParserNode *child)
 /*                           Concate item to list                         */
 /**************************************************************************/
 
-ParserNode *concatList(ParserNode *listHead,ParserNode *newItem)
+ParserNode *concatList(ParserNode *listHead, ParserNode *newItem)
 {
   ParserNode* lastSibling;
 
@@ -59,7 +61,7 @@ static void dumpParseSubtree(ParserNode *parentNode, int depth)
     ParserNode *curChild;
     char indent[(depth * 2) + 1];
     memset(indent, ' ', depth * 2); // Indentation is two spaces per depth level
-    indent[depth * 2] = 0; // NULL terminate string.
+    indent[depth * 2] = 0; // NULL terminate char*.
 
     if (parentNode == NULL) // probably reached "child" of a leaf
         return;

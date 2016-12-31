@@ -7,7 +7,7 @@ part2: part2.tab.cpp part2.tab.hpp part2-lex.c part2-lex.h helper_files/part2_he
 
 part2-lex.c part2-lex.h: part2.lex helper_files/part2_helpers.h
 	flex part2.lex
-	
+
 part2.tab.cpp part2.tab.hpp: part2.ypp helper_files/part2_helpers.h
 	bison -d part2.ypp
 
