@@ -16,7 +16,7 @@ extern int yyparse (void);
 ParserNode *makeNode(char* type, char* value, ParserNode *child)
 {
   ParserNode *p;
-
+  // printf("in makeNode %s\n", value);
   if ((p = (ParserNode*)(malloc(sizeof(ParserNode)))) == 0)
     fprintf(stderr, "Failed malloc(struct node)\n");
   else {

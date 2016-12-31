@@ -3,12 +3,12 @@
 for file in ./tests/*.cmm
 do
    echo testing ${file%.cmm}
-   ./part1 < $file > ./tests/result.out
-   if [ -a ${file/.cmm/.tokens} ]
+   ./part2 < $file > ./tests/result.out
+   if [ -a ${file/.cmm/.tree} ]
    then 
-      diff ./tests/result.out ${file/.cmm/.tokens}
+      diff ./tests/result.out ${file/.cmm/.tree}
    else
-      cp ./tests/result.out ${file/.cmm/.tokens}
+      diff ./tests/result.out ${file/.cmm/.output}
    fi
    echo OK
 done

@@ -1,6 +1,0 @@
-hello 				 		 tabs and spaces check
-"two string in a row""second"
-"""" //two empty strings in a row
-
-// Invalid |
-== | >

@@ -19,10 +19,12 @@
 %token Defstruct Extern Main Var Integer Real If Then Else While Do Return Write Read Call
 %token ID
 %token STRING
+%token ',' ';' ':'
 
 %left ADD_OP MUL_OP AND_OP OR_OP REL_OP
 %right ASSIGN_OP NOT_OP
-
+%left '[' '{' '('
+%right ']' '}' ')'
 %%
 
 PROGRAM: 
@@ -373,6 +375,6 @@ CALL_ARGS:
 	
 %%
 
-void yyerror (char const *){
-   cout << "syntax error" << endl;
+void yyerror (char const *err){
+   cout << "syntax error:" << err << endl;
 }
