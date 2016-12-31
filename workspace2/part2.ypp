@@ -1,6 +1,8 @@
 /* Reverse polish notation calculator.  */
 %{
+  #ifndef __cplusplus
   #define __cplusplus
+  #endif
   #include <iostream>
   #include <string>
   #include "helper_files/part2_helpers.h"
@@ -25,8 +27,7 @@
 
 PROGRAM: 
 		TDEFS FDEFS MAIN_FUNCTION {
-			*parseTree = makeNode("PROGRAM", NULL, $1.node);
-			$$.node = *parseTree;
+			$$.node = makeNode("PROGRAM", NULL, $1.node);
 			concatList($$.node, $2.node);
 			concatList($$.node, $3.node);
 		}
@@ -48,7 +49,7 @@ FDEFS:
 		FDEFS TYPE ID '(' FUNC_ARGLIST_FULL ')' BLK {
 			$$.node = makeNode("FDEFS", NULL, $1.node);
 			concatList($$.node, $2.node);
-			concatList($$.node, $3.node));
+			concatList($$.node, $3.node);
 			concatList($$.node, makeNode("(", NULL, NULL));
 			concatList($$.node, $5.node);
 			concatList($$.node, makeNode(")", NULL, NULL));
@@ -115,7 +116,7 @@ DECLARLIST:
 		DECLARLIST DCL ';' {
 			$$.node = makeNode("DECLARLIST", NULL, $1.node);
 			concatList($$.node, $2.node);
-			concatList($$.node, makeNode(";", NULL, NULL))
+			concatList($$.node, makeNode(";", NULL, NULL));
 		}
 	|
 		DCL ';' {
@@ -125,19 +126,19 @@ DECLARLIST:
 		
 DCL: 
 		ID ':' TYPE {
-			$$.node = makeNode("DCL", NULL, makeNode("ID", $1.str, NULL));
+			$$.node = makeNode("DCL", NULL, $1.node);
 			concatList($$.node, makeNode(":", NULL, NULL));
 			concatList($$.node, $3.node);
 		} 
 	|
 		ID ':' ID {
-			$$.node = makeNode("DCL", NULL, makeNode("ID", $1.str, NULL));
+			$$.node = makeNode("DCL", NULL, $1.node);
 			concatList($$.node, makeNode(":", NULL, NULL));
 			concatList($$.node, $3.node);
 		} 
 	|
 		ID ',' DCL {
-			$$.node = makeNode("DCL", NULL, makeNode("ID", $1.str, NULL));
+			$$.node = makeNode("DCL", NULL, $1.node);
 			concatList($$.node, makeNode(":", NULL, NULL));
 			concatList($$.node, $3.node);
 		}
@@ -195,7 +196,6 @@ STMT_RETURN:
 	
 WRITE: 
 		Write '(' EXP ')' ';' {
-		1        2  3
 			$$.node = makeNode("WRITE", NULL, $1.node);
 			concatList($$.node, makeNode("(", NULL, NULL));	
 			concatList($$.node, $3.node);
@@ -333,7 +333,7 @@ STREF:
 		ID '[' ID ']' {
 			$$.node = makeNode("STREF", NULL, $1.node);
 			concatList($$.node, makeNode("[", NULL, NULL));
-			concatList($$.node, makeNode("ID", $3.str, NULL));
+			concatList($$.node, $3.node);
 			concatList($$.node, makeNode("]", NULL, NULL));
 		}
 	|
@@ -372,3 +372,7 @@ CALL_ARGS:
 		}
 	
 %%
+
+void yyerror (char const *){
+   cout << "syntax error" << endl;
+}

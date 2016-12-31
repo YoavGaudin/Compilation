@@ -48,32 +48,32 @@ COMMENT		   (\/\/.*)
 
 {END_OF_LINE}		     printf("\n");
 {COMMENT}		     {}
-(intger)	{printReservedWord(); yylval.type = "Reserved"; yylval.value = "integer"; return Integer;}
-(real)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "real"; return Real;}
-(return)	{printReservedWord(); yylval.type = "Reserved"; yylval.value = "return"; return Return;}
-(defstruct)	{printReservedWord(); yylval.type = "Reserved"; yylval.value = "defstruct"; return Defstruct;}
-(while)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "while"; return While;}
-(do)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "do"; return Do;}
-(if)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "if"; return If;}
-(then)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "then"; return Then;}
-(else)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "else"; return Else;}
-(main)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "main"; return Main;}
-(write)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "write"; return Write;}
-(read)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "read"; return Read;}
-(call)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "call"; return Call;}
-(var)		{printReservedWord(); yylval.type = "Reserved"; yylval.value = "var"; return Var;}
-(extern)	{printReservedWord(); yylval.type = "Reserved"; yylval.value = "extern"; return Extern;}
-{NUM}           {showToken("num"); yylval.type = "NUM"; yylval.value = yytext; return NUM;}
-{ID}            {showToken("id");  yylval.type = "ID"; yylval.value = yytext; return ID;}
-{STRING}        {showToken("str"); yylval.type = "STRING"; yylval.value = yytext; return STRING;}
+(intger)	{printReservedWord(); yylval.node = makeNode((char*)"Reserved", (char*)"integer", NULL); return Integer;}
+(real)		{printReservedWord(); yylval.node = makeNode((char*)"Reserved", (char*)"real", NULL); return Real;}
+(return)	{printReservedWord(); yylval.node = makeNode((char*)"Reserved", (char*)"return", NULL); return Return;}
+(defstruct)	{printReservedWord(); yylval.node = makeNode((char*)"Reserved", (char*)"defstruct", NULL); return Defstruct;}
+(while)		{printReservedWord(); yylval.node = makeNode((char*)"Reserved", (char*)"while", NULL); return While;}
+(do)		{printReservedWord(); yylval.node = makeNode((char*)"Reserved", (char*)"do", NULL); return Do;}
+(if)		{printReservedWord(); yylval.node = makeNode((char*)"Reserved", (char*)"if", NULL); return If;}
+(then)		{printReservedWord(); yylval.node = makeNode((char*)"Reserved", (char*)"then", NULL); return Then;}
+(else)		{printReservedWord(); yylval.node = makeNode((char*)"Reserved", (char*)"else", NULL); return Else;}
+(main)		{printReservedWord(); yylval.node = makeNode((char*)"Reserved", (char*)"main", NULL); return Main;}
+(write)		{printReservedWord(); yylval.node = makeNode((char*)"Reserved", (char*)"write", NULL); return Write;}
+(read)		{printReservedWord(); yylval.node = makeNode((char*)"Reserved", (char*)"read", NULL); return Read;}
+(call)		{printReservedWord(); yylval.node = makeNode((char*)"Reserved", (char*)"call", NULL); return Call;}
+(var)		{printReservedWord(); yylval.node = makeNode((char*)"Reserved", (char*)"var", NULL); return Var;}
+(extern)	{printReservedWord(); yylval.node = makeNode((char*)"Reserved", (char*)"extern", NULL); return Extern;}
+{NUM}           {showToken((char*)"num"); yylval.node = makeNode((char*)"NUM",  yytext, NULL); return NUM;}
+{ID}            {showToken((char*)"id");  yylval.node = makeNode((char*)"ID", yytext, NULL); return ID;}
+{STRING}        {showToken((char*)"str"); yylval.node = makeNode((char*)"STRING", yytext, NULL); return STRING;}
 {UNCHANGABLE}   {printUnchangable(); return yytext[0];}
-{MUL_OP}	{printOperator("mulop");  yylval.type = "MUL_OP"; return MUL_OP;}
-{ADD_OP}	{printOperator("addop");  yylval.type = "ADD_OP"; return ADD_OP;}
-{ASSIGN_OP}	{printOperator("assign"); yylval.type = "ASSIGN_OP"; return ASSIGN_OP;}
-{RELATION_OP}	{printOperator("relop");  yylval.type = "REL_OP"; return REL_OP;}
-{AND_OP}	{printOperator("and"); 	  yylval.type = "AND_OP"; return AND_OP;}
-{OR_OP}		{printOperator("or"); 	  yylval.type = "OR_OP"; return OR_OP;}
-{NOT_OP}	{printOperator("not"); 	  yylval.type = "NOT_OP"; return NOT_OP;}
+{MUL_OP}	{printOperator((char*)"mulop");  yylval.node = makeNode((char*)"MUL_OP", NULL, NULL); return MUL_OP;}
+{ADD_OP}	{printOperator((char*)"addop");  yylval.node = makeNode((char*)"ADD_OP", NULL, NULL); return ADD_OP;}
+{ASSIGN_OP}	{printOperator((char*)"assign"); yylval.node = makeNode((char*)"ASSIGN_OP", NULL, NULL); return ASSIGN_OP;}
+{RELATION_OP}	{printOperator((char*)"relop");  yylval.node = makeNode((char*)"REL_OP", NULL, NULL); return REL_OP;}
+{AND_OP}	{printOperator((char*)"and"); 	 yylval.node = makeNode((char*)"AND_OP", NULL, NULL); return AND_OP;}
+{OR_OP}		{printOperator((char*)"or"); 	 yylval.node = makeNode((char*)"OR_OP", NULL, NULL); return OR_OP;}
+{NOT_OP}	{printOperator((char*)"not"); 	 yylval.node = makeNode((char*)"NOT_OP", NULL, NULL); return NOT_OP;}
 .                            {printErr();}
 
 %%

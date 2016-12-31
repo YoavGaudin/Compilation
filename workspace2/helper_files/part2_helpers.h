@@ -52,11 +52,8 @@ typedef union
   
 } STYPE;
 
-#define YYSTYPE ParserNode	// Tell Bison to use STYPE as the stack type
+#define YYSTYPE STYPE	// Tell Bison to use STYPE as the stack type
 
-#endif
-
-  
 #ifdef __cplusplus
 } // extern "C"
 #endif

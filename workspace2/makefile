@@ -2,8 +2,8 @@
 
 all: part2
 
-part2: part2.tab.cpp part2.tab.hpp part2-lex.c part2-lex.h
-	g++ part2.tab.cpp part2-lex.c -o part2
+part2: part2.tab.cpp part2.tab.hpp part2-lex.c part2-lex.h helper_files/part2_helpers.h
+	g++ part2.tab.cpp part2-lex.c helper_files/part2_helpers.c -o part2
 
 part2-lex.c part2-lex.h: part2.lex helper_files/part2_helpers.h
 	flex part2.lex
