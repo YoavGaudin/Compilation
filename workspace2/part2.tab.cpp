@@ -2123,6 +2123,10 @@ yyreturn:
 #line 388 "part2.ypp" /* yacc.c:1906  */
 
 
+extern char* yytext;
+extern int yylineno;
+
 void yyerror (char const *err){
-   cout << "syntax error:" << err << endl;
+   printf("\nLexical error: '%s' in line number %d\n", yytext, yylineno);
+   exit(1);;
 }

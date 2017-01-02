@@ -387,6 +387,10 @@ CALL_ARGS:
 	
 %%
 
+extern char* yytext;
+extern int yylineno;
+
 void yyerror (char const *err){
-   cout << "syntax error:" << err << endl;
+   printf("\nSyntax error: '%s' in line number %d\n", yytext, yylineno);
+   exit(1);
 }
