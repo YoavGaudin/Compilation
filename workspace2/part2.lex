@@ -35,39 +35,39 @@ AND_OP		   (&&)
 NOT_OP		   (\!)
 BRACKET            ([\(\)\{\}\[\]])
 CHARTOKENS	   ({BRACKET}|[\;\:\,])
-UNCHANGABLE        (END_OF_LINE|{whitespace})
+UNCHANGABLE        (\n|{whitespace})
 STRING             (\"[^\"\n]*\")
 COMMENT		   (\/\/.*)
 
 %%
 
 {COMMENT}	{}
-integer		{yylval = makeNode((char*)"Reserved", (char*)"integer", NULL); return Integer;}
-real		{yylval = makeNode((char*)"Reserved", (char*)"real", NULL); return Real;}
-return		{yylval = makeNode((char*)"Reserved", (char*)"return", NULL); return Return;}
-defstruct	{yylval = makeNode((char*)"Reserved", (char*)"defstruct", NULL); return Defstruct;}
-while		{yylval = makeNode((char*)"Reserved", (char*)"while", NULL); return While;}
-do		{yylval = makeNode((char*)"Reserved", (char*)"do", NULL); return Do;}
-if		{yylval = makeNode((char*)"Reserved", (char*)"if", NULL); return If;}
-then		{yylval = makeNode((char*)"Reserved", (char*)"then", NULL); return Then;}
-else		{yylval = makeNode((char*)"Reserved", (char*)"else", NULL); return Else;}
+integer		{yylval = makeNode((char*)"integer", NULL, NULL); return Integer;}
+real		{yylval = makeNode((char*)"real", NULL, NULL); return Real;}
+return		{yylval = makeNode((char*)"return", NULL, NULL); return Return;}
+defstruct	{yylval = makeNode((char*)"defstruct", NULL, NULL); return Defstruct;}
+while		{yylval = makeNode((char*)"while", NULL, NULL); return While;}
+do		{yylval = makeNode((char*)"do", NULL, NULL); return Do;}
+if		{yylval = makeNode((char*)"if", NULL, NULL); return If;}
+then		{yylval = makeNode((char*)"then", NULL, NULL); return Then;}
+else		{yylval = makeNode((char*)"else", NULL, NULL); return Else;}
 main		{yylval = makeNode((char*)"main", NULL, NULL); return Main;}
-write		{yylval = makeNode((char*)"Reserved", (char*)"write", NULL); return Write;}
-read		{yylval = makeNode((char*)"Reserved", (char*)"read", NULL); return Read;}
-call		{yylval = makeNode((char*)"Reserved", (char*)"call", NULL); return Call;}
+write		{yylval = makeNode((char*)"write", NULL, NULL); return Write;}
+read		{yylval = makeNode((char*)"read", NULL, NULL); return Read;}
+call		{yylval = makeNode((char*)"call", NULL, NULL); return Call;}
 var		{yylval = makeNode((char*)"var", NULL, NULL); return Var;}
-extern		{yylval = makeNode((char*)"Reserved", (char*)"extern", NULL); return Extern;}
-{NUM}           {yylval = makeNode((char*)"num",  yytext, NULL); return NUM;}
-{ID}            {yylval = makeNode((char*)"id", yytext, NULL); return ID;}
-{STRING}        {yylval = makeNode((char*)"STRING", yytext, NULL); return STRING;}
+extern		{yylval = makeNode((char*)"extern", NULL, NULL); return Extern;}
+{NUM}           {yylval = makeNode((char*)"num",  strdup(yytext), NULL); return NUM;}
+{ID}            {yylval = makeNode((char*)"id", strdup(yytext), NULL); return ID;}
+{STRING}        {yylval = makeNode((char*)"STRING", strdup(yytext), NULL); return STRING;}
 {CHARTOKENS}    {return yytext[0];}
-{MUL_OP}	{yylval = makeNode((char*)"MUL_OP", NULL, NULL); return MUL_OP;}
-{ADD_OP}	{yylval = makeNode((char*)"ADD_OP", NULL, NULL); return ADD_OP;}
-{ASSIGN_OP}	{yylval = makeNode((char*)"assign", NULL, NULL); return ASSIGN;}
-{RELATION_OP}	{yylval = makeNode((char*)"REL_OP", NULL, NULL); return REL_OP;}
-{AND_OP}	{yylval = makeNode((char*)"AND_OP", NULL, NULL); return AND_OP;}
-{OR_OP}		{yylval = makeNode((char*)"OR_OP", NULL, NULL); return OR_OP;}
-{NOT_OP}	{yylval = makeNode((char*)"NOT_OP", NULL, NULL); return NOT_OP;}
+{MUL_OP}	{yylval = makeNode((char*)"mulop", NULL, NULL); return MUL_OP;}
+{ADD_OP}	{yylval = makeNode((char*)"addop", NULL, NULL); return ADD_OP;}
+{ASSIGN_OP}	{yylval = makeNode((char*)"assign", (char*)"=", NULL); return ASSIGN;}
+{RELATION_OP}	{yylval = makeNode((char*)"relop", (char*)"<", NULL); return REL_OP;}
+{AND_OP}	{yylval = makeNode((char*)"andop", NULL, NULL); return AND_OP;}
+{OR_OP}		{yylval = makeNode((char*)"orop", NULL, NULL); return OR_OP;}
+{NOT_OP}	{yylval = makeNode((char*)"notop", NULL, NULL); return NOT_OP;}
 {UNCHANGABLE}	{}
 .               {printErr();}
 
