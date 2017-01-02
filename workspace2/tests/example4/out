@@ -46,67 +46,89 @@
             (<BEXP>
               (<BEXP>
                 (<BEXP>
-                  (<BEXP>
+                  (<EXP>
+                    (<(>)
+                    (<TYPE>
+                      (<integer>)
+                    )
+                    (<)>)
                     (<EXP>
                       (<(>)
                       (<TYPE>
-                        (<integer>)
+                        (<real>)
                       )
                       (<)>)
                       (<EXP>
-                        (<(>)
-                        (<TYPE>
-                          (<real>)
-                        )
-                        (<)>)
-                        (<EXP>
-                          (<id,a>)
-                        )
+                        (<id,a>)
                       )
                     )
-                    (<relop,<>)
-                    (<EXP>
-                      (<num,2>)
-                    )
                   )
-                  (<and,&&>)
-                  (<BEXP>
-                    (<EXP>
-                      (<id,a>)
-                    )
-                    (<relop,<>)
-                    (<EXP>
-                      (<num,5>)
-                    )
+                  (<relop,>>)
+                  (<EXP>
+                    (<num,2>)
                   )
                 )
-                (<or,||>)
+                (<and,&&>)
                 (<BEXP>
                   (<EXP>
                     (<id,a>)
                   )
-                  (<relop,<>)
+                  (<relop,<=>)
+                  (<EXP>
+                    (<num,5>)
+                  )
+                )
+              )
+              (<or,||>)
+              (<BEXP>
+                (<BEXP>
+                  (<EXP>
+                    (<id,a>)
+                  )
+                  (<relop,>>)
                   (<EXP>
                     (<num,1>)
                   )
                 )
-              )
-              (<and,&&>)
-              (<BEXP>
-                (<(>)
+                (<and,&&>)
                 (<BEXP>
+                  (<(>)
                   (<BEXP>
-                    (<EXP>
-                      (<id,a>)
+                    (<BEXP>
+                      (<EXP>
+                        (<id,a>)
+                      )
+                      (<relop,<=>)
+                      (<EXP>
+                        (<num,3>)
+                      )
                     )
-                    (<relop,<>)
-                    (<EXP>
-                      (<num,3>)
-                    )
-                  )
-                  (<or,||>)
-                  (<BEXP>
-                    (<EXP>
+                    (<or,||>)
+                    (<BEXP>
+                      (<EXP>
+                        (<EXP>
+                          (<(>)
+                          (<TYPE>
+                            (<integer>)
+                          )
+                          (<)>)
+                          (<EXP>
+                            (<id,a>)
+                          )
+                        )
+                        (<addop,->)
+                        (<EXP>
+                          (<(>)
+                          (<TYPE>
+                            (<real>)
+                          )
+                          (<)>)
+                          (<EXP>
+                            (<id,a>)
+                          )
+                        )
+                      )
+                      (<relop,==>)
                       (<EXP>
                         (<(>)
                         (<TYPE>
@@ -114,71 +136,49 @@
                         )
                         (<)>)
                         (<EXP>
-                          (<id,a>)
-                        )
-                      )
-                      (<addop,+>)
-                      (<EXP>
-                        (<(>)
-                        (<TYPE>
-                          (<real>)
-                        )
-                        (<)>)
-                        (<EXP>
-                          (<id,a>)
-                        )
-                      )
-                    )
-                    (<relop,<>)
-                    (<EXP>
-                      (<(>)
-                      (<TYPE>
-                        (<integer>)
-                      )
-                      (<)>)
-                      (<EXP>
-                        (<(>)
-                        (<EXP>
+                          (<(>)
                           (<EXP>
                             (<EXP>
-                              (<(>)
-                              (<TYPE>
-                                (<real>)
+                              (<EXP>
+                                (<(>)
+                                (<TYPE>
+                                  (<real>)
+                                )
+                                (<)>)
+                                (<EXP>
+                                  (<id,a>)
+                                )
                               )
-                              (<)>)
+                              (<mulop,*>)
                               (<EXP>
                                 (<id,a>)
                               )
                             )
-                            (<mulop,*>)
+                            (<addop,->)
                             (<EXP>
-                              (<id,a>)
-                            )
-                          )
-                          (<addop,+>)
-                          (<EXP>
-                            (<EXP>
-                              (<(>)
-                              (<TYPE>
-                                (<integer>)
+                              (<EXP>
+                                (<(>)
+                                (<TYPE>
+                                  (<integer>)
+                                )
+                                (<)>)
+                                (<EXP>
+                                  (<id,a>)
+                                )
                               )
-                              (<)>)
+                              (<mulop,*>)
                               (<EXP>
                                 (<id,a>)
                               )
                             )
-                            (<mulop,*>)
-                            (<EXP>
-                              (<id,a>)
-                            )
                           )
+                          (<)>)
                         )
-                        (<)>)
                       )
                     )
                   )
+                  (<)>)
                 )
-                (<)>)
               )
             )
             (<then>)
@@ -189,7 +189,7 @@
                   (<EXP>
                     (<id,a>)
                   )
-                  (<relop,<>)
+                  (<relop,==>)
                   (<EXP>
                     (<id,a>)
                   )
@@ -212,7 +212,7 @@
                   (<WRITE>
                     (<write>)
                     (<(>)
-                    (<STRING,"BLAH!">)
+                    (<str,BLAH!>)
                     (<)>)
                     (<;>)
                   )
@@ -224,7 +224,7 @@
               (<WRITE>
                 (<write>)
                 (<(>)
-                (<STRING,"blah blah">)
+                (<str,blah blah>)
                 (<)>)
                 (<;>)
               )

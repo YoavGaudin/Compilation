@@ -574,7 +574,8 @@ char *yytext;
 #include "helper_files/part2_helpers.h"
 #include "part2.tab.hpp"
 void printErr();
-#line 578 "part2-lex.c"
+char * getString(char * in);
+#line 579 "part2-lex.c"
 
 #define INITIAL 0
 
@@ -792,10 +793,10 @@ YY_DECL
 		}
 
 	{
-#line 42 "part2.lex"
+#line 43 "part2.lex"
 
 
-#line 799 "part2-lex.c"
+#line 800 "part2-lex.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -864,156 +865,156 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 44 "part2.lex"
+#line 45 "part2.lex"
 {}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 45 "part2.lex"
+#line 46 "part2.lex"
 {yylval = makeNode((char*)"integer", NULL, NULL); return Integer;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 46 "part2.lex"
+#line 47 "part2.lex"
 {yylval = makeNode((char*)"real", NULL, NULL); return Real;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 47 "part2.lex"
+#line 48 "part2.lex"
 {yylval = makeNode((char*)"return", NULL, NULL); return Return;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 48 "part2.lex"
+#line 49 "part2.lex"
 {yylval = makeNode((char*)"defstruct", NULL, NULL); return Defstruct;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 49 "part2.lex"
+#line 50 "part2.lex"
 {yylval = makeNode((char*)"while", NULL, NULL); return While;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 50 "part2.lex"
+#line 51 "part2.lex"
 {yylval = makeNode((char*)"do", NULL, NULL); return Do;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 51 "part2.lex"
+#line 52 "part2.lex"
 {yylval = makeNode((char*)"if", NULL, NULL); return If;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 52 "part2.lex"
+#line 53 "part2.lex"
 {yylval = makeNode((char*)"then", NULL, NULL); return Then;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 53 "part2.lex"
+#line 54 "part2.lex"
 {yylval = makeNode((char*)"else", NULL, NULL); return Else;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 54 "part2.lex"
+#line 55 "part2.lex"
 {yylval = makeNode((char*)"main", NULL, NULL); return Main;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 55 "part2.lex"
+#line 56 "part2.lex"
 {yylval = makeNode((char*)"write", NULL, NULL); return Write;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 56 "part2.lex"
+#line 57 "part2.lex"
 {yylval = makeNode((char*)"read", NULL, NULL); return Read;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 57 "part2.lex"
+#line 58 "part2.lex"
 {yylval = makeNode((char*)"call", NULL, NULL); return Call;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 58 "part2.lex"
+#line 59 "part2.lex"
 {yylval = makeNode((char*)"var", NULL, NULL); return Var;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 59 "part2.lex"
+#line 60 "part2.lex"
 {yylval = makeNode((char*)"extern", NULL, NULL); return Extern;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 60 "part2.lex"
+#line 61 "part2.lex"
 {yylval = makeNode((char*)"num",  strdup(yytext), NULL); return NUM;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 61 "part2.lex"
+#line 62 "part2.lex"
 {yylval = makeNode((char*)"id", strdup(yytext), NULL); return ID;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 62 "part2.lex"
-{yylval = makeNode((char*)"STRING", strdup(yytext), NULL); return STRING;}
+#line 63 "part2.lex"
+{yylval = makeNode((char*)"str", getString(yytext), NULL); return STRING;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 63 "part2.lex"
+#line 64 "part2.lex"
 {return yytext[0];}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 64 "part2.lex"
-{yylval = makeNode((char*)"mulop", (char*)"*", NULL); return MUL_OP;}
+#line 65 "part2.lex"
+{yylval = makeNode((char*)"mulop", strdup(yytext), NULL); return MUL_OP;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 65 "part2.lex"
-{yylval = makeNode((char*)"addop", (char*)"+", NULL); return ADD_OP;}
+#line 66 "part2.lex"
+{yylval = makeNode((char*)"addop", strdup(yytext), NULL); return ADD_OP;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 66 "part2.lex"
-{yylval = makeNode((char*)"assign", (char*)"=", NULL); return ASSIGN;}
+#line 67 "part2.lex"
+{yylval = makeNode((char*)"assign", strdup(yytext), NULL); return ASSIGN;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 67 "part2.lex"
-{yylval = makeNode((char*)"relop", (char*)"<", NULL); return REL_OP;}
+#line 68 "part2.lex"
+{yylval = makeNode((char*)"relop", strdup(yytext), NULL); return REL_OP;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 68 "part2.lex"
-{yylval = makeNode((char*)"and", (char*)"&&", NULL); return AND_OP;}
+#line 69 "part2.lex"
+{yylval = makeNode((char*)"and", strdup(yytext), NULL); return AND_OP;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 69 "part2.lex"
-{yylval = makeNode((char*)"or", (char*)"||", NULL); return OR_OP;}
+#line 70 "part2.lex"
+{yylval = makeNode((char*)"or", strdup(yytext), NULL); return OR_OP;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 70 "part2.lex"
-{yylval = makeNode((char*)"not", (char*)"!", NULL); return NOT_OP;}
+#line 71 "part2.lex"
+{yylval = makeNode((char*)"not", strdup(yytext), NULL); return NOT_OP;}
 	YY_BREAK
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 71 "part2.lex"
+#line 72 "part2.lex"
 {}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 72 "part2.lex"
+#line 73 "part2.lex"
 {printErr();}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 74 "part2.lex"
+#line 75 "part2.lex"
 ECHO;
 	YY_BREAK
-#line 1017 "part2-lex.c"
+#line 1018 "part2-lex.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2026,7 +2027,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 74 "part2.lex"
+#line 75 "part2.lex"
 
 
 
@@ -2034,5 +2035,13 @@ void printErr()
 {
   printf("\nLexical error: '%s' in line number %d\n", yytext, yylineno);
   exit(1);
+}
+
+char * getString(char * in) {
+  char * out = strdup(in);
+  ++out;
+  int len = strlen(out);
+  *(out+len-1) = '\0';
+  return out;
 }
 
