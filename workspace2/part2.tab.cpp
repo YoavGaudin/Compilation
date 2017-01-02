@@ -1694,7 +1694,7 @@ yyreduce:
   case 41:
 #line 269 "part2.ypp" /* yacc.c:1646  */
     {
-			(yyval) = makeNode((char*)"CNTRL", NULL, makeNode((char*)"while", NULL, NULL));
+			(yyval) = makeNode((char*)"CNTRL", NULL, (yyvsp[-3]));
 			concatList((yyvsp[-3]), (yyvsp[-2]));
 			concatList((yyvsp[-3]), (yyvsp[-1]));
 			concatList((yyvsp[-3]), (yyvsp[0]));
