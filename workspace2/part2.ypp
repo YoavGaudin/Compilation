@@ -391,6 +391,6 @@ extern char* yytext;
 extern int yylineno;
 
 void yyerror (char const *err){
-   printf("\nSyntax error: '%s' in line number %d\n", yytext, yylineno);
+   printf("Syntax error: '%s' in line number %d\n", yytext, yylineno);
    exit(1);
 }

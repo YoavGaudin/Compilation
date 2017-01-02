@@ -2127,6 +2127,6 @@ extern char* yytext;
 extern int yylineno;
 
 void yyerror (char const *err){
-   printf("\nLexical error: '%s' in line number %d\n", yytext, yylineno);
-   exit(1);;
+   printf("Syntax error: '%s' in line number %d\n", yytext, yylineno);
+   exit(1);
 }
