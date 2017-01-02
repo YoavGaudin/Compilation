@@ -68,7 +68,7 @@
   #define __cplusplus
   #endif
   #include <iostream>
-  #include <string>
+  #include <stdio.h>
   #include "helper_files/part2_helpers.h"
 
   using namespace std;
@@ -457,13 +457,13 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    31,    31,    38,    47,    51,    62,    72,    76,    79,
-      83,    89,    94,    98,   102,   110,   114,   118,   124,   130,
-     136,   142,   149,   153,   158,   162,   166,   170,   174,   178,
-     182,   186,   191,   200,   208,   217,   223,   231,   235,   239,
-     248,   255,   263,   269,   275,   280,   286,   293,   299,   305,
-     311,   318,   322,   326,   330,   335,   342,   350,   359,   362,
-     366,   370
+       0,    31,    31,    38,    48,    51,    62,    73,    77,    81,
+      85,    91,    96,   102,   105,   113,   119,   122,   128,   134,
+     140,   146,   153,   157,   162,   168,   171,   175,   179,   183,
+     187,   191,   196,   205,   213,   222,   228,   236,   240,   245,
+     254,   261,   269,   275,   281,   286,   292,   299,   305,   311,
+     317,   324,   328,   332,   336,   341,   348,   356,   365,   370,
+     373,   377
 };
 #endif
 
@@ -1328,9 +1328,9 @@ yyreduce:
         case 2:
 #line 31 "part2.ypp" /* yacc.c:1646  */
     {
-			(yyval) = makeNode((char*)"PROGRAM", NULL, (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
+			parseTree = makeNode((char*)"PROGRAM", NULL, (yyvsp[-2]));
+			concatList((yyvsp[-2]), (yyvsp[-1]));
+			concatList((yyvsp[-2]), (yyvsp[0]));
 		}
 #line 1336 "part2.tab.cpp" /* yacc.c:1646  */
     break;
@@ -1339,514 +1339,556 @@ yyreduce:
 #line 38 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"TDEFS", NULL, (yyvsp[-6]));
-			concatList((yyval), (yyvsp[-5]));
-			concatList((yyval), makeNode((char*)"{", NULL, NULL));
-			concatList((yyval), (yyvsp[-3]));
-			concatList((yyval), makeNode((char*)"}", NULL, NULL));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)";", NULL, NULL));
+			concatList((yyvsp[-6]), (yyvsp[-5]));
+			concatList((yyvsp[-6]), makeNode((char*)"{", NULL, NULL));
+			concatList((yyvsp[-6]), (yyvsp[-3]));
+			concatList((yyvsp[-6]), makeNode((char*)"}", NULL, NULL));
+			concatList((yyvsp[-6]), (yyvsp[-1]));
+			concatList((yyvsp[-6]), makeNode((char*)";", NULL, NULL));
 		}
 #line 1350 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 4:
+#line 48 "part2.ypp" /* yacc.c:1646  */
+    {makeNode((char*)"epsilon", NULL, NULL);}
+#line 1356 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 5:
 #line 51 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"FDEFS", NULL, (yyvsp[-6]));
-			concatList((yyval), (yyvsp[-5]));
-			concatList((yyval), (yyvsp[-4]));
-			concatList((yyval), makeNode((char*)"(", NULL, NULL));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
-			concatList((yyval), (yyvsp[0]));
+			concatList((yyvsp[-6]), (yyvsp[-5]));
+			concatList((yyvsp[-6]), (yyvsp[-4]));
+			concatList((yyvsp[-6]), makeNode((char*)"(", NULL, NULL));
+			concatList((yyvsp[-6]), (yyvsp[-2]));
+			concatList((yyvsp[-6]), makeNode((char*)")", NULL, NULL));
+			concatList((yyvsp[-6]), (yyvsp[0]));
 			
 		}
-#line 1365 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1371 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 6:
 #line 62 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"FDEFS", NULL, (yyvsp[-7]));
-			concatList((yyval), (yyvsp[-6]));
-			concatList((yyval), (yyvsp[-5]));
-			concatList((yyval), (yyvsp[-4]));
-			concatList((yyval), makeNode((char*)"(", NULL, NULL));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
-			concatList((yyval), makeNode((char*)";", NULL, NULL));
+			concatList((yyvsp[-7]), (yyvsp[-6]));
+			concatList((yyvsp[-7]), (yyvsp[-5]));
+			concatList((yyvsp[-7]), (yyvsp[-4]));
+			concatList((yyvsp[-7]), makeNode((char*)"(", NULL, NULL));
+			concatList((yyvsp[-7]), (yyvsp[-2]));
+			concatList((yyvsp[-7]), makeNode((char*)")", NULL, NULL));
+			concatList((yyvsp[-7]), makeNode((char*)";", NULL, NULL));
 		}
-#line 1380 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1386 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 7:
+#line 73 "part2.ypp" /* yacc.c:1646  */
+    {makeNode((char*)"epsilon", NULL, NULL);}
+#line 1392 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 76 "part2.ypp" /* yacc.c:1646  */
+#line 77 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"FUNC_ARGLIST_FULL", NULL, (yyvsp[0]));
 		}
-#line 1388 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1400 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 10:
-#line 83 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"FUNC_ARGLIST", NULL, (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)",", NULL, NULL));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1398 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 11:
-#line 89 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"FUNC_ARGLIST", NULL, (yyvsp[0]));
-		}
+  case 9:
+#line 81 "part2.ypp" /* yacc.c:1646  */
+    {makeNode((char*)"epsilon", NULL, NULL);}
 #line 1406 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 12:
-#line 94 "part2.ypp" /* yacc.c:1646  */
+  case 10:
+#line 85 "part2.ypp" /* yacc.c:1646  */
     {
-			(yyval) = makeNode((char*)"MAIN_FUNCTION", NULL, makeNode((char*)"Main", NULL, NULL));
-			concatList((yyval), (yyvsp[0]));
+			(yyval) = makeNode((char*)"FUNC_ARGLIST", NULL, (yyvsp[-2]));
+			concatList((yyvsp[-2]), makeNode((char*)",", NULL, NULL));
+			concatList((yyvsp[-2]), (yyvsp[0]));
 		}
-#line 1415 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1416 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 11:
+#line 91 "part2.ypp" /* yacc.c:1646  */
+    {
+			(yyval) = makeNode((char*)"FUNC_ARGLIST", NULL, (yyvsp[0]));
+		}
+#line 1424 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 12:
+#line 96 "part2.ypp" /* yacc.c:1646  */
+    {
+			(yyval) = makeNode((char*)"MAIN_FUNCTION", NULL, (yyvsp[-1]));
+			concatList((yyvsp[-1]), (yyvsp[0]));
+		}
+#line 1433 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 13:
+#line 102 "part2.ypp" /* yacc.c:1646  */
+    {makeNode((char*)"epsilon", NULL, NULL);}
+#line 1439 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 102 "part2.ypp" /* yacc.c:1646  */
+#line 105 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"BLK", NULL, (yyvsp[-3]));
-			concatList((yyval), makeNode((char*)"{", NULL, NULL));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)"}", NULL, NULL));
+			concatList((yyvsp[-3]), makeNode((char*)"{", NULL, NULL));
+			concatList((yyvsp[-3]), (yyvsp[-1]));
+			concatList((yyvsp[-3]), makeNode((char*)"}", NULL, NULL));
 		}
-#line 1426 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1450 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 110 "part2.ypp" /* yacc.c:1646  */
+#line 113 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"DECLARATIONS", NULL, (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
+			concatList((yyvsp[-1]), (yyvsp[0]));
 		}
-#line 1435 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1459 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 16:
+#line 119 "part2.ypp" /* yacc.c:1646  */
+    {makeNode((char*)"epsilon", NULL, NULL);}
+#line 1465 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 118 "part2.ypp" /* yacc.c:1646  */
+#line 122 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"DECLARLIST", NULL, (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)";", NULL, NULL));
+			concatList((yyvsp[-2]), (yyvsp[-1]));
+			concatList((yyvsp[-2]), makeNode((char*)";", NULL, NULL));
 		}
-#line 1445 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1475 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 124 "part2.ypp" /* yacc.c:1646  */
+#line 128 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"DECLARLIST", NULL, (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)";", NULL, NULL));
-		}
-#line 1454 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 19:
-#line 130 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"DCL", NULL, (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)":", NULL, NULL));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1464 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 20:
-#line 136 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"DCL", NULL, (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)":", NULL, NULL));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1474 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 21:
-#line 142 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"DCL", NULL, (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)":", NULL, NULL));
-			concatList((yyval), (yyvsp[0]));
+			concatList((yyvsp[-1]), makeNode((char*)";", NULL, NULL));
 		}
 #line 1484 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 22:
-#line 149 "part2.ypp" /* yacc.c:1646  */
+  case 19:
+#line 134 "part2.ypp" /* yacc.c:1646  */
     {
-			(yyval) = makeNode((char*)"TYPE", NULL, (yyvsp[0]));
+			(yyval) = makeNode((char*)"DCL", NULL, (yyvsp[-2]));
+			concatList((yyvsp[-2]), makeNode((char*)":", NULL, NULL));
+			concatList((yyvsp[-2]), (yyvsp[0]));
 		}
-#line 1492 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1494 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 23:
+  case 20:
+#line 140 "part2.ypp" /* yacc.c:1646  */
+    {
+			(yyval) = makeNode((char*)"DCL", NULL, (yyvsp[-2]));
+			concatList((yyvsp[-2]), makeNode((char*)":", NULL, NULL));
+			concatList((yyvsp[-2]), (yyvsp[0]));
+		}
+#line 1504 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 21:
+#line 146 "part2.ypp" /* yacc.c:1646  */
+    {
+			(yyval) = makeNode((char*)"DCL", NULL, (yyvsp[-2]));
+			concatList((yyvsp[-2]), makeNode((char*)":", NULL, NULL));
+			concatList((yyvsp[-2]), (yyvsp[0]));
+		}
+#line 1514 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 22:
 #line 153 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"TYPE", NULL, (yyvsp[0]));
 		}
-#line 1500 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1522 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 23:
+#line 157 "part2.ypp" /* yacc.c:1646  */
+    {
+			(yyval) = makeNode((char*)"TYPE", NULL, (yyvsp[0]));
+		}
+#line 1530 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 158 "part2.ypp" /* yacc.c:1646  */
+#line 162 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"LIST", NULL, (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
+			concatList((yyvsp[-1]), (yyvsp[0]));
 		}
-#line 1509 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1539 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 25:
+#line 168 "part2.ypp" /* yacc.c:1646  */
+    {makeNode((char*)"epsilon", NULL, NULL);}
+#line 1545 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 166 "part2.ypp" /* yacc.c:1646  */
+#line 171 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
 		}
-#line 1517 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1553 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 170 "part2.ypp" /* yacc.c:1646  */
+#line 175 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
 		}
-#line 1525 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1561 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 174 "part2.ypp" /* yacc.c:1646  */
+#line 179 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
-		}
-#line 1533 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 29:
-#line 178 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
-		}
-#line 1541 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 30:
-#line 182 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
-		}
-#line 1549 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 31:
-#line 186 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
-		}
-#line 1557 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 32:
-#line 191 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"STMT_RETURN", NULL, (yyvsp[-4]));
-			concatList((yyval), makeNode((char*)"(", NULL, NULL));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
-			concatList((yyval), makeNode((char*)";", NULL, NULL));
 		}
 #line 1569 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 33:
-#line 200 "part2.ypp" /* yacc.c:1646  */
+  case 29:
+#line 183 "part2.ypp" /* yacc.c:1646  */
     {
-			(yyval) = makeNode((char*)"WRITE", NULL, (yyvsp[-4]));
-			concatList((yyval), makeNode((char*)"(", NULL, NULL));	
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
-			concatList((yyval), makeNode((char*)";", NULL, NULL));
+			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
 		}
-#line 1581 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1577 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 34:
-#line 208 "part2.ypp" /* yacc.c:1646  */
+  case 30:
+#line 187 "part2.ypp" /* yacc.c:1646  */
     {
-			(yyval) = makeNode((char*)"WRITE", NULL, (yyvsp[-4]));
-			concatList((yyval), makeNode((char*)"(", NULL, NULL));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
-			concatList((yyval), makeNode((char*)";", NULL, NULL));
+			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
+		}
+#line 1585 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 31:
+#line 191 "part2.ypp" /* yacc.c:1646  */
+    {
+			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
 		}
 #line 1593 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 35:
-#line 217 "part2.ypp" /* yacc.c:1646  */
+  case 32:
+#line 196 "part2.ypp" /* yacc.c:1646  */
     {
-			(yyval) = makeNode((char*)"READ", NULL, (yyvsp[-4]));
-			concatList((yyval), makeNode((char*)"(", NULL, NULL));	
+			(yyval) = makeNode((char*)"STMT_RETURN", NULL, (yyvsp[-4]));
+			concatList((yyvsp[-4]), makeNode((char*)"(", NULL, NULL));
+			concatList((yyvsp[-4]), (yyvsp[-2]));
+			concatList((yyvsp[-4]), makeNode((char*)")", NULL, NULL));
+			concatList((yyvsp[-4]), makeNode((char*)";", NULL, NULL));
 		}
-#line 1602 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1605 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 36:
-#line 223 "part2.ypp" /* yacc.c:1646  */
+  case 33:
+#line 205 "part2.ypp" /* yacc.c:1646  */
     {
-			(yyval) = makeNode((char*)"ASSN", NULL, (yyvsp[-3]));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)";", NULL, NULL));
+			(yyval) = makeNode((char*)"WRITE", NULL, (yyvsp[-4]));
+			concatList((yyvsp[-4]), makeNode((char*)"(", NULL, NULL));	
+			concatList((yyvsp[-4]), (yyvsp[-2]));
+			concatList((yyvsp[-4]), makeNode((char*)")", NULL, NULL));
+			concatList((yyvsp[-4]), makeNode((char*)";", NULL, NULL));
 		}
-#line 1613 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1617 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 37:
-#line 231 "part2.ypp" /* yacc.c:1646  */
+  case 34:
+#line 213 "part2.ypp" /* yacc.c:1646  */
     {
-			(yyval) = makeNode((char*)"LVAL", NULL, (yyvsp[0]));
-		}
-#line 1621 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 38:
-#line 235 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"LVAL", NULL, (yyvsp[0]));
+			(yyval) = makeNode((char*)"WRITE", NULL, (yyvsp[-4]));
+			concatList((yyvsp[-4]), makeNode((char*)"(", NULL, NULL));
+			concatList((yyvsp[-4]), (yyvsp[-2]));
+			concatList((yyvsp[-4]), makeNode((char*)")", NULL, NULL));
+			concatList((yyvsp[-4]), makeNode((char*)";", NULL, NULL));
 		}
 #line 1629 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
+  case 35:
+#line 222 "part2.ypp" /* yacc.c:1646  */
+    {
+			(yyval) = makeNode((char*)"READ", NULL, (yyvsp[-4]));
+			concatList((yyvsp[-4]), makeNode((char*)"(", NULL, NULL));	
+		}
+#line 1638 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 36:
+#line 228 "part2.ypp" /* yacc.c:1646  */
+    {
+			(yyval) = makeNode((char*)"ASSN", NULL, (yyvsp[-3]));
+			concatList((yyvsp[-3]), (yyvsp[-2]));
+			concatList((yyvsp[-3]), (yyvsp[-1]));
+			concatList((yyvsp[-3]), makeNode((char*)";", NULL, NULL));
+		}
+#line 1649 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 37:
+#line 236 "part2.ypp" /* yacc.c:1646  */
+    {
+			(yyval) = makeNode((char*)"LVAL", NULL, (yyvsp[0]));
+		}
+#line 1657 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 38:
+#line 240 "part2.ypp" /* yacc.c:1646  */
+    {
+			(yyval) = makeNode((char*)"LVAL", NULL, (yyvsp[0]));
+		}
+#line 1665 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
   case 39:
-#line 239 "part2.ypp" /* yacc.c:1646  */
+#line 245 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"CNTRL", NULL, (yyvsp[-5]));
-			concatList((yyval), (yyvsp[-4]));
-			concatList((yyval), (yyvsp[-3]));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
+			concatList((yyvsp[-5]), (yyvsp[-4]));
+			concatList((yyvsp[-5]), (yyvsp[-3]));
+			concatList((yyvsp[-5]), (yyvsp[-2]));
+			concatList((yyvsp[-5]), (yyvsp[-1]));
+			concatList((yyvsp[-5]), (yyvsp[0]));
 		}
-#line 1642 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1678 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 248 "part2.ypp" /* yacc.c:1646  */
+#line 254 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"CNTRL", NULL, (yyvsp[-3]));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
+			concatList((yyvsp[-3]), (yyvsp[-2]));
+			concatList((yyvsp[-3]), (yyvsp[-1]));
+			concatList((yyvsp[-3]), (yyvsp[0]));
 		}
-#line 1653 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1689 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 255 "part2.ypp" /* yacc.c:1646  */
+#line 261 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"CNTRL", NULL, makeNode((char*)"while", NULL, NULL));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
+			concatList((yyvsp[-3]), (yyvsp[-2]));
+			concatList((yyvsp[-3]), (yyvsp[-1]));
+			concatList((yyvsp[-3]), (yyvsp[0]));
 		}
-#line 1664 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1700 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 263 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"BEXP", NULL, (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1674 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 43:
 #line 269 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"BEXP", NULL, (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
+			concatList((yyvsp[-2]), (yyvsp[-1]));
+			concatList((yyvsp[-2]), (yyvsp[0]));
 		}
-#line 1684 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1710 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 43:
+#line 275 "part2.ypp" /* yacc.c:1646  */
+    {
+			(yyval) = makeNode((char*)"BEXP", NULL, (yyvsp[-2]));
+			concatList((yyvsp[-2]), (yyvsp[-1]));
+			concatList((yyvsp[-2]), (yyvsp[0]));
+		}
+#line 1720 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 275 "part2.ypp" /* yacc.c:1646  */
+#line 281 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"BEXP", NULL, (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
+			concatList((yyvsp[-1]), (yyvsp[0]));
 		}
-#line 1693 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1729 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 280 "part2.ypp" /* yacc.c:1646  */
+#line 286 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"BEXP", NULL, (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
+			concatList((yyvsp[-2]), (yyvsp[-1]));
+			concatList((yyvsp[-2]), (yyvsp[0]));
 		}
-#line 1703 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1739 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 286 "part2.ypp" /* yacc.c:1646  */
+#line 292 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"BEXP", NULL, makeNode((char*)"(", NULL, NULL));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
+			concatList((yyvsp[-2]), (yyvsp[-1]));
+			concatList((yyvsp[-2]), makeNode((char*)")", NULL, NULL));
 		}
-#line 1713 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1749 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 293 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
-		}
-#line 1723 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 48:
 #line 299 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[-2]));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), (yyvsp[0]));
+			concatList((yyvsp[-2]), (yyvsp[-1]));
+			concatList((yyvsp[-2]), (yyvsp[0]));
 		}
-#line 1733 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1759 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 48:
+#line 305 "part2.ypp" /* yacc.c:1646  */
+    {
+			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[-2]));
+			concatList((yyvsp[-2]), (yyvsp[-1]));
+			concatList((yyvsp[-2]), (yyvsp[0]));
+		}
+#line 1769 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 305 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"EXP", NULL, makeNode((char*)"(", NULL, NULL));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
-		}
-#line 1743 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 50:
 #line 311 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"EXP", NULL, makeNode((char*)"(", NULL, NULL));
-			concatList((yyval), (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
-			concatList((yyval), (yyvsp[0]));
+			concatList((yyvsp[-2]), (yyvsp[-1]));
+			concatList((yyvsp[-2]), makeNode((char*)")", NULL, NULL));
 		}
-#line 1754 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1779 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 50:
+#line 317 "part2.ypp" /* yacc.c:1646  */
+    {
+			(yyval) = makeNode((char*)"EXP", NULL, makeNode((char*)"(", NULL, NULL));
+			concatList((yyvsp[-3]), (yyvsp[-2]));
+			concatList((yyvsp[-3]), makeNode((char*)")", NULL, NULL));
+			concatList((yyvsp[-3]), (yyvsp[0]));
+		}
+#line 1790 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 318 "part2.ypp" /* yacc.c:1646  */
+#line 324 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[0]));
 		}
-#line 1762 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1798 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 322 "part2.ypp" /* yacc.c:1646  */
+#line 328 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[0]));
 		}
-#line 1770 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1806 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 326 "part2.ypp" /* yacc.c:1646  */
+#line 332 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[0]));
 		}
-#line 1778 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1814 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 330 "part2.ypp" /* yacc.c:1646  */
+#line 336 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[0]));
 		}
-#line 1786 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1822 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 335 "part2.ypp" /* yacc.c:1646  */
+#line 341 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"STREF", NULL, (yyvsp[-3]));
-			concatList((yyval), makeNode((char*)"[", NULL, NULL));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)"]", NULL, NULL));
+			concatList((yyvsp[-3]), makeNode((char*)"[", NULL, NULL));
+			concatList((yyvsp[-3]), (yyvsp[-1]));
+			concatList((yyvsp[-3]), makeNode((char*)"]", NULL, NULL));
 		}
-#line 1797 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1833 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 342 "part2.ypp" /* yacc.c:1646  */
+#line 348 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"STREF", NULL, (yyvsp[-3]));
-			concatList((yyval), makeNode((char*)"[", NULL, NULL));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)"]", NULL, NULL));
+			concatList((yyvsp[-3]), makeNode((char*)"[", NULL, NULL));
+			concatList((yyvsp[-3]), (yyvsp[-1]));
+			concatList((yyvsp[-3]), makeNode((char*)"]", NULL, NULL));
 		}
-#line 1808 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1844 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 350 "part2.ypp" /* yacc.c:1646  */
+#line 356 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"CALL", NULL, (yyvsp[-4]));
-			concatList((yyval), (yyvsp[-3]));
-			concatList((yyval), makeNode((char*)"(", NULL, NULL));
-			concatList((yyval), (yyvsp[-1]));
-			concatList((yyval), makeNode((char*)")", NULL, NULL));
+			concatList((yyvsp[-4]), (yyvsp[-3]));
+			concatList((yyvsp[-4]), makeNode((char*)"(", NULL, NULL));
+			concatList((yyvsp[-4]), (yyvsp[-1]));
+			concatList((yyvsp[-4]), makeNode((char*)")", NULL, NULL));
 		}
-#line 1820 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1856 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 359 "part2.ypp" /* yacc.c:1646  */
+#line 365 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"CALL_ARGS_FULL", NULL, (yyvsp[0]));
 		}
-#line 1828 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1864 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 59:
+#line 370 "part2.ypp" /* yacc.c:1646  */
+    {makeNode((char*)"epsilon", NULL, NULL);}
+#line 1870 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 366 "part2.ypp" /* yacc.c:1646  */
+#line 373 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"CALL_ARGS", NULL, (yyvsp[0]));
 		}
-#line 1836 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1878 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 370 "part2.ypp" /* yacc.c:1646  */
+#line 377 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"CALL_ARGS", NULL, (yyvsp[-2]));
-			concatList((yyval), makeNode((char*)",", NULL, NULL));
-			concatList((yyval), (yyvsp[0]));
+			concatList((yyvsp[-2]), makeNode((char*)",", NULL, NULL));
+			concatList((yyvsp[-2]), (yyvsp[0]));
 		}
-#line 1846 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1888 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 1850 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1892 "part2.tab.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2074,7 +2116,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 376 "part2.ypp" /* yacc.c:1906  */
+#line 384 "part2.ypp" /* yacc.c:1906  */
 
 
 void yyerror (char const *err){

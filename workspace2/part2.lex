@@ -34,35 +34,33 @@ OR_OP		   (\|\|)
 AND_OP		   (&&)
 NOT_OP		   (\!)
 BRACKET            ([\(\)\{\}\[\]])
-END_OF_COMMAND     (\;)
-END_OF_LINE        (\n)
-UNCHANGABLE        ({BRACKET}|{END_OF_LINE}|{END_OF_COMMAND}|{whitespace}|\:|\,)
+CHARTOKENS	   ({BRACKET}|[\;\:\,])
+UNCHANGABLE        (END_OF_LINE|{whitespace})
 STRING             (\"[^\"\n]*\")
 COMMENT		   (\/\/.*)
 
 %%
 
-{END_OF_LINE}	{}
 {COMMENT}	{}
-(intger)	{yylval = makeNode((char*)"Reserved", (char*)"integer", NULL); return Integer;}
-(real)		{yylval = makeNode((char*)"Reserved", (char*)"real", NULL); return Real;}
-(return)	{yylval = makeNode((char*)"Reserved", (char*)"return", NULL); return Return;}
-(defstruct)	{yylval = makeNode((char*)"Reserved", (char*)"defstruct", NULL); return Defstruct;}
-(while)		{yylval = makeNode((char*)"Reserved", (char*)"while", NULL); return While;}
-(do)		{yylval = makeNode((char*)"Reserved", (char*)"do", NULL); return Do;}
-(if)		{yylval = makeNode((char*)"Reserved", (char*)"if", NULL); return If;}
-(then)		{yylval = makeNode((char*)"Reserved", (char*)"then", NULL); return Then;}
-(else)		{yylval = makeNode((char*)"Reserved", (char*)"else", NULL); return Else;}
-(main)		{yylval = makeNode((char*)"Reserved", (char*)"main", NULL); return Main;}
-(write)		{yylval = makeNode((char*)"Reserved", (char*)"write", NULL); return Write;}
-(read)		{yylval = makeNode((char*)"Reserved", (char*)"read", NULL); return Read;}
-(call)		{yylval = makeNode((char*)"Reserved", (char*)"call", NULL); return Call;}
-(var)		{yylval = makeNode((char*)"Reserved", (char*)"var", NULL); return Var;}
-(extern)	{yylval = makeNode((char*)"Reserved", (char*)"extern", NULL); return Extern;}
+intger		{printf("reserved- %s\n", yytext); yylval = makeNode((char*)"Reserved", (char*)"integer", NULL); return Integer;}
+real		{printf("reserved- %s\n", yytext); yylval = makeNode((char*)"Reserved", (char*)"real", NULL); return Real;}
+return		{printf("reserved- %s\n", yytext); yylval = makeNode((char*)"Reserved", (char*)"return", NULL); return Return;}
+defstruct	{printf("reserved- %s\n", yytext); yylval = makeNode((char*)"Reserved", (char*)"defstruct", NULL); return Defstruct;}
+while		{printf("reserved- %s\n", yytext); yylval = makeNode((char*)"Reserved", (char*)"while", NULL); return While;}
+do		{printf("reserved- %s\n", yytext); yylval = makeNode((char*)"Reserved", (char*)"do", NULL); return Do;}
+if		{printf("reserved- %s\n", yytext); yylval = makeNode((char*)"Reserved", (char*)"if", NULL); return If;}
+then		{printf("reserved- %s\n", yytext); yylval = makeNode((char*)"Reserved", (char*)"then", NULL); return Then;}
+else		{printf("reserved- %s\n", yytext); yylval = makeNode((char*)"Reserved", (char*)"else", NULL); return Else;}
+main		{printf("reserved- %s\n", yytext); yylval = makeNode((char*)"Reserved", (char*)"main", NULL); return Main;}
+write		{printf("reserved- %s\n", yytext); yylval = makeNode((char*)"Reserved", (char*)"write", NULL); return Write;}
+read		{printf("reserved- %s\n", yytext); yylval = makeNode((char*)"Reserved", (char*)"read", NULL); return Read;}
+call		{printf("reserved- %s\n", yytext); yylval = makeNode((char*)"Reserved", (char*)"call", NULL); return Call;}
+var		{printf("reserved- %s\n", yytext); yylval = makeNode((char*)"Reserved", (char*)"var", NULL); return Var;}
+extern		{printf("reserved- %s\n", yytext); yylval = makeNode((char*)"Reserved", (char*)"extern", NULL); return Extern;}
 {NUM}           {yylval = makeNode((char*)"NUM",  yytext, NULL); return NUM;}
-{ID}            {yylval = makeNode((char*)"ID", yytext, NULL); return ID;}
+{ID}            {printf("ID- %s\n", yytext); yylval = makeNode((char*)"ID", yytext, NULL); return ID;}
 {STRING}        {yylval = makeNode((char*)"STRING", yytext, NULL); return STRING;}
-{UNCHANGABLE}   {return yytext[0];}
+{CHARTOKENS}    {return yytext[0];}
 {MUL_OP}	{yylval = makeNode((char*)"MUL_OP", NULL, NULL); return MUL_OP;}
 {ADD_OP}	{yylval = makeNode((char*)"ADD_OP", NULL, NULL); return ADD_OP;}
 {ASSIGN_OP}	{yylval = makeNode((char*)"ASSIGN_OP", NULL, NULL); return ASSIGN_OP;}
@@ -70,6 +68,7 @@ COMMENT		   (\/\/.*)
 {AND_OP}	{yylval = makeNode((char*)"AND_OP", NULL, NULL); return AND_OP;}
 {OR_OP}		{yylval = makeNode((char*)"OR_OP", NULL, NULL); return OR_OP;}
 {NOT_OP}	{yylval = makeNode((char*)"NOT_OP", NULL, NULL); return NOT_OP;}
+{UNCHANGABLE}	{}
 .               {printErr();}
 
 %%

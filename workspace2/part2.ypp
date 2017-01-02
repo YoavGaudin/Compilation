@@ -4,7 +4,7 @@
   #define __cplusplus
   #endif
   #include <iostream>
-  #include <string>
+  #include <stdio.h>
   #include "helper_files/part2_helpers.h"
 
   using namespace std;
@@ -29,122 +29,126 @@
 
 PROGRAM: 
 		TDEFS FDEFS MAIN_FUNCTION {
-			$$ = makeNode((char*)"PROGRAM", NULL, $1);
-			concatList($$, $2);
-			concatList($$, $3);
+			parseTree = makeNode((char*)"PROGRAM", NULL, $1);
+			concatList($1, $2);
+			concatList($1, $3);
 		}
-
+;
 TDEFS: 
 		TDEFS Defstruct '{' DECLARLIST '}' ID ';' {
 			$$ = makeNode((char*)"TDEFS", NULL, $1);
-			concatList($$, $2);
-			concatList($$, makeNode((char*)"{", NULL, NULL));
-			concatList($$, $4);
-			concatList($$, makeNode((char*)"}", NULL, NULL));
-			concatList($$, $6);
-			concatList($$, makeNode((char*)";", NULL, NULL));
+			concatList($1, $2);
+			concatList($1, makeNode((char*)"{", NULL, NULL));
+			concatList($1, $4);
+			concatList($1, makeNode((char*)"}", NULL, NULL));
+			concatList($1, $6);
+			concatList($1, makeNode((char*)";", NULL, NULL));
 		}		
 	|
-		/*epsilon*/
-		
+		/*epsilon*/ {makeNode((char*)"epsilon", NULL, NULL);}
+;		
 FDEFS: 
 		FDEFS TYPE ID '(' FUNC_ARGLIST_FULL ')' BLK {
 			$$ = makeNode((char*)"FDEFS", NULL, $1);
-			concatList($$, $2);
-			concatList($$, $3);
-			concatList($$, makeNode((char*)"(", NULL, NULL));
-			concatList($$, $5);
-			concatList($$, makeNode((char*)")", NULL, NULL));
-			concatList($$, $7);
+			concatList($1, $2);
+			concatList($1, $3);
+			concatList($1, makeNode((char*)"(", NULL, NULL));
+			concatList($1, $5);
+			concatList($1, makeNode((char*)")", NULL, NULL));
+			concatList($1, $7);
 			
 		}
 	|
 		FDEFS Extern TYPE ID '(' FUNC_ARGLIST_FULL ')' ';' {
 			$$ = makeNode((char*)"FDEFS", NULL, $1);
-			concatList($$, $2);
-			concatList($$, $3);
-			concatList($$, $4);
-			concatList($$, makeNode((char*)"(", NULL, NULL));
-			concatList($$, $6);
-			concatList($$, makeNode((char*)")", NULL, NULL));
-			concatList($$, makeNode((char*)";", NULL, NULL));
+			concatList($1, $2);
+			concatList($1, $3);
+			concatList($1, $4);
+			concatList($1, makeNode((char*)"(", NULL, NULL));
+			concatList($1, $6);
+			concatList($1, makeNode((char*)")", NULL, NULL));
+			concatList($1, makeNode((char*)";", NULL, NULL));
 		}		
 	|
+		/*epsilon*/ {makeNode((char*)"epsilon", NULL, NULL);}
 		/*epsilon*/
-
+;
 FUNC_ARGLIST_FULL: 
 		FUNC_ARGLIST {
 			$$ = makeNode((char*)"FUNC_ARGLIST_FULL", NULL, $1);
 		}
 	|
+		/*epsilon*/ {makeNode((char*)"epsilon", NULL, NULL);}
 		/*epsilon*/
-		
+;		
 FUNC_ARGLIST: 
 		FUNC_ARGLIST ',' DCL {
 			$$ = makeNode((char*)"FUNC_ARGLIST", NULL, $1);
-			concatList($$, makeNode((char*)",", NULL, NULL));
-			concatList($$, $3);
+			concatList($1, makeNode((char*)",", NULL, NULL));
+			concatList($1, $3);
 		}
 	|
 		DCL {
 			$$ = makeNode((char*)"FUNC_ARGLIST", NULL, $1);
 		}
-		
+;
 MAIN_FUNCTION:
 		Main BLK {
-			$$ = makeNode((char*)"MAIN_FUNCTION", NULL, makeNode((char*)"Main", NULL, NULL));
-			concatList($$, $2);
+			$$ = makeNode((char*)"MAIN_FUNCTION", NULL, $1);
+			concatList($1, $2);
 		} 
 	|
 		/*epsilon*/
-		
+		/*epsilon*/ {makeNode((char*)"epsilon", NULL, NULL);}
+;		
 BLK: 
 		DECLARATIONS '{' LIST '}' {
 			$$ = makeNode((char*)"BLK", NULL, $1);
-			concatList($$, makeNode((char*)"{", NULL, NULL));
-			concatList($$, $3);
-			concatList($$, makeNode((char*)"}", NULL, NULL));
+			concatList($1, makeNode((char*)"{", NULL, NULL));
+			concatList($1, $3);
+			concatList($1, makeNode((char*)"}", NULL, NULL));
 		}
-	
+;	
 DECLARATIONS:
 		Var DECLARLIST  {
 			$$ = makeNode((char*)"DECLARATIONS", NULL, $1);
-			concatList($$, $2);
+			concatList($1, $2);
 		}
 	|
 		/*epsilon*/
-		
+		/*epsilon*/ {makeNode((char*)"epsilon", NULL, NULL);}
+;		
 DECLARLIST:
 		DECLARLIST DCL ';' {
 			$$ = makeNode((char*)"DECLARLIST", NULL, $1);
-			concatList($$, $2);
-			concatList($$, makeNode((char*)";", NULL, NULL));
+			concatList($1, $2);
+			concatList($1, makeNode((char*)";", NULL, NULL));
 		}
 	|
 		DCL ';' {
 			$$ = makeNode((char*)"DECLARLIST", NULL, $1);
-			concatList($$, makeNode((char*)";", NULL, NULL));
+			concatList($1, makeNode((char*)";", NULL, NULL));
 		}
-		
+;		
 DCL: 
 		ID ':' TYPE {
 			$$ = makeNode((char*)"DCL", NULL, $1);
-			concatList($$, makeNode((char*)":", NULL, NULL));
-			concatList($$, $3);
+			concatList($1, makeNode((char*)":", NULL, NULL));
+			concatList($1, $3);
 		} 
 	|
 		ID ':' ID {
 			$$ = makeNode((char*)"DCL", NULL, $1);
-			concatList($$, makeNode((char*)":", NULL, NULL));
-			concatList($$, $3);
+			concatList($1, makeNode((char*)":", NULL, NULL));
+			concatList($1, $3);
 		} 
 	|
 		ID ',' DCL {
 			$$ = makeNode((char*)"DCL", NULL, $1);
-			concatList($$, makeNode((char*)":", NULL, NULL));
-			concatList($$, $3);
+			concatList($1, makeNode((char*)":", NULL, NULL));
+			concatList($1, $3);
 		}
-	
+;	
 TYPE: 
 		Integer {
 			$$ = makeNode((char*)"TYPE", NULL, $1);
@@ -153,15 +157,16 @@ TYPE:
 		Real {
 			$$ = makeNode((char*)"TYPE", NULL, $1);
 		}
-	
+;	
 LIST: 
 		LIST STMT {
 			$$ = makeNode((char*)"LIST", NULL, $1);
-			concatList($$, $2);
+			concatList($1, $2);
 		}
 	|
 		/*epsilon*/
-	
+		/*epsilon*/ {makeNode((char*)"epsilon", NULL, NULL);}
+;	
 STMT: 
 		ASSN {
 			$$ = makeNode((char*)"STMT", NULL, $1);
@@ -186,47 +191,47 @@ STMT:
 		BLK {
 			$$ = makeNode((char*)"STMT", NULL, $1);
 		}
-	
+;	
 STMT_RETURN: 
 		Return '(' EXP ')' ';' {
 			$$ = makeNode((char*)"STMT_RETURN", NULL, $1);
-			concatList($$, makeNode((char*)"(", NULL, NULL));
-			concatList($$, $3);
-			concatList($$, makeNode((char*)")", NULL, NULL));
-			concatList($$, makeNode((char*)";", NULL, NULL));
+			concatList($1, makeNode((char*)"(", NULL, NULL));
+			concatList($1, $3);
+			concatList($1, makeNode((char*)")", NULL, NULL));
+			concatList($1, makeNode((char*)";", NULL, NULL));
 		}
-	
+;	
 WRITE: 
 		Write '(' EXP ')' ';' {
 			$$ = makeNode((char*)"WRITE", NULL, $1);
-			concatList($$, makeNode((char*)"(", NULL, NULL));	
-			concatList($$, $3);
-			concatList($$, makeNode((char*)")", NULL, NULL));
-			concatList($$, makeNode((char*)";", NULL, NULL));
+			concatList($1, makeNode((char*)"(", NULL, NULL));	
+			concatList($1, $3);
+			concatList($1, makeNode((char*)")", NULL, NULL));
+			concatList($1, makeNode((char*)";", NULL, NULL));
 		}
 	|
 		Write '(' STRING ')' ';' {
 			$$ = makeNode((char*)"WRITE", NULL, $1);
-			concatList($$, makeNode((char*)"(", NULL, NULL));
-			concatList($$, $3);
-			concatList($$, makeNode((char*)")", NULL, NULL));
-			concatList($$, makeNode((char*)";", NULL, NULL));
+			concatList($1, makeNode((char*)"(", NULL, NULL));
+			concatList($1, $3);
+			concatList($1, makeNode((char*)")", NULL, NULL));
+			concatList($1, makeNode((char*)";", NULL, NULL));
 		}
-	
+;	
 READ: 
 		Read '(' LVAL ')' ';' {
 			$$ = makeNode((char*)"READ", NULL, $1);
-			concatList($$, makeNode((char*)"(", NULL, NULL));	
+			concatList($1, makeNode((char*)"(", NULL, NULL));	
 		}
-	
+;	
 ASSN: 
 		LVAL ASSIGN_OP EXP ';' {
 			$$ = makeNode((char*)"ASSN", NULL, $1);
-			concatList($$, $2);
-			concatList($$, $3);
-			concatList($$, makeNode((char*)";", NULL, NULL));
+			concatList($1, $2);
+			concatList($1, $3);
+			concatList($1, makeNode((char*)";", NULL, NULL));
 		}
-
+;
 LVAL: 
 		ID {
 			$$ = makeNode((char*)"LVAL", NULL, $1);
@@ -235,84 +240,85 @@ LVAL:
 		STREF {
 			$$ = makeNode((char*)"LVAL", NULL, $1);
 		}
+;
 CNTRL: 
 		If BEXP Then STMT Else STMT {
 			$$ = makeNode((char*)"CNTRL", NULL, $1);
-			concatList($$, $2);
-			concatList($$, $3);
-			concatList($$, $4);
-			concatList($$, $5);
-			concatList($$, $6);
+			concatList($1, $2);
+			concatList($1, $3);
+			concatList($1, $4);
+			concatList($1, $5);
+			concatList($1, $6);
 		}
 	|
 		If BEXP Then STMT {
 			$$ = makeNode((char*)"CNTRL", NULL, $1);
-			concatList($$, $2);
-			concatList($$, $3);
-			concatList($$, $4);
+			concatList($1, $2);
+			concatList($1, $3);
+			concatList($1, $4);
 		}
 	|
 		While BEXP Do STMT {
 			$$ = makeNode((char*)"CNTRL", NULL, makeNode((char*)"while", NULL, NULL));
-			concatList($$, $2);
-			concatList($$, $3);
-			concatList($$, $4);
+			concatList($1, $2);
+			concatList($1, $3);
+			concatList($1, $4);
 		}
-	
+;	
 BEXP: 
 		BEXP OR_OP BEXP {
 			$$ = makeNode((char*)"BEXP", NULL, $1);
-			concatList($$, $2);
-			concatList($$, $3);
+			concatList($1, $2);
+			concatList($1, $3);
 		}
 	|
 		BEXP AND_OP BEXP {
 			$$ = makeNode((char*)"BEXP", NULL, $1);
-			concatList($$, $2);
-			concatList($$, $3);
+			concatList($1, $2);
+			concatList($1, $3);
 		}
 	|
 		NOT_OP BEXP {
 			$$ = makeNode((char*)"BEXP", NULL, $1);
-			concatList($$, $2);
+			concatList($1, $2);
 		}
 	|
 		EXP REL_OP EXP {
 			$$ = makeNode((char*)"BEXP", NULL, $1);
-			concatList($$, $2);
-			concatList($$, $3);
+			concatList($1, $2);
+			concatList($1, $3);
 		}
 	|
 		'(' BEXP ')' {
 			$$ = makeNode((char*)"BEXP", NULL, makeNode((char*)"(", NULL, NULL));
-			concatList($$, $2);
-			concatList($$, makeNode((char*)")", NULL, NULL));
+			concatList($1, $2);
+			concatList($1, makeNode((char*)")", NULL, NULL));
 		}
-	
+;	
 EXP: 
 		EXP ADD_OP EXP {
 			$$ = makeNode((char*)"EXP", NULL, $1);
-			concatList($$, $2);
-			concatList($$, $3);
+			concatList($1, $2);
+			concatList($1, $3);
 		}
 	|
 		EXP MUL_OP EXP {
 			$$ = makeNode((char*)"EXP", NULL, $1);
-			concatList($$, $2);
-			concatList($$, $3);
+			concatList($1, $2);
+			concatList($1, $3);
 		}
 	|
 		'(' EXP ')' {
 			$$ = makeNode((char*)"EXP", NULL, makeNode((char*)"(", NULL, NULL));
-			concatList($$, $2);
-			concatList($$, makeNode((char*)")", NULL, NULL));
+			concatList($1, $2);
+			concatList($1, makeNode((char*)")", NULL, NULL));
 		}
 	|
 		'(' TYPE ')' EXP {
 			$$ = makeNode((char*)"EXP", NULL, makeNode((char*)"(", NULL, NULL));
-			concatList($$, $2);
-			concatList($$, makeNode((char*)")", NULL, NULL));
-			concatList($$, $4);
+			concatList($1, $2);
+			concatList($1, makeNode((char*)")", NULL, NULL));
+			concatList($1, $4);
 		}
 	|
 		ID {
@@ -330,38 +336,39 @@ EXP:
 		CALL {
 			$$ = makeNode((char*)"EXP", NULL, $1);
 		}
-	
+;	
 STREF: 
 		ID '[' ID ']' {
 			$$ = makeNode((char*)"STREF", NULL, $1);
-			concatList($$, makeNode((char*)"[", NULL, NULL));
-			concatList($$, $3);
-			concatList($$, makeNode((char*)"]", NULL, NULL));
+			concatList($1, makeNode((char*)"[", NULL, NULL));
+			concatList($1, $3);
+			concatList($1, makeNode((char*)"]", NULL, NULL));
 		}
 	|
 		STREF '[' ID ']' {
 			$$ = makeNode((char*)"STREF", NULL, $1);
-			concatList($$, makeNode((char*)"[", NULL, NULL));
-			concatList($$, $3);
-			concatList($$, makeNode((char*)"]", NULL, NULL));
+			concatList($1, makeNode((char*)"[", NULL, NULL));
+			concatList($1, $3);
+			concatList($1, makeNode((char*)"]", NULL, NULL));
 		}
-	
+;	
 CALL: 
 		Call ID '(' CALL_ARGS_FULL ')' {
 			$$ = makeNode((char*)"CALL", NULL, $1);
-			concatList($$, $2);
-			concatList($$, makeNode((char*)"(", NULL, NULL));
-			concatList($$, $4);
-			concatList($$, makeNode((char*)")", NULL, NULL));
+			concatList($1, $2);
+			concatList($1, makeNode((char*)"(", NULL, NULL));
+			concatList($1, $4);
+			concatList($1, makeNode((char*)")", NULL, NULL));
 		}
-	
+;	
 CALL_ARGS_FULL: 
 		CALL_ARGS {
 			$$ = makeNode((char*)"CALL_ARGS_FULL", NULL, $1);
 		}
 	|
 		/*epsilon*/
-	
+		/*epsilon*/ {makeNode((char*)"epsilon", NULL, NULL);}
+;	
 CALL_ARGS:
 		EXP {
 			$$ = makeNode((char*)"CALL_ARGS", NULL, $1);
@@ -369,9 +376,10 @@ CALL_ARGS:
 	|
 		CALL_ARGS ',' EXP {
 			$$ = makeNode((char*)"CALL_ARGS", NULL, $1);
-			concatList($$, makeNode((char*)",", NULL, NULL));
-			concatList($$, $3);
+			concatList($1, makeNode((char*)",", NULL, NULL));
+			concatList($1, $3);
 		}
+;
 	
 %%
 

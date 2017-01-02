@@ -330,7 +330,7 @@ extern int yylex (void);
 #undef YY_DECL
 #endif
 
-#line 75 "part2.lex"
+#line 74 "part2.lex"
 
 
 #line 337 "part2-lex.h"
