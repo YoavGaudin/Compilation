@@ -61,13 +61,13 @@ extern		{yylval = makeNode((char*)"extern", NULL, NULL); return Extern;}
 {ID}            {yylval = makeNode((char*)"id", strdup(yytext), NULL); return ID;}
 {STRING}        {yylval = makeNode((char*)"STRING", strdup(yytext), NULL); return STRING;}
 {CHARTOKENS}    {return yytext[0];}
-{MUL_OP}	{yylval = makeNode((char*)"mulop", NULL, NULL); return MUL_OP;}
-{ADD_OP}	{yylval = makeNode((char*)"addop", NULL, NULL); return ADD_OP;}
+{MUL_OP}	{yylval = makeNode((char*)"mulop", (char*)"*", NULL); return MUL_OP;}
+{ADD_OP}	{yylval = makeNode((char*)"addop", (char*)"+", NULL); return ADD_OP;}
 {ASSIGN_OP}	{yylval = makeNode((char*)"assign", (char*)"=", NULL); return ASSIGN;}
 {RELATION_OP}	{yylval = makeNode((char*)"relop", (char*)"<", NULL); return REL_OP;}
-{AND_OP}	{yylval = makeNode((char*)"andop", NULL, NULL); return AND_OP;}
-{OR_OP}		{yylval = makeNode((char*)"orop", NULL, NULL); return OR_OP;}
-{NOT_OP}	{yylval = makeNode((char*)"notop", NULL, NULL); return NOT_OP;}
+{AND_OP}	{yylval = makeNode((char*)"and", (char*)"&&", NULL); return AND_OP;}
+{OR_OP}		{yylval = makeNode((char*)"or", (char*)"||", NULL); return OR_OP;}
+{NOT_OP}	{yylval = makeNode((char*)"not", (char*)"!", NULL); return NOT_OP;}
 {UNCHANGABLE}	{}
 .               {printErr();}
 

@@ -63,12 +63,12 @@ extern int yydebug;
     Call = 273,
     ID = 274,
     STRING = 275,
-    ADD_OP = 276,
-    MUL_OP = 277,
-    AND_OP = 278,
-    OR_OP = 279,
-    REL_OP = 280,
-    ASSIGN = 281,
+    ASSIGN = 276,
+    AND_OP = 277,
+    OR_OP = 278,
+    REL_OP = 279,
+    ADD_OP = 280,
+    MUL_OP = 281,
     NOT_OP = 282
   };
 #endif

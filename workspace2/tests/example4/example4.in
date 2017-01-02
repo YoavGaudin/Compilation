@@ -1,0 +1,10 @@
+main
+var a:integer;
+{
+  a = 5;
+  if (integer)(real)a > 2 && a <=5 || a>1 && (a<=3 || (integer)a-(real)a == (integer)((real)a*a-(integer)a*a)) then 
+	if a == a then 
+		a=1; 
+	else write("BLAH!"); 
+  else write("blah blah");
+}

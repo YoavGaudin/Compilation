@@ -965,12 +965,12 @@ YY_RULE_SETUP
 case 21:
 YY_RULE_SETUP
 #line 64 "part2.lex"
-{yylval = makeNode((char*)"mulop", NULL, NULL); return MUL_OP;}
+{yylval = makeNode((char*)"mulop", (char*)"*", NULL); return MUL_OP;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
 #line 65 "part2.lex"
-{yylval = makeNode((char*)"addop", NULL, NULL); return ADD_OP;}
+{yylval = makeNode((char*)"addop", (char*)"+", NULL); return ADD_OP;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
@@ -985,17 +985,17 @@ YY_RULE_SETUP
 case 25:
 YY_RULE_SETUP
 #line 68 "part2.lex"
-{yylval = makeNode((char*)"andop", NULL, NULL); return AND_OP;}
+{yylval = makeNode((char*)"and", (char*)"&&", NULL); return AND_OP;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 69 "part2.lex"
-{yylval = makeNode((char*)"orop", NULL, NULL); return OR_OP;}
+{yylval = makeNode((char*)"or", (char*)"||", NULL); return OR_OP;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 70 "part2.lex"
-{yylval = makeNode((char*)"notop", NULL, NULL); return NOT_OP;}
+{yylval = makeNode((char*)"not", (char*)"!", NULL); return NOT_OP;}
 	YY_BREAK
 case 28:
 /* rule 28 can match eol */

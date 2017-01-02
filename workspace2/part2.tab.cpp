@@ -131,12 +131,12 @@ extern int yydebug;
     Call = 273,
     ID = 274,
     STRING = 275,
-    ADD_OP = 276,
-    MUL_OP = 277,
-    AND_OP = 278,
-    OR_OP = 279,
-    REL_OP = 280,
-    ASSIGN = 281,
+    ASSIGN = 276,
+    AND_OP = 277,
+    OR_OP = 278,
+    REL_OP = 279,
+    ADD_OP = 280,
+    MUL_OP = 281,
     NOT_OP = 282
   };
 #endif
@@ -457,13 +457,13 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    31,    31,    38,    48,    51,    62,    73,    77,    81,
-      85,    91,    96,   102,   105,   113,   119,   122,   128,   134,
-     140,   146,   153,   157,   162,   168,   171,   175,   179,   183,
-     187,   191,   196,   205,   213,   222,   231,   239,   243,   248,
-     257,   264,   272,   278,   284,   289,   295,   303,   309,   315,
-     321,   328,   332,   336,   340,   345,   352,   360,   369,   374,
-     377,   381
+       0,    35,    35,    42,    52,    55,    66,    77,    81,    85,
+      89,    95,   100,   106,   109,   117,   123,   126,   132,   138,
+     144,   150,   157,   161,   166,   172,   175,   179,   183,   187,
+     191,   195,   200,   209,   217,   226,   235,   243,   247,   252,
+     261,   268,   276,   282,   288,   294,   299,   307,   313,   319,
+     326,   334,   338,   342,   346,   351,   358,   366,   375,   380,
+     383,   387
 };
 #endif
 
@@ -474,8 +474,8 @@ static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "NUM", "Defstruct", "Extern", "Main",
   "Var", "Integer", "Real", "If", "Then", "Else", "While", "Do", "Return",
-  "Write", "Read", "Call", "ID", "STRING", "','", "';'", "':'", "ADD_OP",
-  "MUL_OP", "AND_OP", "OR_OP", "REL_OP", "ASSIGN", "NOT_OP", "'['", "'{'",
+  "Write", "Read", "Call", "ID", "STRING", "','", "';'", "':'", "ASSIGN",
+  "AND_OP", "OR_OP", "REL_OP", "ADD_OP", "MUL_OP", "NOT_OP", "'['", "'{'",
   "'('", "']'", "'}'", "')'", "$accept", "PROGRAM", "TDEFS", "FDEFS",
   "FUNC_ARGLIST_FULL", "FUNC_ARGLIST", "MAIN_FUNCTION", "BLK",
   "DECLARATIONS", "DECLARLIST", "DCL", "TYPE", "LIST", "STMT",
@@ -510,20 +510,20 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-     -81,     7,     8,   -81,   -16,    68,     5,    71,    40,   -81,
-     -81,   -81,    31,    21,   -13,    30,    56,     5,   -81,    57,
-      62,     5,   108,    81,    82,   -81,    85,     5,   -81,     5,
-     -81,   -81,   -81,    84,   -81,     5,    75,    89,   114,   -81,
-     -81,   100,     1,     1,   105,   106,   107,   110,   -81,   -81,
-     -81,   -81,   -81,   -81,   -81,   113,   -81,   112,    40,     5,
-     115,   -81,   125,   110,     1,    51,    14,   104,   112,   -81,
-      19,    -1,    45,   126,   127,    -1,   128,   -81,   -81,   -81,
-     116,   -81,   117,    94,    83,    86,     1,     1,    -1,    -1,
-      -1,    86,    53,    73,   118,    88,   119,   122,   109,   123,
-      -1,    -1,   -81,   -81,   136,   -81,   -81,   -81,   -81,    98,
-     -81,    90,   129,   130,   137,   138,   -81,   -81,   -81,    98,
-     131,   140,   -81,    86,   -81,   -81,   -81,   -81,   -81,    -1,
-     -81,    98
+     -81,     7,     8,   -81,   -16,    68,    31,    16,    72,   -81,
+     -81,   -81,    56,    77,   -13,    58,    74,    31,   -81,    65,
+      93,    31,    33,    82,   100,   -81,   102,    31,   -81,    31,
+     -81,   -81,   -81,   111,   -81,    31,    75,    88,   113,   -81,
+     -81,   104,     1,     1,   105,   106,   108,   112,   -81,   -81,
+     -81,   -81,   -81,   -81,   -81,   118,   -81,   114,    72,    31,
+     115,   -81,   117,   112,     1,    51,    78,   101,   114,   -81,
+      19,    -1,    45,   125,   127,    -1,   128,   -81,   -81,   -81,
+     116,   -81,   119,    70,    85,    92,     1,     1,    -1,    -1,
+      -1,    92,    53,    87,   120,    89,   121,   124,    18,   126,
+      -1,    -1,   -81,   -81,   136,   -81,   -81,   103,   122,   -81,
+     -81,    91,   130,   131,   132,   137,   -81,   -81,   -81,   103,
+     129,   140,   -81,    92,   -81,   -81,   -81,   -81,   -81,    -1,
+     -81,   103
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -539,9 +539,9 @@ static const yytype_uint8 yydefact[] =
       24,    30,    29,    28,    26,     0,    27,    38,    16,     0,
        0,    53,     0,    51,     0,     0,     0,     0,    52,    54,
        0,     0,     0,     0,     0,     0,     0,     5,    10,     6,
-       0,    44,     0,     0,     0,    16,     0,     0,     0,     0,
+       0,    45,     0,     0,     0,    16,     0,     0,     0,     0,
        0,    16,     0,     0,     0,     0,     0,     0,     0,     0,
-      59,     0,    46,    49,    40,    43,    42,    47,    48,    45,
+      59,     0,    46,    49,    40,    42,    43,    44,    47,    48,
       41,     0,     0,     0,     0,     0,    55,    36,    56,    60,
        0,    58,    50,    16,    32,    34,    33,    35,    57,     0,
       39,    61
@@ -550,8 +550,8 @@ static const yytype_uint8 yydefact[] =
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
-     -81,   -81,   -81,   -81,   133,   -81,   -81,    -7,   -81,   141,
-      -6,    61,   -81,   -80,   -81,   -81,   -81,   -81,    77,   -81,
+     -81,   -81,   -81,   -81,   133,   -81,   -81,    -7,   -81,   145,
+      -6,    61,   -81,   -80,   -81,   -81,   -81,   -81,    90,   -81,
      -29,   -62,   -36,   -81,   -81,   -81
 };
 
@@ -570,42 +570,42 @@ static const yytype_uint8 yytable[] =
 {
       57,    18,    61,    84,    61,   104,    13,     3,    24,    93,
       95,   110,     4,    98,    70,    30,     6,    62,    63,    62,
-      63,    24,    23,    39,    13,    85,   107,   108,   109,    39,
+      63,    24,    23,    39,     9,    10,   107,   108,   109,    39,
      111,    64,    92,    91,    65,    81,    83,    57,   119,   122,
-      86,    87,    21,   130,    22,    86,    87,    17,    61,    57,
-      20,    77,    25,    78,    61,    57,    61,   105,   106,     9,
+     117,     9,    10,   130,    86,    87,    89,    90,    61,    57,
+      13,    77,    31,    78,    61,    57,    61,   105,   106,     9,
       10,     9,    10,    62,    63,    94,    12,   131,    16,    62,
-      63,    62,    63,     7,     8,    26,     9,    10,    92,     9,
-      10,    64,    17,    32,    65,    42,    92,    57,    43,    28,
-      44,    45,    46,    17,    47,    29,    42,    88,    89,    43,
-      33,    44,    45,    46,    34,    47,    40,    88,    89,   112,
-      48,    90,    88,    89,    88,    89,     9,    10,    35,   103,
-      86,    87,    88,    89,   114,    58,   103,    31,    88,    89,
-     102,   117,    90,    88,    89,    59,    60,    79,    71,    72,
-      73,    74,    75,    76,    80,    47,    97,    99,   123,   100,
-      96,   124,   125,   101,   113,   115,   116,   118,    27,   126,
-     127,   129,     0,     0,     0,     0,     0,   128,    41
+      63,    62,    63,     7,     8,    20,     9,    10,    92,    17,
+      25,    64,    17,    32,    65,    42,    92,    57,    43,    85,
+      44,    45,    46,    26,    47,    86,    87,    28,    21,    17,
+      22,    33,    42,    86,    87,    43,   102,    44,    45,    46,
+      48,    47,    88,    89,    90,    89,    90,    89,    90,    89,
+      90,   103,    34,   112,    58,   114,    29,   103,    88,    89,
+      90,    89,    90,    40,    59,    35,    80,    79,    71,    72,
+      60,    73,    75,    74,    47,    76,    97,    99,   123,   100,
+       0,    90,   124,   125,   126,   101,   113,   115,   116,   127,
+     118,   129,    27,    96,     0,   128,     0,     0,    41
 };
 
 static const yytype_int16 yycheck[] =
 {
       36,     8,     3,    65,     3,    85,    19,     0,    14,    71,
       72,    91,     4,    75,    43,    21,    32,    18,    19,    18,
-      19,    27,    35,    29,    19,    11,    88,    89,    90,    35,
+      19,    27,    35,    29,     8,     9,    88,    89,    90,    35,
       92,    30,    33,    14,    33,    64,    65,    73,   100,   101,
-      26,    27,    21,   123,    23,    26,    27,     7,     3,    85,
-      19,    58,    22,    59,     3,    91,     3,    86,    87,     8,
+      22,     8,     9,   123,    25,    26,    28,    29,     3,    85,
+      19,    58,    19,    59,     3,    91,     3,    86,    87,     8,
        9,     8,     9,    18,    19,    20,     5,   129,     7,    18,
-      19,    18,    19,     5,     6,    19,     8,     9,    33,     8,
-       9,    30,     7,    22,    33,    10,    33,   123,    13,    32,
-      15,    16,    17,     7,    19,    33,    10,    24,    25,    13,
-      19,    15,    16,    17,    22,    19,    22,    24,    25,    36,
-      35,    28,    24,    25,    24,    25,     8,     9,    33,    36,
-      26,    27,    24,    25,    36,    36,    36,    19,    24,    25,
-      36,    22,    28,    24,    25,    21,    36,    22,    33,    33,
-      33,    31,    29,    31,    19,    19,    19,    19,    12,    33,
-      73,    22,    22,    36,    36,    36,    34,    34,    17,    22,
-      22,    21,    -1,    -1,    -1,    -1,    -1,    36,    35
+      19,    18,    19,     5,     6,    19,     8,     9,    33,     7,
+      22,    30,     7,    22,    33,    10,    33,   123,    13,    11,
+      15,    16,    17,    19,    19,    25,    26,    32,    21,     7,
+      23,    19,    10,    25,    26,    13,    36,    15,    16,    17,
+      35,    19,    27,    28,    29,    28,    29,    28,    29,    28,
+      29,    36,    22,    36,    36,    36,    33,    36,    27,    28,
+      29,    28,    29,    22,    21,    33,    19,    22,    33,    33,
+      36,    33,    24,    31,    19,    31,    19,    19,    12,    33,
+      -1,    29,    22,    22,    22,    36,    36,    36,    34,    22,
+      34,    21,    17,    73,    -1,    36,    -1,    -1,    35
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -619,9 +619,9 @@ static const yytype_uint8 yystos[] =
       22,    41,    10,    13,    15,    16,    17,    19,    35,    44,
       50,    51,    52,    53,    54,    55,    56,    59,    36,    21,
       36,     3,    18,    19,    30,    33,    57,    58,    59,    60,
-      57,    33,    33,    33,    31,    29,    31,    44,    47,    22,
-      19,    57,    48,    57,    58,    11,    26,    27,    24,    25,
-      28,    14,    33,    58,    20,    58,    55,    19,    58,    19,
+      57,    33,    33,    33,    31,    24,    31,    44,    47,    22,
+      19,    57,    48,    57,    58,    11,    25,    26,    27,    28,
+      29,    14,    33,    58,    20,    58,    55,    19,    58,    19,
       33,    36,    36,    36,    50,    57,    57,    58,    58,    58,
       50,    58,    36,    36,    36,    36,    34,    22,    34,    58,
       61,    62,    58,    12,    22,    22,    22,    22,    36,    21,
@@ -647,7 +647,7 @@ static const yytype_uint8 yyr2[] =
        3,     1,     2,     0,     4,     2,     0,     3,     2,     3,
        3,     3,     1,     1,     2,     0,     1,     1,     1,     1,
        1,     1,     5,     5,     5,     5,     4,     1,     1,     6,
-       4,     4,     3,     3,     2,     3,     3,     3,     3,     3,
+       4,     4,     3,     3,     3,     2,     3,     3,     3,     3,
        4,     1,     1,     1,     1,     4,     4,     5,     1,     0,
        1,     3
 };
@@ -1326,7 +1326,7 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 31 "part2.ypp" /* yacc.c:1646  */
+#line 35 "part2.ypp" /* yacc.c:1646  */
     {
 			parseTree = makeNode((char*)"PROGRAM", NULL, (yyvsp[-2]));
 			concatList((yyvsp[-2]), (yyvsp[-1]));
@@ -1336,7 +1336,7 @@ yyreduce:
     break;
 
   case 3:
-#line 38 "part2.ypp" /* yacc.c:1646  */
+#line 42 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"TDEFS", NULL, (yyvsp[-6]));
 			concatList((yyvsp[-6]), (yyvsp[-5]));
@@ -1350,13 +1350,13 @@ yyreduce:
     break;
 
   case 4:
-#line 48 "part2.ypp" /* yacc.c:1646  */
+#line 52 "part2.ypp" /* yacc.c:1646  */
     {(yyval) = makeNode((char*)"TDEFS", NULL, makeNode((char*)"EPSILON", NULL, NULL));}
 #line 1356 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 51 "part2.ypp" /* yacc.c:1646  */
+#line 55 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"FDEFS", NULL, (yyvsp[-6]));
 			concatList((yyvsp[-6]), (yyvsp[-5]));
@@ -1371,7 +1371,7 @@ yyreduce:
     break;
 
   case 6:
-#line 62 "part2.ypp" /* yacc.c:1646  */
+#line 66 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"FDEFS", NULL, (yyvsp[-7]));
 			concatList((yyvsp[-7]), (yyvsp[-6]));
@@ -1386,13 +1386,13 @@ yyreduce:
     break;
 
   case 7:
-#line 73 "part2.ypp" /* yacc.c:1646  */
+#line 77 "part2.ypp" /* yacc.c:1646  */
     {(yyval) = makeNode((char*)"FDEFS", NULL, makeNode((char*)"EPSILON", NULL, NULL));}
 #line 1392 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 77 "part2.ypp" /* yacc.c:1646  */
+#line 81 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"FUNC_ARGLIST_FULL", NULL, (yyvsp[0]));
 		}
@@ -1400,13 +1400,13 @@ yyreduce:
     break;
 
   case 9:
-#line 81 "part2.ypp" /* yacc.c:1646  */
+#line 85 "part2.ypp" /* yacc.c:1646  */
     {(yyval) = makeNode((char*)"FUNC_ARGLIST_FULL", NULL, makeNode((char*)"EPSILON", NULL, NULL));}
 #line 1406 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 85 "part2.ypp" /* yacc.c:1646  */
+#line 89 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"FUNC_ARGLIST", NULL, (yyvsp[-2]));
 			concatList((yyvsp[-2]), makeNode((char*)",", NULL, NULL));
@@ -1416,7 +1416,7 @@ yyreduce:
     break;
 
   case 11:
-#line 91 "part2.ypp" /* yacc.c:1646  */
+#line 95 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"FUNC_ARGLIST", NULL, (yyvsp[0]));
 		}
@@ -1424,7 +1424,7 @@ yyreduce:
     break;
 
   case 12:
-#line 96 "part2.ypp" /* yacc.c:1646  */
+#line 100 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"MAIN_FUNCTION", NULL, (yyvsp[-1]));
 			concatList((yyvsp[-1]), (yyvsp[0]));
@@ -1433,13 +1433,13 @@ yyreduce:
     break;
 
   case 13:
-#line 102 "part2.ypp" /* yacc.c:1646  */
+#line 106 "part2.ypp" /* yacc.c:1646  */
     {(yyval) = makeNode((char*)"MAIN_FUNCTION", NULL, makeNode((char*)"EPSILON", NULL, NULL));}
 #line 1439 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 105 "part2.ypp" /* yacc.c:1646  */
+#line 109 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"BLK", NULL, (yyvsp[-3]));
 			concatList((yyvsp[-3]), makeNode((char*)"{", NULL, NULL));
@@ -1450,7 +1450,7 @@ yyreduce:
     break;
 
   case 15:
-#line 113 "part2.ypp" /* yacc.c:1646  */
+#line 117 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"DECLARATIONS", NULL, (yyvsp[-1]));
 			concatList((yyvsp[-1]), (yyvsp[0]));
@@ -1459,13 +1459,13 @@ yyreduce:
     break;
 
   case 16:
-#line 119 "part2.ypp" /* yacc.c:1646  */
+#line 123 "part2.ypp" /* yacc.c:1646  */
     {(yyval) = makeNode((char*)"DECLARATIONS", NULL, makeNode((char*)"EPSILON", NULL, NULL));}
 #line 1465 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 122 "part2.ypp" /* yacc.c:1646  */
+#line 126 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"DECLARLIST", NULL, (yyvsp[-2]));
 			concatList((yyvsp[-2]), (yyvsp[-1]));
@@ -1475,7 +1475,7 @@ yyreduce:
     break;
 
   case 18:
-#line 128 "part2.ypp" /* yacc.c:1646  */
+#line 132 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"DECLARLIST", NULL, (yyvsp[-1]));
 			concatList((yyvsp[-1]), makeNode((char*)";", NULL, NULL));
@@ -1484,7 +1484,7 @@ yyreduce:
     break;
 
   case 19:
-#line 134 "part2.ypp" /* yacc.c:1646  */
+#line 138 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"DCL", NULL, (yyvsp[-2]));
 			concatList((yyvsp[-2]), makeNode((char*)":", NULL, NULL));
@@ -1494,7 +1494,7 @@ yyreduce:
     break;
 
   case 20:
-#line 140 "part2.ypp" /* yacc.c:1646  */
+#line 144 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"DCL", NULL, (yyvsp[-2]));
 			concatList((yyvsp[-2]), makeNode((char*)":", NULL, NULL));
@@ -1504,7 +1504,7 @@ yyreduce:
     break;
 
   case 21:
-#line 146 "part2.ypp" /* yacc.c:1646  */
+#line 150 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"DCL", NULL, (yyvsp[-2]));
 			concatList((yyvsp[-2]), makeNode((char*)",", NULL, NULL));
@@ -1514,7 +1514,7 @@ yyreduce:
     break;
 
   case 22:
-#line 153 "part2.ypp" /* yacc.c:1646  */
+#line 157 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"TYPE", NULL, (yyvsp[0]));
 		}
@@ -1522,7 +1522,7 @@ yyreduce:
     break;
 
   case 23:
-#line 157 "part2.ypp" /* yacc.c:1646  */
+#line 161 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"TYPE", NULL, (yyvsp[0]));
 		}
@@ -1530,7 +1530,7 @@ yyreduce:
     break;
 
   case 24:
-#line 162 "part2.ypp" /* yacc.c:1646  */
+#line 166 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"LIST", NULL, (yyvsp[-1]));
 			concatList((yyvsp[-1]), (yyvsp[0]));
@@ -1539,13 +1539,13 @@ yyreduce:
     break;
 
   case 25:
-#line 168 "part2.ypp" /* yacc.c:1646  */
+#line 172 "part2.ypp" /* yacc.c:1646  */
     {(yyval) = makeNode((char*)"LIST", NULL, makeNode((char*)"EPSILON", NULL, NULL));}
 #line 1545 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 171 "part2.ypp" /* yacc.c:1646  */
+#line 175 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
 		}
@@ -1553,7 +1553,7 @@ yyreduce:
     break;
 
   case 27:
-#line 175 "part2.ypp" /* yacc.c:1646  */
+#line 179 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
 		}
@@ -1561,7 +1561,7 @@ yyreduce:
     break;
 
   case 28:
-#line 179 "part2.ypp" /* yacc.c:1646  */
+#line 183 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
 		}
@@ -1569,7 +1569,7 @@ yyreduce:
     break;
 
   case 29:
-#line 183 "part2.ypp" /* yacc.c:1646  */
+#line 187 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
 		}
@@ -1577,7 +1577,7 @@ yyreduce:
     break;
 
   case 30:
-#line 187 "part2.ypp" /* yacc.c:1646  */
+#line 191 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
 		}
@@ -1585,7 +1585,7 @@ yyreduce:
     break;
 
   case 31:
-#line 191 "part2.ypp" /* yacc.c:1646  */
+#line 195 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"STMT", NULL, (yyvsp[0]));
 		}
@@ -1593,7 +1593,7 @@ yyreduce:
     break;
 
   case 32:
-#line 196 "part2.ypp" /* yacc.c:1646  */
+#line 200 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"STMT_RETURN", NULL, (yyvsp[-4]));
 			concatList((yyvsp[-4]), makeNode((char*)"(", NULL, NULL));
@@ -1605,7 +1605,7 @@ yyreduce:
     break;
 
   case 33:
-#line 205 "part2.ypp" /* yacc.c:1646  */
+#line 209 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"WRITE", NULL, (yyvsp[-4]));
 			concatList((yyvsp[-4]), makeNode((char*)"(", NULL, NULL));	
@@ -1617,7 +1617,7 @@ yyreduce:
     break;
 
   case 34:
-#line 213 "part2.ypp" /* yacc.c:1646  */
+#line 217 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"WRITE", NULL, (yyvsp[-4]));
 			concatList((yyvsp[-4]), makeNode((char*)"(", NULL, NULL));
@@ -1629,7 +1629,7 @@ yyreduce:
     break;
 
   case 35:
-#line 222 "part2.ypp" /* yacc.c:1646  */
+#line 226 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"READ", NULL, (yyvsp[-4]));
 			concatList((yyvsp[-4]), makeNode((char*)"(", NULL, NULL));
@@ -1641,7 +1641,7 @@ yyreduce:
     break;
 
   case 36:
-#line 231 "part2.ypp" /* yacc.c:1646  */
+#line 235 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"ASSN", NULL, (yyvsp[-3]));
 			concatList((yyvsp[-3]), (yyvsp[-2]));
@@ -1652,7 +1652,7 @@ yyreduce:
     break;
 
   case 37:
-#line 239 "part2.ypp" /* yacc.c:1646  */
+#line 243 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"LVAL", NULL, (yyvsp[0]));
 		}
@@ -1660,7 +1660,7 @@ yyreduce:
     break;
 
   case 38:
-#line 243 "part2.ypp" /* yacc.c:1646  */
+#line 247 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"LVAL", NULL, (yyvsp[0]));
 		}
@@ -1668,7 +1668,7 @@ yyreduce:
     break;
 
   case 39:
-#line 248 "part2.ypp" /* yacc.c:1646  */
+#line 252 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"CNTRL", NULL, (yyvsp[-5]));
 			concatList((yyvsp[-5]), (yyvsp[-4]));
@@ -1681,7 +1681,7 @@ yyreduce:
     break;
 
   case 40:
-#line 257 "part2.ypp" /* yacc.c:1646  */
+#line 261 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"CNTRL", NULL, (yyvsp[-3]));
 			concatList((yyvsp[-3]), (yyvsp[-2]));
@@ -1692,7 +1692,7 @@ yyreduce:
     break;
 
   case 41:
-#line 264 "part2.ypp" /* yacc.c:1646  */
+#line 268 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"CNTRL", NULL, makeNode((char*)"while", NULL, NULL));
 			concatList((yyvsp[-3]), (yyvsp[-2]));
@@ -1703,7 +1703,7 @@ yyreduce:
     break;
 
   case 42:
-#line 272 "part2.ypp" /* yacc.c:1646  */
+#line 276 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"BEXP", NULL, (yyvsp[-2]));
 			concatList((yyvsp[-2]), (yyvsp[-1]));
@@ -1713,7 +1713,7 @@ yyreduce:
     break;
 
   case 43:
-#line 278 "part2.ypp" /* yacc.c:1646  */
+#line 282 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"BEXP", NULL, (yyvsp[-2]));
 			concatList((yyvsp[-2]), (yyvsp[-1]));
@@ -1723,26 +1723,26 @@ yyreduce:
     break;
 
   case 44:
-#line 284 "part2.ypp" /* yacc.c:1646  */
-    {
-			(yyval) = makeNode((char*)"BEXP", NULL, (yyvsp[-1]));
-			concatList((yyvsp[-1]), (yyvsp[0]));
-		}
-#line 1732 "part2.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 45:
-#line 289 "part2.ypp" /* yacc.c:1646  */
+#line 288 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"BEXP", NULL, (yyvsp[-2]));
 			concatList((yyvsp[-2]), (yyvsp[-1]));
 			concatList((yyvsp[-2]), (yyvsp[0]));
 		}
+#line 1733 "part2.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 45:
+#line 294 "part2.ypp" /* yacc.c:1646  */
+    {
+			(yyval) = makeNode((char*)"BEXP", NULL, (yyvsp[-1]));
+			concatList((yyvsp[-1]), (yyvsp[0]));
+		}
 #line 1742 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 295 "part2.ypp" /* yacc.c:1646  */
+#line 299 "part2.ypp" /* yacc.c:1646  */
     {
 		    	(yyvsp[-2]) = makeNode((char*)"(",NULL,NULL);
 			(yyval) = makeNode((char*)"BEXP", NULL, (yyvsp[-2]));
@@ -1753,7 +1753,7 @@ yyreduce:
     break;
 
   case 47:
-#line 303 "part2.ypp" /* yacc.c:1646  */
+#line 307 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[-2]));
 			concatList((yyvsp[-2]), (yyvsp[-1]));
@@ -1763,7 +1763,7 @@ yyreduce:
     break;
 
   case 48:
-#line 309 "part2.ypp" /* yacc.c:1646  */
+#line 313 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[-2]));
 			concatList((yyvsp[-2]), (yyvsp[-1]));
@@ -1773,82 +1773,84 @@ yyreduce:
     break;
 
   case 49:
-#line 315 "part2.ypp" /* yacc.c:1646  */
+#line 319 "part2.ypp" /* yacc.c:1646  */
     {
-			(yyval) = makeNode((char*)"EXP", NULL, makeNode((char*)"(", NULL, NULL));
+		    	(yyvsp[-2]) = makeNode((char*)"(",NULL,NULL);
+			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[-2]));
 			concatList((yyvsp[-2]), (yyvsp[-1]));
 			concatList((yyvsp[-2]), makeNode((char*)")", NULL, NULL));
 		}
-#line 1783 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1784 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 321 "part2.ypp" /* yacc.c:1646  */
+#line 326 "part2.ypp" /* yacc.c:1646  */
     {
-			(yyval) = makeNode((char*)"EXP", NULL, makeNode((char*)"(", NULL, NULL));
+		    	(yyvsp[-3]) = makeNode((char*)"(",NULL,NULL);
+			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[-3]));
 			concatList((yyvsp[-3]), (yyvsp[-2]));
 			concatList((yyvsp[-3]), makeNode((char*)")", NULL, NULL));
 			concatList((yyvsp[-3]), (yyvsp[0]));
 		}
-#line 1794 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1796 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 328 "part2.ypp" /* yacc.c:1646  */
+#line 334 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[0]));
 		}
-#line 1802 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1804 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 332 "part2.ypp" /* yacc.c:1646  */
+#line 338 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[0]));
 		}
-#line 1810 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1812 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 336 "part2.ypp" /* yacc.c:1646  */
+#line 342 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[0]));
 		}
-#line 1818 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1820 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 340 "part2.ypp" /* yacc.c:1646  */
+#line 346 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"EXP", NULL, (yyvsp[0]));
 		}
-#line 1826 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1828 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 345 "part2.ypp" /* yacc.c:1646  */
+#line 351 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"STREF", NULL, (yyvsp[-3]));
 			concatList((yyvsp[-3]), makeNode((char*)"[", NULL, NULL));
 			concatList((yyvsp[-3]), (yyvsp[-1]));
 			concatList((yyvsp[-3]), makeNode((char*)"]", NULL, NULL));
 		}
-#line 1837 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1839 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 352 "part2.ypp" /* yacc.c:1646  */
+#line 358 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"STREF", NULL, (yyvsp[-3]));
 			concatList((yyvsp[-3]), makeNode((char*)"[", NULL, NULL));
 			concatList((yyvsp[-3]), (yyvsp[-1]));
 			concatList((yyvsp[-3]), makeNode((char*)"]", NULL, NULL));
 		}
-#line 1848 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1850 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 360 "part2.ypp" /* yacc.c:1646  */
+#line 366 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"CALL", NULL, (yyvsp[-4]));
 			concatList((yyvsp[-4]), (yyvsp[-3]));
@@ -1856,43 +1858,43 @@ yyreduce:
 			concatList((yyvsp[-4]), (yyvsp[-1]));
 			concatList((yyvsp[-4]), makeNode((char*)")", NULL, NULL));
 		}
-#line 1860 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1862 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 369 "part2.ypp" /* yacc.c:1646  */
+#line 375 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"CALL_ARGS_FULL", NULL, (yyvsp[0]));
 		}
-#line 1868 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1870 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 374 "part2.ypp" /* yacc.c:1646  */
+#line 380 "part2.ypp" /* yacc.c:1646  */
     {(yyval) = makeNode((char*)"CALL_ARGS_FULL", NULL, makeNode((char*)"EPSILON", NULL, NULL));}
-#line 1874 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1876 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 377 "part2.ypp" /* yacc.c:1646  */
+#line 383 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"CALL_ARGS", NULL, (yyvsp[0]));
 		}
-#line 1882 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1884 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 381 "part2.ypp" /* yacc.c:1646  */
+#line 387 "part2.ypp" /* yacc.c:1646  */
     {
 			(yyval) = makeNode((char*)"CALL_ARGS", NULL, (yyvsp[-2]));
 			concatList((yyvsp[-2]), makeNode((char*)",", NULL, NULL));
 			concatList((yyvsp[-2]), (yyvsp[0]));
 		}
-#line 1892 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1894 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 1896 "part2.tab.cpp" /* yacc.c:1646  */
+#line 1898 "part2.tab.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2120,7 +2122,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 388 "part2.ypp" /* yacc.c:1906  */
+#line 394 "part2.ypp" /* yacc.c:1906  */
 
 
 extern char* yytext;
