@@ -68,7 +68,7 @@ extern int yydebug;
     AND_OP = 278,
     OR_OP = 279,
     REL_OP = 280,
-    ASSIGN_OP = 281,
+    ASSIGN = 281,
     NOT_OP = 282
   };
 #endif

@@ -1,0 +1,58 @@
+
+
+
+
+
+(<PROGRAM>
+  (<TDEFS>
+    (<EPSILON>)
+  )
+  (<FDEFS>
+    (<EPSILON>)
+  )
+  (<MAIN_FUNCTION>
+    (<main>)
+    (<BLK>
+      (<DECLARATIONS>
+        (<var>)
+        (<DECLARLIST>
+          (<DCL>
+            (<id,a:integer;
+{
+  a = 5;
+}
+>)
+            (<:>)
+            (<TYPE>
+              (<Reserved,integer>)
+            )
+          )
+          (<;>)
+        )
+      )
+      (<{>)
+      (<LIST>
+        (<LIST>
+          (<EPSILON>)
+        )
+        (<STMT>
+          (<ASSN>
+            (<LVAL>
+              (<id,a = 5;
+}
+>)
+            )
+            (<assign>)
+            (<EXP>
+              (<num,5;
+}
+>)
+            )
+            (<;>)
+          )
+        )
+      )
+      (<}>)
+    )
+  )
+)

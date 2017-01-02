@@ -1,0 +1,13 @@
+makeNode epsilon (null) with child ##
+reserved- main
+makeNode Reserved main with child ##
+makeNode epsilon (null) with child ##
+
+makeNode epsilon (null) with child ##
+makeNode epsilon (null) with child ##
+
+ID- foo
+makeNode ID foo with child ##
+makeNode NUM 21 with child ##
+makeNode LVAL (null) with child ID
+syntax error:syntax error

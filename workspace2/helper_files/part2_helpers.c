@@ -16,7 +16,7 @@ extern int yyparse (void);
 ParserNode *makeNode(char* type, char* value, ParserNode *child)
 {
   ParserNode *p;
-  printf("makeNode %s %s with child %s\n", type, value, child!=NULL?child->type:"##");
+  //printf("makeNode %s %s with child %s\n", type, value, child!=NULL?child->type:"##");
   if ((p = (ParserNode*)(malloc(sizeof(ParserNode)))) == 0)
     fprintf(stderr, "Failed malloc(struct node)\n");
   else {
@@ -46,7 +46,7 @@ ParserNode *concatList(ParserNode *listHead, ParserNode *newItem)
   while (lastSibling->sibling != (ParserNode*)NULL)
     lastSibling = lastSibling->sibling;  /* finds the last sibling in the list */
   lastSibling->sibling = newItem;  /* concate the new item to the list */
-  printf("Added %s %s to %s %s\n", newItem->type, newItem->value, listHead->type, listHead->value);
+  //printf("Added %s %s to %s %s\n", newItem->type, newItem->value, listHead->type, listHead->value);
   return (listHead);
 }
 
@@ -95,6 +95,8 @@ void dumpParseTree(void)
 /**************************************************************************/
 /*                           Main of parser                               */
 /**************************************************************************/
+//#define YYDEBUG 1
+//extern int yydebug;
 int main(void)
 {
     int rc;

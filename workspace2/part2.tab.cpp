@@ -136,7 +136,7 @@ extern int yydebug;
     AND_OP = 278,
     OR_OP = 279,
     REL_OP = 280,
-    ASSIGN_OP = 281,
+    ASSIGN = 281,
     NOT_OP = 282
   };
 #endif
@@ -475,9 +475,9 @@ static const char *const yytname[] =
   "$end", "error", "$undefined", "NUM", "Defstruct", "Extern", "Main",
   "Var", "Integer", "Real", "If", "Then", "Else", "While", "Do", "Return",
   "Write", "Read", "Call", "ID", "STRING", "','", "';'", "':'", "ADD_OP",
-  "MUL_OP", "AND_OP", "OR_OP", "REL_OP", "ASSIGN_OP", "NOT_OP", "'['",
-  "'{'", "'('", "']'", "'}'", "')'", "$accept", "PROGRAM", "TDEFS",
-  "FDEFS", "FUNC_ARGLIST_FULL", "FUNC_ARGLIST", "MAIN_FUNCTION", "BLK",
+  "MUL_OP", "AND_OP", "OR_OP", "REL_OP", "ASSIGN", "NOT_OP", "'['", "'{'",
+  "'('", "']'", "'}'", "')'", "$accept", "PROGRAM", "TDEFS", "FDEFS",
+  "FUNC_ARGLIST_FULL", "FUNC_ARGLIST", "MAIN_FUNCTION", "BLK",
   "DECLARATIONS", "DECLARLIST", "DCL", "TYPE", "LIST", "STMT",
   "STMT_RETURN", "WRITE", "READ", "ASSN", "LVAL", "CNTRL", "BEXP", "EXP",
   "STREF", "CALL", "CALL_ARGS_FULL", "CALL_ARGS", YY_NULLPTR
@@ -1351,7 +1351,7 @@ yyreduce:
 
   case 4:
 #line 48 "part2.ypp" /* yacc.c:1646  */
-    {makeNode((char*)"epsilon", NULL, NULL);}
+    {(yyval) = makeNode((char*)"TDEFS", NULL, makeNode((char*)"EPSILON", NULL, NULL));}
 #line 1356 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -1387,7 +1387,7 @@ yyreduce:
 
   case 7:
 #line 73 "part2.ypp" /* yacc.c:1646  */
-    {makeNode((char*)"epsilon", NULL, NULL);}
+    {(yyval) = makeNode((char*)"FDEFS", NULL, makeNode((char*)"EPSILON", NULL, NULL));}
 #line 1392 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -1401,7 +1401,7 @@ yyreduce:
 
   case 9:
 #line 81 "part2.ypp" /* yacc.c:1646  */
-    {makeNode((char*)"epsilon", NULL, NULL);}
+    {(yyval) = makeNode((char*)"FUNC_ARGLIST_FULL", NULL, makeNode((char*)"EPSILON", NULL, NULL));}
 #line 1406 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -1434,7 +1434,7 @@ yyreduce:
 
   case 13:
 #line 102 "part2.ypp" /* yacc.c:1646  */
-    {makeNode((char*)"epsilon", NULL, NULL);}
+    {(yyval) = makeNode((char*)"MAIN_FUNCTION", NULL, makeNode((char*)"EPSILON", NULL, NULL));}
 #line 1439 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -1460,7 +1460,7 @@ yyreduce:
 
   case 16:
 #line 119 "part2.ypp" /* yacc.c:1646  */
-    {makeNode((char*)"epsilon", NULL, NULL);}
+    {(yyval) = makeNode((char*)"DECLARATIONS", NULL, makeNode((char*)"EPSILON", NULL, NULL));}
 #line 1465 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -1540,7 +1540,7 @@ yyreduce:
 
   case 25:
 #line 168 "part2.ypp" /* yacc.c:1646  */
-    {makeNode((char*)"epsilon", NULL, NULL);}
+    {(yyval) = makeNode((char*)"LIST", NULL, makeNode((char*)"EPSILON", NULL, NULL));}
 #line 1545 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
@@ -1865,7 +1865,7 @@ yyreduce:
 
   case 59:
 #line 370 "part2.ypp" /* yacc.c:1646  */
-    {makeNode((char*)"epsilon", NULL, NULL);}
+    {(yyval) = makeNode((char*)"CALL_ARGS_FULL", NULL, makeNode((char*)"EPSILON", NULL, NULL));}
 #line 1870 "part2.tab.cpp" /* yacc.c:1646  */
     break;
 
