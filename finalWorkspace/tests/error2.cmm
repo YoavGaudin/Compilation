@@ -1,0 +1,5 @@
+// Test with bad string
+"First a good string @ here"
+"Then a string that is not closed @ end of line... 
+it does not matter that it closes here"
+
