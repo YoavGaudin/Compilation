@@ -1,9 +1,9 @@
-workspace/*.c
-workspace/*.h
-workspace/part1
-workspace/myOut.tokens
+finalWorkspace/*-lex.c
+finalWorkspace/*-lex.h
+finalWorkspace/*.tab.cpp
+finalWorkspace/*.tab.hpp
+finalWorkspace/part2
 *.ova.*
 *.zip
 .metadata
 *.swp
-.gitignore~
