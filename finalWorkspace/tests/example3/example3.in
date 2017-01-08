@@ -1,0 +1,60 @@
+defstruct {
+    f1: integer;
+    anotherField: real;
+    m, k : integer;
+} cdata;
+
+defstruct {
+    f2: integer;
+    m, k : integer;
+} cdata2;
+
+extern real abc( tree : real , tulman : integer);
+
+real abc( tree : real , tulman : integer){
+	read(polak);
+}
+
+
+main
+var a,c,d: integer;
+    b: cdata;
+	e: cdata2;
+    c: real;
+	
+{
+read(a);
+c[b] = 5 + tulman;
+// pollak
+if  (a < b[f1]) then 
+	write(a);
+else
+	c = 9.8;		
+
+if  (a >= b[f1])   then 
+	write(a);
+
+while a > 5 do {}
+
+write(3/12/12);
+write(3*3);
+write("djlfdfkgkdfgldfhglfdh-AD-MATAI-ldfhgldfhgldfhldfhgldfhgkldfghdflgdkfhgldfh");
+
+
+
+read(a[b][cd][cs][d1]);
+	
+a= 3+5 *a ;
+
+if  (a == 5 && b<=2)   then 
+	write(a);
+
+
+if  (a == 5 && b<=2 || !c<>2 )   then 
+	write(a);
+	
+
+read(b[f1]);
+
+return (call foo((integer)8,(3+a)));
+}

@@ -1,0 +1,18 @@
+defstruct {
+    f1: integer;
+    anotherField: real;
+    m, k : integer;
+} cdata;
+
+main
+var a: integer;
+    b: cdata;
+    c: real;
+{
+read(a);
+read(b[f1]);
+if  (a < b[f1])   then 
+	write(a);
+else
+	c = 9.8;		
+}
