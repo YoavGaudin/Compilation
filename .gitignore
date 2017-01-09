@@ -1,8 +1,8 @@
-finalWorkspace/*-lex.c
-finalWorkspace/*-lex.h
-finalWorkspace/*.tab.cpp
-finalWorkspace/*.tab.hpp
-finalWorkspace/part2
+finalWorkspace/*lexical.c
+finalWorkspace/*lexical.h
+finalWorkspace/*.tab.c
+finalWorkspace/*.tab.h
+finalWorkspace/rx-cc
 *.ova.*
 *.zip
 .metadata

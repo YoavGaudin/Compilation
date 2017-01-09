@@ -1,9 +1,7 @@
 /* 046266 Compilation Methods, EE Faculty, Technion                        */
 /* part2_helpers.c - Helper functions for project part 2 - implementation  */
 #include <stdio.h>
-#include "part2_helpers.h"
-
-using namespace std;
+#include "parser.h"
 
 extern ParserNode *parseTree; /* Root of parse tree. Defined in the parser. */
 

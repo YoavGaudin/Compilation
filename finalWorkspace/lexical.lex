@@ -1,13 +1,13 @@
 %{
 #include <stdio.h>
-#include "part2_helpers.h"
-#include "part2.tab.hpp"
+#include "parser.h"
+#include "parser.tab.h"
 void printErr();
 char * getString(char * in);
 %}
 
 %option yylineno noyywrap
-%option   outfile="part2-lex.c" header-file="part2-lex.h"
+%option   outfile="lexical.c" header-file="lexical.h"
 
 PRIMITIVE_TYPE     (integer|real)
 SEQUENSER          (return)

@@ -1,13 +1,7 @@
 /* Reverse polish notation calculator.  */
 %{
-  #ifndef __cplusplus
-  #define __cplusplus
-  #endif
-  #include <iostream>
   #include <stdio.h>
-  #include "part2_helpers.h"
-
-  using namespace std;
+  #include "parser.h"
 
   int yylex (void);
   void yyerror (char const *);
@@ -16,7 +10,8 @@
 %}
 
 %token NUM 
-%token Defstruct Extern Main Var Integer Real If Then Else While Do Return Write Read Call
+%token Defstruct Extern Main Var Integer Real If Then While Do Return Write Read Call
+%token Else 
 %token ID
 %token STRING
 %token ',' ';' ':'

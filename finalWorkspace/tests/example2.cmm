@@ -1,18 +1,19 @@
-defstruct {
-    f1: integer;
-    anotherField: real;
-    m, k : integer;
-} cdata;
+real power (c:real, m:integer)
+var d:real;
+{
+    if m==0 then return(1.0);
+    if m==1 then return(c);
+    d=call power(c,m-1);
+    return(c*d);
+}
 
 main
-var a: integer;
-    b: cdata;
-    c: real;
+var a:real;
+    b:real;
+    n:integer;
 {
-read(a);
-read(b[f1]);
-if  (a < b[f1])   then 
-	write(a);
-else
-	c = 9.8;		
+    read(a);
+    read(n);
+    b=call power (a,n);
+    write(b);
 }
