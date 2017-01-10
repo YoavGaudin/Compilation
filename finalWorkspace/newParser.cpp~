@@ -1,0 +1,12 @@
+#include <iostream>
+#include "parser.hpp"
+
+using namespace std;
+
+void f() {
+  cout << "Hellow World" << endl;
+}
+
+void emit(string singleInstruction) {
+  cout << singleInstruction << endl;
+}

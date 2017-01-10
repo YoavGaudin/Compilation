@@ -2,6 +2,7 @@
 %{
   #include <stdio.h>
   #include "parser.h"
+  #include "newParser.hpp"
 
   int yylex (void);
   void yyerror (char const *);
@@ -32,6 +33,7 @@ PROGRAM:
 			parseTree = makeNode((char*)"PROGRAM", NULL, $1);
 			concatList($1, $2);
 			concatList($1, $3);
+		        emit("code");
 		}
 ;
 TDEFS: 

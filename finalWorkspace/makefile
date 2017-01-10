@@ -2,13 +2,13 @@
 
 all: rx-cc
 
-rx-cc: parser.tab.c parser.tab.h lexical.c lexical.h parser.h
-	gcc parser.tab.c lexical.c parser.c -o rx-cc
+rx-cc: parser.tab.c parser.tab.h lexical.c lexical.h parser.h newParser.hpp
+	g++ parser.tab.c lexical.c parser.c newParser.cpp -o rx-cc
 
-lexical.c lexical.h: lexical.lex parser.h parser.tab.h
+lexical.c lexical.h: lexical.lex parser.h newParser.hpp parser.tab.h
 	flex lexical.lex
 
-parser.tab.c parser.tab.h: parser.y parser.h
+parser.tab.c parser.tab.h: parser.y parser.h newParser.hpp
 	bison -d parser.y
 
 # Utility targets
