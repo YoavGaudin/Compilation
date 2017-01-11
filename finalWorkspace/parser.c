@@ -90,11 +90,6 @@ void dumpParseTree(void)
     }
 }
 
-void* newTemp() {
-  void* out = malloc(sizeof(void*));
-  assert(out);
-  return out;
-}
 
 /**************************************************************************/
 /*                           Main of parser                               */

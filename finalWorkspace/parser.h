@@ -19,10 +19,8 @@ ParserNode *makeNode(char* type, char* value, ParserNode *child);
 ParserNode *concatList(ParserNode *listHead, ParserNode *newItem);
 void dumpParseTree(void);
 
-void* newTemp();
-
 
   /* DATA STRUCTURES LIST */
-#define YYSTYPE ParserNode*	// Tell Bison to use pointer to ParseNode as the stack type
+//#define YYSTYPE ParserNode*	// Tell Bison to use pointer to ParseNode as the stack type
 
 #endif //COMMON_H

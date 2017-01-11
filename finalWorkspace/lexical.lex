@@ -1,7 +1,7 @@
 %{
 #include <stdio.h>
 #include "parser.h"
-  //#include "newParser.hpp"
+#include "newParser.hpp"
 #include "parser.tab.h"
 void printErr();
 char * getString(char * in);
@@ -44,32 +44,32 @@ COMMENT		   (\/\/.*)
 %%
 
 {COMMENT}	{}
-integer		{yylval = makeNode((char*)"integer", NULL, NULL); return Integer;}
-real		{yylval = makeNode((char*)"real", NULL, NULL); return Real;}
-return		{yylval = makeNode((char*)"return", NULL, NULL); return Return;}
-defstruct	{yylval = makeNode((char*)"defstruct", NULL, NULL); return Defstruct;}
-while		{yylval = makeNode((char*)"while", NULL, NULL); return While;}
-do		{yylval = makeNode((char*)"do", NULL, NULL); return Do;}
-if		{yylval = makeNode((char*)"if", NULL, NULL); return If;}
-then		{yylval = makeNode((char*)"then", NULL, NULL); return Then;}
-else		{yylval = makeNode((char*)"else", NULL, NULL); return Else;}
-main		{yylval = makeNode((char*)"main", NULL, NULL); return Main;}
-write		{yylval = makeNode((char*)"write", NULL, NULL); return Write;}
-read		{yylval = makeNode((char*)"read", NULL, NULL); return Read;}
-call		{yylval = makeNode((char*)"call", NULL, NULL); return Call;}
-var		{yylval = makeNode((char*)"var", NULL, NULL); return Var;}
-extern		{yylval = makeNode((char*)"extern", NULL, NULL); return Extern;}
-{NUM}           {yylval = makeNode((char*)"num",  strdup(yytext), NULL); return NUM;}
-{ID}            {yylval = makeNode((char*)"id", strdup(yytext), NULL); return ID;}
-{STRING}        {yylval = makeNode((char*)"str", getString(yytext), NULL); return STRING;}
+integer		{yylval = new Stype("integer"); return Integer;}
+real		{yylval = new Stype("real"); return Real;}
+return		{yylval = new Stype("return"); return Return;}
+defstruct	{yylval = new Stype("defstruct"); return Defstruct;}
+while		{yylval = new Stype("while"); return While;}
+do		{yylval = new Stype("do"); return Do;}
+if		{yylval = new Stype("if"); return If;}
+then		{yylval = new Stype("then"); return Then;}
+else		{yylval = new Stype("else"); return Else;}
+main		{yylval = new Stype("main"); return Main;}
+write		{yylval = new Stype("write"); return Write;}
+read		{yylval = new Stype("read"); return Read;}
+call		{yylval = new Stype("call"); return Call;}
+var		{yylval = new Stype("var"); return Var;}
+extern		{yylval = new Stype("extern"); return Extern;}
+{NUM}           {yylval = new Stype("num"); return NUM;}
+{ID}            {yylval = new Stype("id"); return ID;}
+{STRING}        {yylval = new Stype("str"); return STRING;}
 {CHARTOKENS}    {return yytext[0];}
-{MUL_OP}	{yylval = makeNode((char*)"mulop", strdup(yytext), NULL); return MUL_OP;}
-{ADD_OP}	{yylval = makeNode((char*)"addop", strdup(yytext), NULL); return ADD_OP;}
-{ASSIGN_OP}	{yylval = makeNode((char*)"assign", strdup(yytext), NULL); return ASSIGN;}
-{RELATION_OP}	{yylval = makeNode((char*)"relop", strdup(yytext), NULL); return REL_OP;}
-{AND_OP}	{yylval = makeNode((char*)"and", strdup(yytext), NULL); return AND_OP;}
-{OR_OP}		{yylval = makeNode((char*)"or", strdup(yytext), NULL); return OR_OP;}
-{NOT_OP}	{yylval = makeNode((char*)"not", strdup(yytext), NULL); return NOT_OP;}
+{MUL_OP}	{yylval = new Stype("mulop"); return MUL_OP;}
+{ADD_OP}	{yylval = new Stype("addop"); return ADD_OP;}
+{ASSIGN_OP}	{yylval = new Stype("assign"); return ASSIGN;}
+{RELATION_OP}	{yylval = new Stype("relop"); return REL_OP;}
+{AND_OP}	{yylval = new Stype("and"); return AND_OP;}
+{OR_OP}		{yylval = new Stype("or"); return OR_OP;}
+{NOT_OP}	{yylval = new Stype("not"); return NOT_OP;}
 {UNCHANGABLE}	{}
 .               {printErr();}
 

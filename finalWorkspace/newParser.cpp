@@ -3,6 +3,8 @@
 #include <string>
 #include "newParser.hpp"
 
+extern int yyparse (void);
+
 using namespace std;
 
 // varName, type
@@ -57,4 +59,22 @@ string getRealReg() {
 
 void emit(string singleInstruction) {
   cout << singleInstruction << endl;
+}
+
+
+/**************************************************************************/
+/*                           Main of parser                               */
+/**************************************************************************/
+//#define YYDEBUG 1
+//extern int yydebug;
+int main(void)
+{
+    int rc;
+#if YYDEBUG
+    yydebug=1;
+#endif
+    rc = yyparse();
+    if (rc == 0) { // Parsed successfully
+      cout << "OK!!!" << endl;
+    }
 }

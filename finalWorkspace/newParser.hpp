@@ -18,6 +18,18 @@ typedef struct {
 } Variable;
 
 
+class Stype {
+public:
+  string token;
+  void* place;
+  Stype(string token_) : token(token_) {}
+};
+
+
+#define YYSTYPE Stype*	// Tell Bison to use pointer to ParseNode as the stack type
+
+
+                             /* DATA STRUCTURES LIST */
 // [varName, type]
 extern map <string, string> varTable;
 
