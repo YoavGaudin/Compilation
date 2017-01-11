@@ -21,7 +21,7 @@ typedef struct {
 class Stype {
 public:
   string token;
-  void* place;
+  string place;
   Stype(string token_) : token(token_) {}
 };
 
@@ -47,9 +47,12 @@ I1 - stack pointer
 I2 - frame pointer
 
  */
+
+// ----------------- Helper functions: ------------------
 string getIntReg();
 string getRealReg();
-
+bool isUsedIntReg(string in);
+bool isUsedRealReg(string in);
 
 /* ----------------- Memory layout: -------------------
 

@@ -1,12 +1,13 @@
 /* Reverse polish notation calculator.  */
 %{
   #include <stdio.h>
-  #include "parser.h"
-
+  #include "newParser.hpp"
+  
+  using namespace std;
+  
   int yylex (void);
   void yyerror (char const *);
-  
-  ParserNode *parseTree;
+  void semanticError(string s);
 %}
 
 %token NUM 
@@ -183,15 +184,51 @@ BEXP:
 ;	
 EXP: 
 		EXP ADD_OP EXP {
+		  if(isUsedIntReg($1->place) && isUsedIntReg($3->place)) {
+		    $$->place = getIntReg();
+		    emit("ADD2I " + $$->place + " " + $1->place + " " + $2->place);
+		  } else if(isUsedRealReg($1->place) && isUsedRealReg($3->place)) {
+		    $$->place = getRealReg();
+		    emit("ADD2R " + $$->place + " " + $1->place + " " + $2->place);
+		  } else {
+		    semanticError("type missmatch within add operation");
+		  }
 		}
 	|
 		EXP MUL_OP EXP {
+		  if(isUsedIntReg($1->place) && isUsedIntReg($3->place)) {
+		    $$->place = getIntReg();
+		    emit("MULTI " + $$->place + " " + $1->place + " " + $2->place);
+		  } else if(isUsedRealReg($1->place) && isUsedRealReg($3->place)) {
+		    $$->place = getRealReg();
+		    emit("MULTR " + $$->place + " " + $1->place + " " + $2->place);
+		  } else {
+		    semanticError("type missmatch within mul operation");
+		  }
 		}
 	|
 		'(' EXP ')' {
+		  $$->place = $2->place;
 		}
 	|
 		'(' TYPE ')' EXP {
+		  if($2->token == "Integer") {
+		    if(isUsedIntReg($4->place)) {
+		      $$->place = $4->place;
+		    } else if(isUsedRealReg($4->place)) {
+		      $$->place = getIntReg();
+		      emit("CRTOI " + $$->place + " " + $4->place);
+		    }
+		  } else if($2->token == "Real") {
+		    if(isUsedRealReg($4->place)) {
+		      $$->place = $4->place;
+		    } else if(isUsedIntReg($4->place)) {
+		      $$->place = getRealReg();
+		      emit("CITOR " + $$->place + " " + $4->place);
+		    }
+		  } else {
+		    semanticError("undefined explicit cast");
+		  }
 		}
 	|
 		ID {
@@ -240,4 +277,9 @@ extern int yylineno;
 void yyerror (char const *err){
    printf("Syntax error: '%s' in line number %d\n", yytext, yylineno);
    exit(1);
+}
+
+void semanticError(string s) {
+  printf("Semantic error: '%s' in line number %d\n", s.c_str(), yylineno);
+  exit(1);
 }

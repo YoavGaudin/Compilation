@@ -61,6 +61,15 @@ void emit(string singleInstruction) {
   cout << singleInstruction << endl;
 }
 
+bool isUsedIntReg(string in) {
+  return usedIntRegs.find(in) != usedIntRegs.end();
+}
+
+bool isUsedRealReg(string in) {
+  return usedRealRegs.find(in) != usedRealRegs.end();
+}
+
+
 
 /**************************************************************************/
 /*                           Main of parser                               */
