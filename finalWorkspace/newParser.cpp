@@ -1,10 +1,11 @@
 #include <iostream>
 #include <string>
 #include "newParser.hpp"
+#include <algorithm>
 
 extern int yyparse (void);
 
-using namespace std;
+//using namespace std;
 
 // varName, type
 map <string, Variable> varTable;
@@ -59,16 +60,47 @@ string getRealReg() {
 }
 
 
-void emit(string singleInstruction) {
+void emit(string const& singleInstruction) {
   cout << singleInstruction << endl;
 }
 
-bool isUsedIntReg(string in) {
+bool isUsedIntReg(string& in) {
   return usedIntRegs.find(in) != usedIntRegs.end();
 }
 
-bool isUsedRealReg(string in) {
+bool isUsedRealReg(string& in) {
   return usedRealRegs.find(in) != usedRealRegs.end();
+}
+
+static void helperInsert(std::pair<const string, Variable>& pair) {
+  std::map<string, Variable>::iterator i;
+  if((i = varTable.find(pair.first)) != varTable.end())
+    varTable.erase(i);
+  varTable.insert(pair);
+}
+
+void insertToVarTable(map<string, Variable> vars) {
+  std::for_each(vars.begin(), vars.end(), helperInsert);
+}
+
+void insertToVarTable(string& name, Variable& v) {
+  std::map<string, Variable>::iterator i;
+  if((i = varTable.find(name)) != varTable.end())
+    varTable.erase(i);
+  varTable.insert(std::pair<string, Variable>(name, v));
+}
+
+// iterate over the ids list and for each id create Variable with the DCL type and this id.
+void createVariablesFromDCL(Stype* DCL) {
+  for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != (DCL->dcl_ids).end(); ++i) {
+    Variable* v = new Variable(*i, DCL->dcl_type);
+    insertToVarTable(*i, *v);
+  }
+}
+
+void Error(string s) {
+  cout << "undefined error: " << s;
+  exit(1);
 }
 
 

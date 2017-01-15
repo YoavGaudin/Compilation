@@ -44,32 +44,32 @@ COMMENT		   (\/\/.*)
 %%
 
 {COMMENT}	{}
-integer		{yylval = new Stype("integer"); return Integer;}
-real		{yylval = new Stype("real"); return Real;}
-return		{yylval = new Stype("return"); return Return;}
-defstruct	{yylval = new Stype("defstruct"); return Defstruct;}
-while		{yylval = new Stype("while"); return While;}
-do		{yylval = new Stype("do"); return Do;}
-if		{yylval = new Stype("if"); return If;}
-then		{yylval = new Stype("then"); return Then;}
-else		{yylval = new Stype("else"); return Else;}
-main		{yylval = new Stype("main"); return Main;}
-write		{yylval = new Stype("write"); return Write;}
-read		{yylval = new Stype("read"); return Read;}
-call		{yylval = new Stype("call"); return Call;}
-var		{yylval = new Stype("var"); return Var;}
-extern		{yylval = new Stype("extern"); return Extern;}
-{NUM}           {yylval = new Stype("num"); return NUM;}
-{ID}            {yylval = new Stype("id"); return ID;}
-{STRING}        {yylval = new Stype("str"); return STRING;}
+integer		{yylval = new Stype(yytext); return Integer;}
+real		{yylval = new Stype(yytext); return Real;}
+return		{yylval = new Stype(yytext); return Return;}
+defstruct	{yylval = new Stype(yytext); return Defstruct;}
+while		{yylval = new Stype(yytext); return While;}
+do		{yylval = new Stype(yytext); return Do;}
+if		{yylval = new Stype(yytext); return If;}
+then		{yylval = new Stype(yytext); return Then;}
+else		{yylval = new Stype(yytext); return Else;}
+main		{yylval = new Stype(yytext); return Main;}
+write		{yylval = new Stype(yytext); return Write;}
+read		{yylval = new Stype(yytext); return Read;}
+call		{yylval = new Stype(yytext); return Call;}
+var		{yylval = new Stype(yytext); return Var;}
+extern		{yylval = new Stype(yytext); return Extern;}
+{NUM}           {yylval = new Stype(yytext); return NUM;}
+{ID}            {yylval = new Stype(yytext); return ID;}
+{STRING}        {yylval = new Stype(yytext); return STRING;}
 {CHARTOKENS}    {return yytext[0];}
-{MUL_OP}	{yylval = new Stype("mulop"); return MUL_OP;}
-{ADD_OP}	{yylval = new Stype("addop"); return ADD_OP;}
-{ASSIGN_OP}	{yylval = new Stype("assign"); return ASSIGN;}
-{RELATION_OP}	{yylval = new Stype("relop"); return REL_OP;}
-{AND_OP}	{yylval = new Stype("and"); return AND_OP;}
-{OR_OP}		{yylval = new Stype("or"); return OR_OP;}
-{NOT_OP}	{yylval = new Stype("not"); return NOT_OP;}
+{MUL_OP}	{yylval = new Stype(yytext); return MUL_OP;}
+{ADD_OP}	{yylval = new Stype(yytext); return ADD_OP;}
+{ASSIGN_OP}	{yylval = new Stype(yytext); return ASSIGN;}
+{RELATION_OP}	{yylval = new Stype(yytext); return REL_OP;}
+{AND_OP}	{yylval = new Stype(yytext); return AND_OP;}
+{OR_OP}		{yylval = new Stype(yytext); return OR_OP;}
+{NOT_OP}	{yylval = new Stype(yytext); return NOT_OP;}
 {UNCHANGABLE}	{}
 .               {printErr();}
 

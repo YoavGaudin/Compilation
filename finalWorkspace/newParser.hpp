@@ -6,6 +6,7 @@
 #include <string>
 #include <set>
 #include <cassert>
+#include <list>
 
 using namespace std;
 
@@ -28,6 +29,8 @@ public:
     }
   }
 
+  Variable(const string name_, string type_) : name(name_), type(type_) {}
+  
   string getName() { return name; }
   string getType() { return type; }
 };
@@ -50,10 +53,22 @@ public:
 // ---------------------------- S-type definition --------------------------
 
 struct Stype {
-  string token;
+  
   string place;
 
-  Stype(string token_) : token(token_) {}
+  // for tokens
+  string tokenValue;
+  
+  // for DECLARLIST - 
+  map<string, Variable> declarationList;
+
+  // for DCL - the type for the last arguments
+  string dcl_type;
+  list<string> dcl_ids;
+  
+  Stype(string v) : tokenValue(v) {
+    dcl_ids = *(new list<string>());
+  }
 };
 
 
@@ -72,7 +87,9 @@ extern map <string, vector<Variable> > functionTable;
 // [memAddress, type]
 extern map <int, Type> memMap;
 
-extern set <string> usedRegs;
+extern set <string> usedIntRegs;
+extern set <string> usedRealRegs;
+
 void regSetsInit();
 /* ----------------- Reserved registers: ------------------
 I0 - return address
@@ -82,10 +99,15 @@ I2 - frame pointer
  */
 
 // ----------------- Helper functions: ------------------
+void emit(string const& singleInstruction);
 string getIntReg();
 string getRealReg();
-bool isUsedIntReg(string in);
-bool isUsedRealReg(string in);
+bool isUsedIntReg(string& in);
+bool isUsedRealReg(string& in);
+void insertToVarTable(map<string, Variable> vars);
+void insertToVarTable(string& name, Variable& v);
+void createVariablesFromDCL(Stype* DCL);
+void Error(string& s);
 
 /* ----------------- Memory layout: -------------------
 
@@ -120,8 +142,5 @@ bool isUsedRealReg(string in);
 \______________________________________\
 
 */
-
-
-void emit(string singleInstruction);
 
 #endif //COMMON_HPP

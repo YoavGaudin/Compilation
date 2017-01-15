@@ -74,7 +74,8 @@ BLK:
 		}
 ;	
 DECLARATIONS:
-		Var DECLARLIST  {
+		Var DECLARLIST {
+		  insertToVarTable($2->declarationList);
 		}
 	|
 		/*epsilon*/
@@ -82,6 +83,7 @@ DECLARATIONS:
 ;		
 DECLARLIST:
 		DECLARLIST DCL ';' {
+		  createVariablesFromDCL($2);
 		}
 	|
 		DCL ';' {
@@ -89,20 +91,24 @@ DECLARLIST:
 ;		
 DCL: 
 		ID ':' TYPE {
+		  $$->dcl_type = $3->tokenValue;
+		  ($$->dcl_ids).push_front($1->tokenValue);
 		} 
 	|
 		ID ':' ID {
-		} 
+		  //WTF???
+		}
 	|
 		ID ',' DCL {
+		  ($$->dcl_ids).push_front($1->tokenValue);
 		}
 ;	
 TYPE: 
-		Integer {
-		}
+		Integer { 
+		} // $$->token is already assigned in .lex file
 	|
 		Real {
-		}
+		} // $$->token is already assigned in .lex file
 ;	
 LIST: 
 		LIST STMT {
@@ -212,14 +218,14 @@ EXP:
 		}
 	|
 		'(' TYPE ')' EXP {
-		  if($2->token == "Integer") {
+		  if($2->tokenValue == "Integer") {
 		    if(isUsedIntReg($4->place)) {
 		      $$->place = $4->place;
 		    } else if(isUsedRealReg($4->place)) {
 		      $$->place = getIntReg();
 		      emit("CRTOI " + $$->place + " " + $4->place);
 		    }
-		  } else if($2->token == "Real") {
+		  } else if($2->tokenValue == "Real") {
 		    if(isUsedRealReg($4->place)) {
 		      $$->place = $4->place;
 		    } else if(isUsedIntReg($4->place)) {
