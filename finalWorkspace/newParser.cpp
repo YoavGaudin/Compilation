@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cassert>
 #include <string>
 #include "newParser.hpp"
 
@@ -8,16 +7,17 @@ extern int yyparse (void);
 using namespace std;
 
 // varName, type
-map <string, string> varTable;
+map <string, Variable> varTable;
 
 // funcName, agruments
 map <string, vector<Variable> > functionTable;
 
 // [memAddress, type]
-map <int, MemValType> memMap;
+map <int, Type> memMap;
 
 set <string> usedIntRegs;
 set <string> usedRealRegs;
+
 void regSetInit() {
   usedIntRegs.insert("I0"); // return address
   usedIntRegs.insert("I1"); // stack pointer
@@ -27,6 +27,7 @@ void regSetInit() {
 #include <sstream>
 #define INT2STR( x ) static_cast< std::ostringstream & >( ( std::ostringstream() << std::dec << x ) ).str()
 
+// returns unused register name and adds it to usedIntRegs set
 string getIntReg() {
   // 0,1,2 reserved from init
   for(int i = 3; i < 1000; ++i) {
@@ -42,6 +43,7 @@ string getIntReg() {
   assert(0);
 }
 
+// returns unused register name and adds it to usedRealRegs set
 string getRealReg() {
   for(int i = 0; i < 1000; ++i) {
     string currReg = "I" + INT2STR(i);
