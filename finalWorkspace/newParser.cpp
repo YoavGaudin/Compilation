@@ -9,6 +9,7 @@ map<string, Function> funcSymbols;
 stack<string> funcStack;
 Function* currFunction;
 map<string, Variable> globalSymbolTable;
+map<string, Defstruct> typdefsTable;
 vector<string> codeBuffer;
 array<Type, 1000> memMap;
 
@@ -16,8 +17,8 @@ set <string> usedIntRegs;
 set <string> usedRealRegs;
 
 // ------------------------------------ initialization functions ---------------------------------
-void currFunctionInit() {
-  currFunction = new Function();
+void currFunctionInit(string name) {
+  currFunction = new Function(name);
 }
 
 void regSetInit() {
@@ -80,16 +81,31 @@ bool isUsedRealReg(string& in) {
   to.insert(from.begin(), from.end());
   }*/
 
-// need to be implemented!!!
+/* need to be implemented!!!
 static Function& getCurrentFunc() {
   return *(new Function());
-}
+}*/
 
 // iterate over the ids list and for each id create Variable with the DCL type and this id.
-void createVariablesFromDCL(Stype* DCL) {
+void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
+	cout << "createVariablesFromDCL: type- " + DCL->dcl_type << endl;
   for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != (DCL->dcl_ids).end(); ++i) {
     Variable* v = new Variable(*i, DCL->dcl_type);
-    currFunction->insertSymbolTable(*i, *v);
+	DECLARLIST->declarationList.insert(std::pair<string,Variable>(*i, *v));
+  }
+}
+
+// adds a Defstruct object into the global symbols table
+void addStructToSymbolTable(string name, map<string, Variable> fields) {
+  Defstruct* st = new Defstruct(name, fields);
+  typdefsTable.insert(std::pair<string, Defstruct>(name, *st));
+}
+
+// retutns true iff name is the name of a defined struct
+void validateStructName(string name) {
+  std::map<string, Defstruct>::iterator i = typdefsTable.find(name);
+  if(i == typdefsTable.end()){
+    cout << "undefined error: " << endl;
   }
 }
 
@@ -111,8 +127,14 @@ int main(void)
 #if YYDEBUG
     yydebug=1;
 #endif
+	cout << "START Compilation" << endl;
     rc = yyparse();
     if (rc == 0) { // Parsed successfully
       cout << "OK!!!" << endl;
+	  cout << "current function: " << currFunction->name << endl;
+	  cout << "symbol table:" << endl;
+	  for(std::map<string, Variable>::iterator i = currFunction->symbolTable.begin(); i != currFunction->symbolTable.end(); ++i) {
+		  cout << i->first << " : " << (i->second).getType() << endl;
+	  }
     }
 }

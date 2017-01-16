@@ -58,24 +58,31 @@ public:
 
 struct Function {
 
+  string name;
   map<string, Variable> symbolTable;
   vector<Variable> arguments;
   
-  Function(vector<Variable> arguments_) : arguments(arguments_) {
+  Function(string name_, vector<Variable> arguments_) : arguments(arguments_), name(name_) {
     for(std::vector<Variable>::iterator i = arguments_.begin(); i != arguments_.end(); ++i) {
-      insertSymbolTable(i->getName(), *i);
+      addVariable(i->getName(), *i);
     }
   }
 
   // init with empty vector and empty map (std::* data structures should be automatically dynamically allocated)
-  Function() {}
+  Function(string name_) : name(name_) {}
 
   // insert (name,v) to the symbol table
-  void insertSymbolTable(string const& name, Variable& v) {
+  void addVariable(string const& name, Variable& v) {
     std::map<string, Variable>::iterator i;
     if((i = symbolTable.find(name)) != symbolTable.end())
       symbolTable.erase(i);
     symbolTable.insert(std::pair<string, Variable>(name, v));
+  }
+  
+  void insertSymbolTable(map<string, Variable> vars) {
+	for(std::map<string, Variable>::iterator i = vars.begin(); i != vars.end(); ++i) {
+	  this->addVariable(i->first, i->second);
+	}
   }
 };
 
@@ -169,6 +176,7 @@ extern Function* currFunction;
 extern map<string, Variable> globalSymbolTable;
 extern vector<string> codeBuffer;
 extern array<Type, 1000> memMap;
+extern map<string, Defstruct> typdefsTable;
 
 
 // ----------------- Registers: ------------------
@@ -188,7 +196,9 @@ string getIntReg();
 string getRealReg();
 bool isUsedIntReg(string& in);
 bool isUsedRealReg(string& in);
-void createVariablesFromDCL(Stype* DCL);
+void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST);
+void addStructToSymbolTable(string name, map<string, Variable> fields);
+void validateStructName(string name);
 void Error(string& s);
 
 

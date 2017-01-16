@@ -1,6 +1,7 @@
 /* Reverse polish notation calculator.  */
 %{
   #include <stdio.h>
+  #include <iostream>
   #include "newParser.hpp"
   
   using namespace std;
@@ -34,9 +35,10 @@ PROGRAM:
 ;
 TDEFS: 
 		TDEFS Defstruct '{' DECLARLIST '}' ID ';' {
+		  addStructToSymbolTable($6->tokenValue, $4->declarationList);
 		}		
 	|
-		/*epsilon*/ {}
+		/*epsilon*/ { cout << "TDEFS to e" << endl; }
 ;		
 FDEFS: 
 		FDEFS TYPE ID '(' FUNC_ARGLIST_FULL ')' BLK {
@@ -45,8 +47,7 @@ FDEFS:
 		FDEFS Extern TYPE ID '(' FUNC_ARGLIST_FULL ')' ';' {
 		}		
 	|
-		/*epsilon*/ {}
-		/*epsilon*/
+		/*epsilon*/ { cout << "FDEFS to e" << endl;}
 ;
 FUNC_ARGLIST_FULL: 
 		FUNC_ARGLIST {
@@ -63,43 +64,57 @@ FUNC_ARGLIST:
 		}
 ;
 MAIN_FUNCTION:
-		Main BLK {
+		Main {currFunction = new Function("main()");} BLK {
+			cout << "MAIN_FUNCTION" <<endl;
 		} 
 	|
-		/*epsilon*/
 		/*epsilon*/ {}
 ;		
 BLK: 
 		DECLARATIONS '{' LIST '}' {
+			cout << "BLK" << endl;
 		}
 ;	
 DECLARATIONS:
 		Var DECLARLIST {
+			cout << "DECLARATIONS" << endl;
+		  currFunction->insertSymbolTable($2->declarationList);
 		} // the symbol table insertions are made during DECLARLIST parsing
 	|
-		/*epsilon*/
-		/*epsilon*/ {}
+		/*epsilon*/ { cout << "DECLARATIONS to e" << endl; }
 ;		
 DECLARLIST:
 		DECLARLIST DCL ';' {
-		  createVariablesFromDCL($2);
+			cout << "DECLARLIST1: " << $2->dcl_type << endl;
+		  // $$.declarationList = merge with $1
+		  createVariablesFromDCL($2, $1);
+		  $$->declarationList = $1->declarationList;
 		}
 	|
 		DCL ';' {
+			cout << "DECLARLIST2: " << $1->dcl_type << endl;
+		  // $$.declarationList = new
+		  createVariablesFromDCL($1, $$);
 		}
 ;		
 DCL: 
 		ID ':' TYPE {
+		  cout << "variable "+ $1->tokenValue +" of type "+ $3->tokenValue +" declared" << endl;
 		  $$->dcl_type = $3->tokenValue;
 		  ($$->dcl_ids).push_front($1->tokenValue);
 		} 
 	|
 		ID ':' ID {
-		  //WTF???
+			validateStructName($3->tokenValue);
+		    $$->dcl_type = $3->tokenValue;
+		    ($$->dcl_ids).push_front($1->tokenValue);
+		  //The 2nd ID might be the name of a custom typedef
 		}
 	|
 		ID ',' DCL {
-		  ($$->dcl_ids).push_front($1->tokenValue);
+		  ($3->dcl_ids).push_front($1->tokenValue);
+		  ($$->dcl_ids).merge($3->dcl_ids);
+		  $$->dcl_type = $3->dcl_type;
 		}
 ;	
 TYPE: 
@@ -113,8 +128,7 @@ LIST:
 		LIST STMT {
 		}
 	|
-		/*epsilon*/
-		/*epsilon*/ {}
+		/*epsilon*/ { cout << "LIST to e" << endl; }
 ;	
 STMT: 
 		ASSN {
