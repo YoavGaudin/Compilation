@@ -7,6 +7,8 @@
 #include <set>
 #include <cassert>
 #include <list>
+#include <stack>
+#include <array>
 
 using namespace std;
 
@@ -50,6 +52,21 @@ public:
   }
 };
 
+void insertToVarTable(string const& name, Variable& v, map<string, Variable>& container);
+
+class Function {
+  map<string, Variable> symbolTable;
+  vector<Variable> arguments;
+
+  Function(vector<Variable> arguments_) : arguments(arguments_) {
+    for(std::vector<Variable>::iterator i = arguments_.begin(); i != arguments_.end(); ++i) {
+      insertToVarTable(i->getName(), *i, &symbolTable);
+    }
+  }
+
+  Function() {} //TODO implement or delete!!!
+};
+
 // ---------------------------- S-type definition --------------------------
 
 struct Stype {
@@ -73,46 +90,12 @@ struct Stype {
 
 
 #define YYSTYPE Stype*
-// -------------------------------------------------------------------------
 
-
-
-                             /* DATA STRUCTURES LIST */
-// [variable name, info]
-extern map <string, Variable> varTable;
-
-// [function name, agruments]
-extern map <string, vector<Variable> > functionTable;
-
-// [memAddress, type]
-extern map <int, Type> memMap;
-
-extern set <string> usedIntRegs;
-extern set <string> usedRealRegs;
-
-void regSetsInit();
-/* ----------------- Reserved registers: ------------------
-I0 - return address
-I1 - stack pointer
-I2 - frame pointer
-
- */
-
-// ----------------- Helper functions: ------------------
-void emit(string const& singleInstruction);
-string getIntReg();
-string getRealReg();
-bool isUsedIntReg(string& in);
-bool isUsedRealReg(string& in);
-void insertToVarTable(map<string, Variable> vars);
-void insertToVarTable(string& name, Variable& v);
-void createVariablesFromDCL(Stype* DCL);
-void Error(string& s);
 
 /* ----------------- Compile Time Data Structures: -------------------
 
 
-               funcSymbols                             funcNameStack
+               funcSymbols                               funcStack
  _______________________________________               _____________   
 \   functionName    \   symbolTable     \             \   funcName  \
 \___________________\___________________\             \_____________\      
@@ -137,14 +120,66 @@ void Error(string& s);
                     \                    \
                     \____________________\
 
-'funcSymbols'       --- map which contains the mapping from function name to it's symbol table. 
+'funcSymbols'       --- Map from function name to it's symbol table. 
 
-'funcNameStack'     --- stack which holds on it's top the currently running function (by currently we mean the function which's call was the last in the parsed code). This stack contains only strings! by this string we can find the relevant symbol table with the environment variables in the 'funcSymbols' map.
+'funcStack'         --- Stack which holds on it's top the currently running function (by currently we mean the function which's call was the last in the parsed code). This stack contains only strings! by this string we can find the relevant symbol table with the environment variables in the 'funcSymbols' map.
 
-'globalSymbolTable' --- symbol table for the global variables which are included in each function's environment.
+'globalSymbolTable' --- Symbol table for the global variables which are included in each function's environment.
+
+*** each symbol table is a Map of [var name (string), var info class(Variable)]***
+
+
+
+             codeBuffer                                      memMap
+ __________________________________                  _____________________
+\         ASM instruction         \ 0               \                    \ 0
+\_________________________________\                 \____________________\
+\                                 \ 1               \                    \ 1
+\_________________________________\                 \____________________\
+\                                 \ 2               \                    \ 2
+\_________________________________\                 \____________________\
+\                .                \ .               \          .         \ .
+\                .                \ .               \          .         \ .
+\                .                \ .               \          .         \ .
+\                                 \                 \                    \
+\_________________________________\                 \____________________\ 999
+
+'codeBuffer'        --- Vector (we want the back() function which is not included in std::array) which holds the RISKI instructions. This buffer will be the target of the emit() function and will be modified on backpatching. This buffer should not be larger then 1000 (memory size).
+
+'memMap'            --- Array which represents the run time memory layout, for each address (0-999) which type is thedata there.
+
+
 
 */
 
+extern map<string, Function> funcSymbols;
+extern stack<string> funcStack;
+extern map<string, Variable> globalSymbolTable;
+extern vector<string> codeBuffer;
+extern array<Type, 1000> memMap;
+
+
+// ----------------- Registers: ------------------
+extern set<string> usedIntRegs;
+extern set<string> usedRealRegs;
+
+void regSetsInit();
+/*
+I0 - return address
+I1 - stack pointer
+I2 - frame pointer
+*/
+
+// ----------------- Helper functions: ------------------
+void emit(string const& singleInstruction);
+string getIntReg();
+string getRealReg();
+bool isUsedIntReg(string& in);
+bool isUsedRealReg(string& in);
+void insertToVarTable(map<string, Variable>& vars);
+//void insertToVarTable(string& name, Variable& v, map<string, Variable>& container);
+void createVariablesFromDCL(Stype* DCL);
+void Error(string& s);
 
 
 /* ----------------- Run Time Memory layout: -------------------

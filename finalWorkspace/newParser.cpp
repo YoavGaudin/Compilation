@@ -1,20 +1,15 @@
 #include <iostream>
-#include <string>
+#include <string> //redundant?
 #include "newParser.hpp"
 #include <algorithm>
 
 extern int yyparse (void);
 
-//using namespace std;
-
-// varName, type
-map <string, Variable> varTable;
-
-// funcName, agruments
-map <string, vector<Variable> > functionTable;
-
-// [memAddress, type]
-map <int, Type> memMap;
+map<string, Function> funcSymbols;
+stack<string> funcStack;
+map<string, Variable> globalSymbolTable;
+vector<string> codeBuffer;
+array<Type, 1000> memMap;
 
 set <string> usedIntRegs;
 set <string> usedRealRegs;
@@ -83,18 +78,24 @@ void insertToVarTable(map<string, Variable> vars) {
   std::for_each(vars.begin(), vars.end(), helperInsert);
 }
 
-void insertToVarTable(string& name, Variable& v) {
+void insertToVarTable(string const& name, Variable& v, map<string, Variable>& container) {
   std::map<string, Variable>::iterator i;
-  if((i = varTable.find(name)) != varTable.end())
-    varTable.erase(i);
-  varTable.insert(std::pair<string, Variable>(name, v));
+  if((i = container.find(name)) != container.end())
+    container.erase(i);
+  container.insert(std::pair<string, Variable>(name, v));
+}
+
+// need to be implemented!!!
+static Function& getCurrentFunc() {
+  return *(new Function());
 }
 
 // iterate over the ids list and for each id create Variable with the DCL type and this id.
 void createVariablesFromDCL(Stype* DCL) {
   for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != (DCL->dcl_ids).end(); ++i) {
     Variable* v = new Variable(*i, DCL->dcl_type);
-    insertToVarTable(*i, *v);
+    Function& f = getCurrentFunc();
+    insertToVarTable(*i, *v, &(f.symbolTable));
   }
 }
 
