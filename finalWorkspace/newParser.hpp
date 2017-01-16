@@ -17,6 +17,7 @@ enum Type {INTEGER, REAL, DEFSTRUCT};
 
 
 class Variable {
+
   string name;
   string type;
   
@@ -37,7 +38,9 @@ public:
   string const& getType() { return type; }
 };
 
+
 class Defstruct : Variable {
+
   map<string, Variable> fields;
 
 public:
@@ -52,28 +55,27 @@ public:
   }
 };
 
-void insertSymbolTable(string const& name, Variable& v, map<string, Variable>& container);
 
-class Function {
+struct Function {
+
   map<string, Variable> symbolTable;
   vector<Variable> arguments;
-
-public:
   
   Function(vector<Variable> arguments_) : arguments(arguments_) {
     for(std::vector<Variable>::iterator i = arguments_.begin(); i != arguments_.end(); ++i) {
-      insertSymbolTable(i->getName(), *i, symbolTable);
+      insertSymbolTable(i->getName(), *i);
     }
   }
+
   // init with empty vector and empty map (std::* data structures should be automatically dynamically allocated)
   Function() {}
 
-  const map<string, Variable>& getSymbolTable() {
-    return symbolTable;
-  }
-
-  const vector<Variable>& getArguments() {
-    return arguments;
+  // insert (name,v) to the symbol table
+  void insertSymbolTable(string const& name, Variable& v) {
+    std::map<string, Variable>::iterator i;
+    if((i = symbolTable.find(name)) != symbolTable.end())
+      symbolTable.erase(i);
+    symbolTable.insert(std::pair<string, Variable>(name, v));
   }
 };
 
@@ -186,9 +188,6 @@ string getIntReg();
 string getRealReg();
 bool isUsedIntReg(string& in);
 bool isUsedRealReg(string& in);
-void insertSymbolTable(map<string, Variable>& to, map<string, Variable>& from);
-// this have to be declared above:
-//void insertSymbolTable(string& name, Variable& v, map<string, Variable>& container);
 void createVariablesFromDCL(Stype* DCL);
 void Error(string& s);
 

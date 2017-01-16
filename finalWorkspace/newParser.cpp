@@ -80,14 +80,6 @@ bool isUsedRealReg(string& in) {
   to.insert(from.begin(), from.end());
   }*/
 
-// insert (name,v) to container
-void insertSymbolTable(string const& name, Variable& v, map<string, Variable>& container) {
-  std::map<string, Variable>::iterator i;
-  if((i = container.find(name)) != container.end())
-    container.erase(i);
-  container.insert(std::pair<string, Variable>(name, v));
-}
-
 // need to be implemented!!!
 static Function& getCurrentFunc() {
   return *(new Function());
@@ -97,7 +89,7 @@ static Function& getCurrentFunc() {
 void createVariablesFromDCL(Stype* DCL) {
   for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != (DCL->dcl_ids).end(); ++i) {
     Variable* v = new Variable(*i, DCL->dcl_type);
-    insertSymbolTable(*i, *v, currFunction->getSymbolTable());
+    currFunction->insertSymbolTable(*i, *v);
   }
 }
 
