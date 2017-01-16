@@ -105,10 +105,10 @@ DCL:
 ;	
 TYPE: 
 		Integer { 
-		} // $$->token is already assigned in .lex file
+		} // $$->tokenValue is already assigned in .lex file
 	|
 		Real {
-		} // $$->token is already assigned in .lex file
+		} // $$->tokenValue is already assigned in .lex file
 ;	
 LIST: 
 		LIST STMT {

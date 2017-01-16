@@ -109,7 +109,45 @@ void insertToVarTable(string& name, Variable& v);
 void createVariablesFromDCL(Stype* DCL);
 void Error(string& s);
 
-/* ----------------- Memory layout: -------------------
+/* ----------------- Compile Time Memory layout: -------------------
+
+
+             functionSymbols                           funcNameStack
+ _______________________________________               _____________   
+\   functionName    \   symbolTable     \             \   funcName  \
+\___________________\___________________\             \_____________\      
+\                   \                   \             \             \
+\___________________\___________________\             \_____________\
+\                   \                   \             \      .      \
+\___________________\___________________\             \      .      \
+\     .      .      \      .      .     \             \      .      \
+\     .      .      \      .      .     \             \             \
+\     .      .      \      .      .     \             \_____________\
+\                   \                   \
+\___________________\___________________\
+
+
+                       globalSymbolTable
+                     _____________________
+                    \       varName      \
+                    \____________________\
+                    \         .          \
+                    \         .          \
+                    \         .          \
+                    \                    \
+                    \____________________\
+
+The 'funcNameStack' holds on it's top the currently running function (by currently we mean the function
+which's call was the last in the parsed code). This stack contains only strings! by this string we can
+find the relevant symbol table with the environment variables in the 'funcSymbols' map.
+'globalSymbolTable' is the symbol table for the global variables which are included in each function's
+environment.
+
+*/
+
+
+
+/* ----------------- Run Time Memory layout: -------------------
 
  ______________________________________
 \                                      \
