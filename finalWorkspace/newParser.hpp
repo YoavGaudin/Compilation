@@ -112,7 +112,7 @@ void Error(string& s);
 /* ----------------- Compile Time Memory layout: -------------------
 
 
-             functionSymbols                           funcNameStack
+               funcSymbols                             funcNameStack
  _______________________________________               _____________   
 \   functionName    \   symbolTable     \             \   funcName  \
 \___________________\___________________\             \_____________\      
@@ -137,11 +137,11 @@ void Error(string& s);
                     \                    \
                     \____________________\
 
-The 'funcNameStack' holds on it's top the currently running function (by currently we mean the function
-which's call was the last in the parsed code). This stack contains only strings! by this string we can
-find the relevant symbol table with the environment variables in the 'funcSymbols' map.
-'globalSymbolTable' is the symbol table for the global variables which are included in each function's
-environment.
+'funcSymbols'       --- map which contains the mapping from function name to it's symbol table. 
+
+'funcNameStack'     --- stack which holds on it's top the currently running function (by currently we mean the function which's call was the last in the parsed code). This stack contains only strings! by this string we can find the relevant symbol table with the environment variables in the 'funcSymbols' map.
+
+'globalSymbolTable' --- symbol table for the global variables which are included in each function's environment.
 
 */
 
