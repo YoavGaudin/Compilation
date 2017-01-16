@@ -109,7 +109,7 @@ void insertToVarTable(string& name, Variable& v);
 void createVariablesFromDCL(Stype* DCL);
 void Error(string& s);
 
-/* ----------------- Compile Time Memory layout: -------------------
+/* ----------------- Compile Time Data Structures: -------------------
 
 
                funcSymbols                             funcNameStack
