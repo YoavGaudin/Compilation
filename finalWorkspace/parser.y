@@ -75,8 +75,7 @@ BLK:
 ;	
 DECLARATIONS:
 		Var DECLARLIST {
-		  insertToVarTable($2->declarationList);
-		}
+		} // the symbol table insertions are made during DECLARLIST parsing
 	|
 		/*epsilon*/
 		/*epsilon*/ {}

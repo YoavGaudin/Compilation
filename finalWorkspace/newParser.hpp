@@ -33,8 +33,8 @@ public:
 
   Variable(const string name_, string type_) : name(name_), type(type_) {}
   
-  string getName() { return name; }
-  string getType() { return type; }
+  string const& getName() { return name; }
+  string const& getType() { return type; }
 };
 
 class Defstruct : Variable {
@@ -52,19 +52,29 @@ public:
   }
 };
 
-void insertToVarTable(string const& name, Variable& v, map<string, Variable>& container);
+void insertSymbolTable(string const& name, Variable& v, map<string, Variable>& container);
 
 class Function {
   map<string, Variable> symbolTable;
   vector<Variable> arguments;
 
+public:
+  
   Function(vector<Variable> arguments_) : arguments(arguments_) {
     for(std::vector<Variable>::iterator i = arguments_.begin(); i != arguments_.end(); ++i) {
-      insertToVarTable(i->getName(), *i, &symbolTable);
+      insertSymbolTable(i->getName(), *i, symbolTable);
     }
   }
+  // init with empty vector and empty map (std::* data structures should be automatically dynamically allocated)
+  Function() {}
 
-  Function() {} //TODO implement or delete!!!
+  const map<string, Variable>& getSymbolTable() {
+    return symbolTable;
+  }
+
+  const vector<Variable>& getArguments() {
+    return arguments;
+  }
 };
 
 // ---------------------------- S-type definition --------------------------
@@ -81,11 +91,10 @@ struct Stype {
 
   // for DCL - the type for the last arguments
   string dcl_type;
+  // for DCL - the variables names () ids of the currently declared type
   list<string> dcl_ids;
   
-  Stype(string v) : tokenValue(v) {
-    dcl_ids = *(new list<string>());
-  }
+  Stype(string v) : tokenValue(v) {}
 };
 
 
@@ -154,6 +163,7 @@ struct Stype {
 
 extern map<string, Function> funcSymbols;
 extern stack<string> funcStack;
+extern Function* currFunction;
 extern map<string, Variable> globalSymbolTable;
 extern vector<string> codeBuffer;
 extern array<Type, 1000> memMap;
@@ -176,8 +186,9 @@ string getIntReg();
 string getRealReg();
 bool isUsedIntReg(string& in);
 bool isUsedRealReg(string& in);
-void insertToVarTable(map<string, Variable>& vars);
-//void insertToVarTable(string& name, Variable& v, map<string, Variable>& container);
+void insertSymbolTable(map<string, Variable>& to, map<string, Variable>& from);
+// this have to be declared above:
+//void insertSymbolTable(string& name, Variable& v, map<string, Variable>& container);
 void createVariablesFromDCL(Stype* DCL);
 void Error(string& s);
 

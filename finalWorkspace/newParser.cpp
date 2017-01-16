@@ -7,6 +7,7 @@ extern int yyparse (void);
 
 map<string, Function> funcSymbols;
 stack<string> funcStack;
+Function* currFunction;
 map<string, Variable> globalSymbolTable;
 vector<string> codeBuffer;
 array<Type, 1000> memMap;
@@ -14,11 +15,18 @@ array<Type, 1000> memMap;
 set <string> usedIntRegs;
 set <string> usedRealRegs;
 
+// ------------------------------------ initialization functions ---------------------------------
+void currFunctionInit() {
+  currFunction = new Function();
+}
+
 void regSetInit() {
   usedIntRegs.insert("I0"); // return address
   usedIntRegs.insert("I1"); // stack pointer
   usedIntRegs.insert("I2"); // frame pointer
 }
+
+// -----------------------------------------------------------------------------------------------
 
 #include <sstream>
 #define INT2STR( x ) static_cast< std::ostringstream & >( ( std::ostringstream() << std::dec << x ) ).str()
@@ -67,18 +75,13 @@ bool isUsedRealReg(string& in) {
   return usedRealRegs.find(in) != usedRealRegs.end();
 }
 
-static void helperInsert(std::pair<const string, Variable>& pair) {
-  std::map<string, Variable>::iterator i;
-  if((i = varTable.find(pair.first)) != varTable.end())
-    varTable.erase(i);
-  varTable.insert(pair);
-}
+// insert all pairs of 'from' map to 'to' map (overwrite)
+/*void insertSymbolTable(map<string, Variable>& to, map<string, Variable> const& from) {
+  to.insert(from.begin(), from.end());
+  }*/
 
-void insertToVarTable(map<string, Variable> vars) {
-  std::for_each(vars.begin(), vars.end(), helperInsert);
-}
-
-void insertToVarTable(string const& name, Variable& v, map<string, Variable>& container) {
+// insert (name,v) to container
+void insertSymbolTable(string const& name, Variable& v, map<string, Variable>& container) {
   std::map<string, Variable>::iterator i;
   if((i = container.find(name)) != container.end())
     container.erase(i);
@@ -94,8 +97,7 @@ static Function& getCurrentFunc() {
 void createVariablesFromDCL(Stype* DCL) {
   for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != (DCL->dcl_ids).end(); ++i) {
     Variable* v = new Variable(*i, DCL->dcl_type);
-    Function& f = getCurrentFunc();
-    insertToVarTable(*i, *v, &(f.symbolTable));
+    insertSymbolTable(*i, *v, currFunction->getSymbolTable());
   }
 }
 
