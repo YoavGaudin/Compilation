@@ -9,6 +9,7 @@
 #include <list>
 #include <stack>
 #include <array>
+#include <iostream>
 
 using namespace std;
 
@@ -41,9 +42,10 @@ public:
 
 class Defstruct : Variable {
 
-  map<string, Variable> fields;
+  
 
 public:
+  map<string, Variable> fields;
   Defstruct(string name_, map<string, Variable> fields_) : Variable(name_, DEFSTRUCT), fields(fields_) {}
 
   Variable getField(string name) {
@@ -62,7 +64,7 @@ struct Function {
   map<string, Variable> symbolTable;
   vector<Variable> arguments;
   
-  Function(string name_, vector<Variable> arguments_) : arguments(arguments_), name(name_) {
+  Function(string name_, vector<Variable> arguments_) : name(name_), arguments(arguments_) {
     for(std::vector<Variable>::iterator i = arguments_.begin(); i != arguments_.end(); ++i) {
       addVariable(i->getName(), *i);
     }
@@ -80,7 +82,9 @@ struct Function {
   }
   
   void insertSymbolTable(map<string, Variable> vars) {
+	cout << "insertSymbolTable to " << this->name << endl;
 	for(std::map<string, Variable>::iterator i = vars.begin(); i != vars.end(); ++i) {
+	  cout << "\t" << i->first << i->second.getType() << endl;
 	  this->addVariable(i->first, i->second);
 	}
   }
@@ -102,6 +106,9 @@ struct Stype {
   string dcl_type;
   // for DCL - the variables names () ids of the currently declared type
   list<string> dcl_ids;
+  
+  // for FUNC_ARGLIST
+  vector<Variable> argsList;
   
   Stype(string v) : tokenValue(v) {}
 };
@@ -197,8 +204,9 @@ string getRealReg();
 bool isUsedIntReg(string& in);
 bool isUsedRealReg(string& in);
 void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST);
+void createArgumentsFromDCL(Stype* DCL, Stype* FUNC_ARGLIST);
 void addStructToSymbolTable(string name, map<string, Variable> fields);
-void validateStructName(string name);
+bool validateStructName(string name);
 void Error(string& s);
 
 

@@ -9,7 +9,7 @@ map<string, Function> funcSymbols;
 stack<string> funcStack;
 Function* currFunction;
 map<string, Variable> globalSymbolTable;
-map<string, Defstruct> typdefsTable;
+map<string, Defstruct> typedefsTable;
 vector<string> codeBuffer;
 array<Type, 1000> memMap;
 
@@ -95,18 +95,26 @@ void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
   }
 }
 
+// 
+void createArgumentsFromDCL(Stype* DCL, Stype* FUNC_ARGLIST) {
+  for(std::list<string>::iterator i = (DCL->dcl_ids).begin() ; i != (DCL->dcl_ids).end() ; ++i) {
+    Variable* v = new Variable(*i, DCL->dcl_type);
+    FUNC_ARGLIST->argsList.push_back(*v);
+  }
+}
+
 // adds a Defstruct object into the global symbols table
 void addStructToSymbolTable(string name, map<string, Variable> fields) {
   Defstruct* st = new Defstruct(name, fields);
-  typdefsTable.insert(std::pair<string, Defstruct>(name, *st));
+  typedefsTable.insert(std::pair<string, Defstruct>(name, *st));
 }
 
 // retutns true iff name is the name of a defined struct
-void validateStructName(string name) {
-  std::map<string, Defstruct>::iterator i = typdefsTable.find(name);
-  if(i == typdefsTable.end()){
-    cout << "undefined error: " << endl;
+bool validateStructName(string name) {
+  if(typedefsTable.find(name) == typedefsTable.end()){
+    return false;
   }
+  return true;
 }
 
 void Error(string s) {
@@ -114,7 +122,19 @@ void Error(string s) {
   exit(1);
 }
 
-
+void printState() {
+  cout << "Functions table:" << funcSymbols.size() << endl;
+  for(std::map<string, Function>::iterator f = funcSymbols.begin() ; f != funcSymbols.end() ; ++f) {
+    cout << f->first << ": arguments:" << endl;
+	for(std::vector<Variable>::iterator j = (f->second).arguments.begin(); j != (f->second).arguments.end(); ++j) {
+	  cout << "\t" << j->getName() << " : " << j->getType() << endl;
+	}
+	cout << "variables:" << endl;
+	for(std::map<string, Variable>::iterator j = (f->second).symbolTable.begin(); j != (f->second).symbolTable.end(); ++j) {
+	  cout << "\t" << j->first << " : " << (j->second).getType() << endl;
+	}
+  }
+}
 
 /**************************************************************************/
 /*                           Main of parser                               */
@@ -131,10 +151,14 @@ int main(void)
     rc = yyparse();
     if (rc == 0) { // Parsed successfully
       cout << "OK!!!" << endl;
-	  cout << "current function: " << currFunction->name << endl;
-	  cout << "symbol table:" << endl;
-	  for(std::map<string, Variable>::iterator i = currFunction->symbolTable.begin(); i != currFunction->symbolTable.end(); ++i) {
-		  cout << i->first << " : " << (i->second).getType() << endl;
+	  printState();
+	  cout << "typedefs:" << endl;
+	  for(std::map<string, Defstruct>::iterator i = typedefsTable.begin() ; i != typedefsTable.end() ; ++i) {
+		cout << i->first << ": " << endl;
+		std::map<string, Variable> fields = (i->second).fields;
+		for(std::map<string, Variable>::iterator j = fields.begin(); j != fields.end(); ++j) {
+		  cout << "--" << j->first << " : " << (j->second).getType() << endl;
+	    }
 	  }
     }
 }
