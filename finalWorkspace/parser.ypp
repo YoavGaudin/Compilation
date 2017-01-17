@@ -42,29 +42,41 @@ TDEFS:
 ;		
 FDEFS: 
 		FDEFS TYPE ID '(' FUNC_ARGLIST_FULL ')' BLK {
+		  cout << "FDEFS: " << $3->tokenValue << endl;
+		  Function* func = new Function($3->tokenValue, $5->argsList);
+		  func->insertSymbolTable($7->declarationList);
+		  funcSymbols.insert(std::pair<string, Function>($3->tokenValue, *func));
 		}
 	|
 		FDEFS Extern TYPE ID '(' FUNC_ARGLIST_FULL ')' ';' {
+		  Function* func = new Function($4->tokenValue, $6->argsList);
+		  funcSymbols.insert(std::pair<string, Function>($4->tokenValue, *func));
 		}		
 	|
 		/*epsilon*/ { cout << "FDEFS to e" << endl;}
 ;
 FUNC_ARGLIST_FULL: 
 		FUNC_ARGLIST {
+		  $$->argsList = $1->argsList;
 		}
 	|
 		/*epsilon*/ {}
-		/*epsilon*/
 ;		
 FUNC_ARGLIST: 
 		FUNC_ARGLIST ',' DCL {
+		  createArgumentsFromDCL($3, $1);
+		  $$->argsList = $1->argsList;
 		}
 	|
 		DCL {
+		  createArgumentsFromDCL($1, $$);
 		}
 ;
 MAIN_FUNCTION:
-		Main {currFunction = new Function("main()");} BLK {
+		Main BLK {
+			Function* mainFunc = new Function("main");
+			mainFunc->insertSymbolTable($2->declarationList);
+			funcSymbols.insert(std::pair<string, Function>("main", *mainFunc));
 			cout << "MAIN_FUNCTION" <<endl;
 		} 
 	|
@@ -72,13 +84,14 @@ MAIN_FUNCTION:
 ;		
 BLK: 
 		DECLARATIONS '{' LIST '}' {
+			$$->declarationList = $1->declarationList;
 			cout << "BLK" << endl;
 		}
 ;	
 DECLARATIONS:
 		Var DECLARLIST {
 			cout << "DECLARATIONS" << endl;
-		  currFunction->insertSymbolTable($2->declarationList);
+			$$->declarationList = $2->declarationList;
 		} // the symbol table insertions are made during DECLARLIST parsing
 	|
 		/*epsilon*/ { cout << "DECLARATIONS to e" << endl; }
@@ -86,7 +99,6 @@ DECLARATIONS:
 DECLARLIST:
 		DECLARLIST DCL ';' {
 			cout << "DECLARLIST1: " << $2->dcl_type << endl;
-		  // $$.declarationList = merge with $1
 		  createVariablesFromDCL($2, $1);
 		  $$->declarationList = $1->declarationList;
 		}
@@ -105,7 +117,9 @@ DCL:
 		} 
 	|
 		ID ':' ID {
-			validateStructName($3->tokenValue);
+			if(validateStructName($3->tokenValue) == false){
+			  semanticError("illegal type name");
+			}
 		    $$->dcl_type = $3->tokenValue;
 		    ($$->dcl_ids).push_front($1->tokenValue);
 		  //The 2nd ID might be the name of a custom typedef
