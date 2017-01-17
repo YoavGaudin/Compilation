@@ -187,22 +187,79 @@ CNTRL:
 ;	
 BEXP: 
 		BEXP OR_OP BEXP {
+		  // backpatching
 		}
 	|
 		BEXP AND_OP BEXP {
+		  // backpatching
 		}
 	|
 		EXP REL_OP EXP {
+		  string tempReg = getIntReg();
+		  string SLET = "";
+		  string SGRT = "";
+		  string SEQU = "";
+		  string SNEQ = "";
+		  string opCommand = "";
+		  
+		  if(isInt($1->place) && isInt($3->place)) {
+		    SLET = "SLETI";
+		    SGRT = "SGRTI";
+		    SEQU = "SEQUI";
+		    SNEQ = "SNEQI";
+		  } else if(isReal($1->place) && isReal($3->place)) {
+		    SLET = "SLETR";
+		    SGRT = "SGRTR";
+		    SEQU = "SEQUR";
+		    SNEQ = "SNEQR";		    
+		  } else {
+		    semanticError("type missmatch on relop \'" + $2->tokenValue + "\'");
+		  }
+		  
+		  if($2->tokenValue == "<" || $2->tokenValue == "<=") {
+		    opCommand = SLET;
+		  } else if($2->tokenValue == ">" || $2->tokenValue == ">=") {
+		    opCommand = SGRT;
+		  } else if($2->tokenValue == "==") {
+		    opCommand = SEQU;
+		  } else if($2->tokenValue == "<>") {
+		    opCommand = SNEQ;
+		  } else {
+		    semanticError("can't recognize RELOP " + $2->tokenValue);
+		  }
+		  
+		  bool equalsFlag = false;
+		  if($2->tokenValue == "<=" || $2->tokenValue == ">=") {
+		    equalsFlag = true;
+		  }
+		  
+		  emit(opCommand + " " + tempReg + " " + $1->place + " " + $2->place);
+		  $$->trueList.push_back(nextquad());
+		  emit("BNEQZ " + tempReg + " " + "___");
+		  if(equalsFlag) {
+		    // if tempReg == 0 we should continue down the flow (no jump needed)
+		    emit(SEQU + " " + tempReg + " " + $1->place + " " + $2->place);
+		    $$->trueList.push_back(nextquad());
+		    emit("BNEQZ " + tempReg + " " + "___");
+		  }
+		  $$->falseList.push_back(nextquad());
+		  // TODO: this should be uncomented!!! I don't have any idea why is it giving compilation error, when I replace this with emit("BNEQZ " + tempReg + " " + "___"); it is not complaining - WTF maybe I am tiered.
+		  //emit("UJUMP " + "___");
 		}
+
 	|
 		NOT_OP BEXP {
+		  $$->trueList.swap($$->falseList);
 		}
 	|
 		'(' BEXP ')' {
+		  $$->trueList = $2->trueList;
+		  $$->falseList = $2->falseList;
 		}
 ;	
 EXP: 
 		EXP ADD_OP EXP {
+		  // EXP->place is always in register!
 		  if(isUsedIntReg($1->place) && isUsedIntReg($3->place)) {
 		    $$->place = getIntReg();
 		    emit("ADD2I " + $$->place + " " + $1->place + " " + $2->place);

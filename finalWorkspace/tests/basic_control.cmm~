@@ -1,0 +1,8 @@
+main
+var a:integer;
+{
+   if
+	5 < 6 then 
+   else 
+      	a = 2;
+}

@@ -102,6 +102,10 @@ struct Stype {
   string dcl_type;
   // for DCL - the variables names () ids of the currently declared type
   list<string> dcl_ids;
+
+  // for BEXP - lists to contain the code lines which will need to be changed on backpatching
+  list<int> falseList;
+  list<int> trueList;
   
   Stype(string v) : tokenValue(v) {}
 };
@@ -199,6 +203,9 @@ bool isUsedRealReg(string& in);
 void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST);
 void addStructToSymbolTable(string name, map<string, Variable> fields);
 void validateStructName(string name);
+int nextquad();
+bool isInt(string& in);
+bool isReal(string& in);
 void Error(string& s);
 
 

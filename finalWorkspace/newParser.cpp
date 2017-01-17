@@ -66,6 +66,7 @@ string getRealReg() {
 
 void emit(string const& singleInstruction) {
   cout << singleInstruction << endl;
+  codeBuffer.push_back(singleInstruction);
 }
 
 bool isUsedIntReg(string& in) {
@@ -76,15 +77,20 @@ bool isUsedRealReg(string& in) {
   return usedRealRegs.find(in) != usedRealRegs.end();
 }
 
-// insert all pairs of 'from' map to 'to' map (overwrite)
-/*void insertSymbolTable(map<string, Variable>& to, map<string, Variable> const& from) {
-  to.insert(from.begin(), from.end());
-  }*/
+bool isInt(string& in) {
+  try {
+    return isUsedIntReg(in) || memMap[stoi(in)] == INTEGER;
+  } catch (const std::invalid_argument& ia) {}
+  return false;
+}
 
-/* need to be implemented!!!
-static Function& getCurrentFunc() {
-  return *(new Function());
-}*/
+bool isReal(string& in) {
+  try {
+    return isUsedRealReg(in) || memMap[stoi(in)] == REAL;
+  } catch (const std::invalid_argument& a) {}
+  return false;
+}
+
 
 // iterate over the ids list and for each id create Variable with the DCL type and this id.
 void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
@@ -107,6 +113,11 @@ void validateStructName(string name) {
   if(i == typdefsTable.end()){
     cout << "undefined error: " << endl;
   }
+}
+
+// returns the line number of the instruction that will be emitted after the call to this function
+int nextquad() {
+  return codeBuffer.size();
 }
 
 void Error(string s) {
