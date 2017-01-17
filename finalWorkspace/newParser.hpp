@@ -131,7 +131,7 @@ struct Stype {
                     \                    \
                     \____________________\
 
-'funcSymbols'       --- Map from function name to it's symbol table. 
+'funcSymbols'       --- Map from function name to it's symbol table and arguments. 
 
 'funcStack'         --- Stack which holds on it's top the currently running function (by currently we mean the function which's call was the last in the parsed code). This stack contains only strings! by this string we can find the relevant symbol table with the environment variables in the 'funcSymbols' map.
 
