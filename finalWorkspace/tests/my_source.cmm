@@ -1,0 +1,8 @@
+defstruct {
+	a:integer;
+} MyStruct;
+main
+var a,b:integer;
+	c,d:real;
+	st:MyStructerr;
+{ }
