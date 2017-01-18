@@ -21,9 +21,12 @@ class Variable {
 
   string name;
   string type;
+  int offset;
   
 public:
-  Variable(const string name_, Type t) : name(name_) {
+  Variable(const string name_, string type_, int offset_) : name(name_), type(type_), offset(offset_) {}
+  
+  Variable(const string name_, Type t) : name(name_){
     if(t == INTEGER) {
       type = "integer";
     } else if(t == REAL) {
@@ -35,15 +38,14 @@ public:
 
   Variable(const string name_, string type_) : name(name_), type(type_) {}
   
+  void setOffset(int offset) { this->offset = offset; }
+  int getOffset() { return this->offset; }
   string const& getName() { return name; }
   string const& getType() { return type; }
 };
 
 
 class Defstruct : Variable {
-
-  
-
 public:
   map<string, Variable> fields;
   Defstruct(string name_, map<string, Variable> fields_) : Variable(name_, DEFSTRUCT), fields(fields_) {}
@@ -63,29 +65,59 @@ struct Function {
   string name;
   map<string, Variable> symbolTable;
   vector<Variable> arguments;
+  int number_of_variables;
   
-  Function(string name_, vector<Variable> arguments_) : name(name_), arguments(arguments_) {
+  Function(string name_, vector<Variable> arguments_) : name(name_), arguments(arguments_), number_of_variables(0) {
     for(std::vector<Variable>::iterator i = arguments_.begin(); i != arguments_.end(); ++i) {
       addVariable(i->getName(), *i);
     }
   }
 
   // init with empty vector and empty map (std::* data structures should be automatically dynamically allocated)
-  Function(string name_) : name(name_) {}
+  Function(string name_) : name(name_), number_of_variables(0) { }
 
+  // find variable in function's scope
+  Variable* getScopeVariable(string name) {
+	std::map<string, Variable>::iterator i;
+	if((i = symbolTable.find(name)) != symbolTable.end()) {
+	  return &(i->second);
+	}
+	return NULL; 
+  }
+  
   // insert (name,v) to the symbol table
   void addVariable(string const& name, Variable& v) {
     std::map<string, Variable>::iterator i;
     if((i = symbolTable.find(name)) != symbolTable.end())
       symbolTable.erase(i);
+    v.setOffset((this->number_of_variables)++);
     symbolTable.insert(std::pair<string, Variable>(name, v));
+	
   }
   
   void insertSymbolTable(map<string, Variable> vars) {
-	cout << "insertSymbolTable to " << this->name << endl;
 	for(std::map<string, Variable>::iterator i = vars.begin(); i != vars.end(); ++i) {
 	  cout << "\t" << i->first << i->second.getType() << endl;
 	  this->addVariable(i->first, i->second);
+	}
+  }
+};
+
+class Block {
+private:
+  vector<Variable> *scopeVariables;
+  Block* parent;
+
+public:
+  Block(Block* parent_): parent(parent_) { 
+	scopeVariables = new vector<Variable>(*(parent->scopeVariables));
+  }
+  
+  Block(Function* func) {
+	scopeVariables = new vector<Variable>();
+	std::map<string, Variable> var_map = func->symbolTable;
+	for(std::map<string, Variable>::iterator i = var_map.begin(); i != var_map.end(); ++i) {
+	  this->scopeVariables->push_back(i->second);
 	}
   }
 };
@@ -184,6 +216,7 @@ struct Stype {
 extern map<string, Function> funcSymbols;
 extern stack<string> funcStack;
 extern Function* currFunction;
+extern Block* currBlock;
 extern map<string, Variable> globalSymbolTable;
 extern vector<string> codeBuffer;
 extern array<Type, 1000> memMap;
@@ -215,6 +248,7 @@ int nextquad();
 bool isInt(string& in);
 bool isReal(string& in);
 void Error(string& s);
+void printState();
 
 
 /* ----------------- Run Time Memory layout: -------------------

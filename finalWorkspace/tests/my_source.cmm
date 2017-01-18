@@ -8,7 +8,7 @@ integer foo1()
 var abc:real;
 { }
 
-integer foo2(funcarg:real) 
+integer foo2(funcarg1,funcarg2:real) 
 var funcvar:integer;
 { }
 main

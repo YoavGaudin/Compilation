@@ -8,6 +8,7 @@ extern int yyparse (void);
 map<string, Function> funcSymbols;
 stack<string> funcStack;
 Function* currFunction;
+Block* currBlock;
 map<string, Variable> globalSymbolTable;
 map<string, Defstruct> typedefsTable;
 vector<string> codeBuffer;
@@ -138,11 +139,11 @@ void printState() {
   for(std::map<string, Function>::iterator f = funcSymbols.begin() ; f != funcSymbols.end() ; ++f) {
     cout << f->first << ": arguments:" << endl;
 	for(std::vector<Variable>::iterator j = (f->second).arguments.begin(); j != (f->second).arguments.end(); ++j) {
-	  cout << "\t" << j->getName() << " : " << j->getType() << endl;
+	  cout << "\t" << j->getName() << " : " << j->getType() << "(" << j->getOffset() << ")" << endl;
 	}
 	cout << "variables:" << endl;
 	for(std::map<string, Variable>::iterator j = (f->second).symbolTable.begin(); j != (f->second).symbolTable.end(); ++j) {
-	  cout << "\t" << j->first << " : " << (j->second).getType() << endl;
+	  cout << "\t" << j->first << " : " << (j->second).getType() << "(" << (j->second).getOffset() << ")" << endl;
 	}
   }
 }

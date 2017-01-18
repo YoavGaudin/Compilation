@@ -2,7 +2,7 @@ main
 var a:integer;
 {
    if 7 < 77 then 
-      	a = 1
+      	a = 1;
    else 
       	a = 0;
 }
