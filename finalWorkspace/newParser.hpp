@@ -60,29 +60,27 @@ public:
 };
 
 
-struct Function {
+class Block {
+private:
+  Block* parent;
 
-  string name;
+public:
   map<string, Variable> symbolTable;
-  vector<Variable> arguments;
-  int number_of_variables;
   
-  Function(string name_, vector<Variable> arguments_) : name(name_), arguments(arguments_), number_of_variables(0) {
-    for(std::vector<Variable>::iterator i = arguments_.begin(); i != arguments_.end(); ++i) {
-      addVariable(i->getName(), *i);
-    }
-  }
+  Block() : parent(NULL) {}
 
-  // init with empty vector and empty map (std::* data structures should be automatically dynamically allocated)
-  Function(string name_) : name(name_), number_of_variables(0) { }
+  Block(Block* parent_): parent(parent_) { 
+    // std::* containers should be automatically dynamically allocated on decleration
+    symbolTable = parent->symbolTable;
+  }
 
   // find variable in function's scope
   Variable* getScopeVariable(string name) {
-	std::map<string, Variable>::iterator i;
-	if((i = symbolTable.find(name)) != symbolTable.end()) {
-	  return &(i->second);
-	}
-	return NULL; 
+    std::map<string, Variable>::iterator i;
+    if((i = symbolTable.find(name)) != symbolTable.end()) {
+      return &(i->second);
+    }
+    return NULL; 
   }
   
   // insert (name,v) to the symbol table
@@ -90,36 +88,42 @@ struct Function {
     std::map<string, Variable>::iterator i;
     if((i = symbolTable.find(name)) != symbolTable.end())
       symbolTable.erase(i);
-    v.setOffset((this->number_of_variables)++);
     symbolTable.insert(std::pair<string, Variable>(name, v));
-	
+    v.setOffset(symbolTable.size());
   }
   
-  void insertSymbolTable(map<string, Variable> vars) {
-	for(std::map<string, Variable>::iterator i = vars.begin(); i != vars.end(); ++i) {
-	  cout << "\t" << i->first << i->second.getType() << endl;
-	  this->addVariable(i->first, i->second);
-	}
+  void insertSymbolTable(map<string, Variable>& vars) {
+    for(std::map<string, Variable>::iterator i = vars.begin(); i != vars.end(); ++i) {
+      cout << "\t" << i->first << i->second.getType() << endl;
+      this->addVariable(i->first, i->second);
+    }
   }
+
+  void insertSymbolTable(vector<Variable>& vars) {
+    for(std::vector<Variable>::iterator i = vars.begin(); i != vars.end(); ++i) {
+      addVariable(i->getName(), *i);
+    }
+  }
+
 };
 
-class Block {
-private:
-  vector<Variable> *scopeVariables;
-  Block* parent;
 
-public:
-  Block(Block* parent_): parent(parent_) { 
-	scopeVariables = new vector<Variable>(*(parent->scopeVariables));
+struct Function : Block {
+
+  string name;
+  // the argumants are inserted straight into the symbol table in the constructor.
+  //int number_of_variables; // for this we use std data structures... they have size().
+
+  // function with arguments
+  Function(string name_, vector<Variable> arguments_) : name(name_) {
+    insertSymbolTable(arguments_);
+  }
+
+  // function without arguments
+  Function(string name_) : name(name_) {
+    // std::* containers should be automatically dynamically allocated on decleration
   }
   
-  Block(Function* func) {
-	scopeVariables = new vector<Variable>();
-	std::map<string, Variable> var_map = func->symbolTable;
-	for(std::map<string, Variable>::iterator i = var_map.begin(); i != var_map.end(); ++i) {
-	  this->scopeVariables->push_back(i->second);
-	}
-  }
 };
 
 // ---------------------------- S-type definition --------------------------

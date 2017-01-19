@@ -1,0 +1,56 @@
+START Compilation
+TDEFS to e
+defstruct
+variable a of type integer declared
+DECLARLIST2: integer
+createVariablesFromDCL: type- integer
+defstruct
+variable b of type real declared
+DECLARLIST2: real
+createVariablesFromDCL: type- real
+FDEFS to e
+variable abc of type real declared
+DECLARLIST2: real
+createVariablesFromDCL: type- real
+DECLARATIONS
+BLK
+FDEFS: foo1
+	abcreal
+variable funcarg2 of type real declared
+variable funcvar of type integer declared
+DECLARLIST2: integer
+createVariablesFromDCL: type- integer
+DECLARATIONS
+BLK
+FDEFS: foo2
+	funcvarinteger
+variable b of type integer declared
+DECLARLIST2: integer
+createVariablesFromDCL: type- integer
+variable d of type real declared
+DECLARLIST1: real
+createVariablesFromDCL: type- real
+DECLARLIST1: MyStruct2
+createVariablesFromDCL: type- MyStruct2
+DECLARATIONS
+BLK
+MAIN_FUNCTION
+OK!!!
+Functions table:3
+foo1: arguments:
+variables:
+	abc : real(0)
+foo2: arguments:
+	funcarg1 : real(0)
+	funcarg2 : real(0)
+variables:
+	funcarg1 : real(0)
+	funcarg2 : real(1)
+	funcvar : integer(2)
+main: arguments:
+variables:
+typedefs:
+MyStruct1: 
+--a : integer
+MyStruct2: 
+--b : real

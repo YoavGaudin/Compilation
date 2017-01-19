@@ -137,14 +137,10 @@ void Error(string s) {
 void printState() {
   cout << "Functions table:" << funcSymbols.size() << endl;
   for(std::map<string, Function>::iterator f = funcSymbols.begin() ; f != funcSymbols.end() ; ++f) {
-    cout << f->first << ": arguments:" << endl;
-	for(std::vector<Variable>::iterator j = (f->second).arguments.begin(); j != (f->second).arguments.end(); ++j) {
-	  cout << "\t" << j->getName() << " : " << j->getType() << "(" << j->getOffset() << ")" << endl;
-	}
-	cout << "variables:" << endl;
-	for(std::map<string, Variable>::iterator j = (f->second).symbolTable.begin(); j != (f->second).symbolTable.end(); ++j) {
-	  cout << "\t" << j->first << " : " << (j->second).getType() << "(" << (j->second).getOffset() << ")" << endl;
-	}
+    cout << "argumants and variables:" << endl;
+    for(std::map<string, Variable>::iterator j = (f->second).symbolTable.begin(); j != (f->second).symbolTable.end(); ++j) {
+      cout << "\t" << j->first << " : " << (j->second).getType() << "(" << (j->second).getOffset() << ")" << endl;
+    }
   }
 }
 
