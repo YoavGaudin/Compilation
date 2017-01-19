@@ -73,7 +73,7 @@ FUNC_ARGLIST:
 		}
 ;
 MAIN_FUNCTION:
-		Main {currFunction = new Function("main");} BLK {
+		Main {currFunction = new Function("main"); currBlock = currFunction;} BLK {
 			Function* mainFunc = currFunction;
 			mainFunc->insertSymbolTable($2->declarationList);
 			funcSymbols.insert(std::pair<string, Function>("main", *mainFunc));
@@ -188,55 +188,75 @@ ASSN:
 		  if(dest[0] != src[0]) {
 		    semanticError("type mismatch on assignment: can't assign " + dest + " to " + src);
 		  }
-		  string COPY = "COPY" + dest[0];
-		  emit(COPY + " " + dest + " " + src);
+		  // dest holds LVAL's address in memory
+		  string STOR = "STOR" + dest[0];
+		  emit(STOR + " " + src + dest + " 0 ");
 		}
 ;
 LVAL: 
 		ID {
 		  // make sure ID is a variable in current scope
-		  string tempreg = getIntReg();
-		  $$->place = tempreg;
-		  Variable* var = currFunction->getScopeVariable($1->tokenValue);
+		  Variable* var = currBlock->getScopeVariable($1->tokenValue);
 		  if(var == NULL) {
 		    cout << "currFunction: " << currFunction->name << endl;
-			printState();
+		    printState();
 		    semanticError($1->tokenValue + " was not declared in this scope");
 		  }
+		  
+		  string tempreg = getIntReg();
+		  $$->place = tempreg;
 		  string LOAD = "";
 		  if(var->getType() == "integer") {
-			LOAD = "LOADI";
+		    LOAD = "LOADI";
 		  }
 		  else if(var->getType() == "real") {
-			LOAD = "LOADR";
+		    LOAD = "LOADR";
 		  }
 		  else {
-			  // TODO: implement struct copy (load address in memory instead of value)
+		    // TODO: implement struct copy (load address in memory instead of value)
 		  }
 		  // load variable into a register
-		  emit(LOAD + " I1 " + std::to_string(var->getOffset()));
+		  emit(LOAD + tempreg + " I1 " + std::to_string(var->getOffset()));
 		}
 	|
 		STREF {
 		}
 ;
 CNTRL: 
-		If BEXP Then STMT Else STMT {
+		If BEXP Then M STMT N Else M STMT {
+		  backpatch($2->trueList, $4->quad);
+		  backpatch($2->falseList, $8->quad);
+		  $$->nextList.insert($$->nextList.end(), $5->nextList.begin(), $5->nextList.end());
+		  $$->nextList.insert($$->nextList.end(), $6->nextList.begin(), $6->nextList.end());
+		  $$->nextList.insert($$->nextList.end(), $9->nextList.begin(), $9->nextList.end());
 		}
 	|
-		If BEXP Then STMT {
+		If BEXP Then M STMT {
+		  backpatch($2->trueList, $4->quad);
+		  $$->nextList.insert($$->nextList.end(), $2->falseList.begin(), $2->falseList.end());
+		  $$->nextList.insert($$->nextList.end(), $5->nextList.begin(), $5->nextList.end());
 		}
 	|
-		While BEXP Do STMT {
+		While M BEXP Do M STMT {
+		  backpatch($3->trueList, $5->quad);
+		  backpatch($5->nextList, $2->quad);
+		  $$->nextList.insert($$->nextList.end(), $3->falseList.begin(), $3->falseList.end());
+		  emit((string)"UJUMP " + INT2STR($2->quad));
 		}
 ;	
 BEXP: 
-		BEXP OR_OP BEXP {
-		  // backpatching
+		BEXP OR_OP M BEXP {
+		  backpatch($1->falseList, $3->quad);
+		  $$->trueList.insert($$->trueList.end(), $1->trueList.begin(), $1->trueList.end());
+		  $$->trueList.insert($$->trueList.end(), $4->trueList.begin(), $4->trueList.end());
+		  $$->falseList.insert($$->falseList.end(), $4->falseList.begin(), $4->falseList.end());
 		}
 	|
-		BEXP AND_OP BEXP {
-		  // backpatching
+		BEXP AND_OP M BEXP {
+		  backpatch($1->trueList, $3->quad);
+		  $$->falseList.insert($$->falseList.end(), $1->falseList.begin(), $1->falseList.end());
+		  $$->falseList.insert($$->falseList.end(), $4->falseList.begin(), $4->falseList.end());
+		  $$->trueList.insert($$->trueList.end(), $4->trueList.begin(), $4->trueList.end());
 		}
 	|
 		EXP REL_OP EXP {
@@ -280,15 +300,14 @@ BEXP:
 		  
 		  emit(opCommand + " " + tempReg + " " + $1->place + " " + $3->place);
 		  $$->trueList.push_back(nextquad());
-		  emit("BNEQZ " + tempReg + " " + "___");
+		  emit("BNEQZ " + tempReg + " ___");
 		  if(equalsFlag) {
 		    // if tempReg == 0 we should continue down the flow (no jump needed)
 		    emit(SEQU + " " + tempReg + " " + $1->place + " " + $2->place);
 		    $$->trueList.push_back(nextquad());
-		    emit("BNEQZ " + tempReg + " " + "___");
+		    emit("BNEQZ " + tempReg + " ___");
 		  }
 		  $$->falseList.push_back(nextquad());
-		  // TODO: this should be uncomented!!! I don't have any idea why is it giving compilation error, when I replace this with emit("BNEQZ " + tempReg + " " + "___"); it is not complaining - WTF maybe I am tiered.
 		  emit((string)"UJUMP " + "___");
 		}
 
@@ -301,7 +320,19 @@ BEXP:
 		  $$->trueList = $2->trueList;
 		  $$->falseList = $2->falseList;
 		}
-;	
+;
+
+M:    		/*epsilon*/ {
+                  $$->quad = nextquad();
+                }
+;
+
+N:    		/*epsilon*/ {
+                  $$->nextList.push_back(nextquad());
+		  emit((string)"UJUMP" + " ___");
+                }
+;
+
 EXP: 
 		EXP ADD_OP EXP {
 		  // EXP->place is always in register!

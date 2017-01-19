@@ -11,6 +11,9 @@
 #include <array>
 #include <iostream>
 
+#include <sstream>
+#define INT2STR( x ) static_cast< std::ostringstream & >( ( std::ostringstream() << std::dec << x ) ).str()
+
 using namespace std;
 
 
@@ -149,6 +152,12 @@ struct Stype {
   
   // for FUNC_ARGLIST
   vector<Variable> argsList;
+
+  // for M marker
+  int quad;
+
+  // for N marker and STMT
+  list<int> nextList;
   
   Stype(string v) : tokenValue(v) {}
 };
@@ -253,7 +262,7 @@ bool isInt(string& in);
 bool isReal(string& in);
 void Error(string& s);
 void printState();
-
+void backpatch(list<int> toFill, int address);
 
 /* ----------------- Run Time Memory layout: -------------------
 

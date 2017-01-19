@@ -30,9 +30,6 @@ void regSetInit() {
 
 // -----------------------------------------------------------------------------------------------
 
-#include <sstream>
-#define INT2STR( x ) static_cast< std::ostringstream & >( ( std::ostringstream() << std::dec << x ) ).str()
-
 // returns unused register name and adds it to usedIntRegs set
 string getIntReg() {
   // 0,1,2 reserved from init
@@ -141,6 +138,24 @@ void printState() {
     for(std::map<string, Variable>::iterator j = (f->second).symbolTable.begin(); j != (f->second).symbolTable.end(); ++j) {
       cout << "\t" << j->first << " : " << (j->second).getType() << "(" << (j->second).getOffset() << ")" << endl;
     }
+  }
+}
+
+// replace first occurance of 'from' sub string in 'str' by 'to'
+static bool subStrReplace(std::string& str, const std::string& from, const std::string& to) {
+    size_t start_pos = str.find(from);
+    if(start_pos == std::string::npos)
+        return false;
+    str.replace(start_pos, from.length(), to);
+    return true;
+}
+
+/* toFill - list of line numbers to fill
+   address - address to fill in the codeBuffer lines specified in 'toFill'
+ */
+void backpatch(list<int> toFill, int address) {
+  for(std::list<int>::iterator i = toFill.begin(); i != toFill.end(); ++i) {
+    subStrReplace(codeBuffer[*i], "___", INT2STR(address));
   }
 }
 
