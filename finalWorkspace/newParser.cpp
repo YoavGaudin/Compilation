@@ -49,7 +49,7 @@ string getIntReg() {
 // returns unused register name and adds it to usedRealRegs set
 string getRealReg() {
   for(int i = 0; i < 1000; ++i) {
-    string currReg = "I" + INT2STR(i);
+    string currReg = "R" + INT2STR(i);
     // in c++ string.operator== and string.compare() is the same (unlike JAVA) so it should work fine
     // return the first register name which is not used
     if(usedRealRegs.count(currReg) == 0) {
@@ -75,20 +75,33 @@ bool isUsedRealReg(string& in) {
   return usedRealRegs.find(in) != usedRealRegs.end();
 }
 
-bool isInt(string& in) {
+bool isIntegerVariable(string& in) {
   try {
     return isUsedIntReg(in) || memMap[stoi(in)] == INTEGER;
   } catch (const std::invalid_argument& ia) {}
   return false;
 }
 
-bool isReal(string& in) {
+bool isRealVariable(string& in) {
   try {
     return isUsedRealReg(in) || memMap[stoi(in)] == REAL;
   } catch (const std::invalid_argument& a) {}
   return false;
 }
 
+bool isInteger(string& in) {
+  size_t *idx;
+  int i = stoi(in, idx);
+  cout << "stoi idx = " << *idx << "; size = " << in.size() << endl;
+  return *idx == in.size();
+}
+
+bool isReal(string& in) {
+  size_t *idx;
+  int i = stod(in, idx);
+  cout << "stod idx = " << *idx << "; size = " << in.size() << endl;
+  return *idx == in.size();
+}
 
 // iterate over the ids list and for each id create Variable with the DCL type and this id.
 void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
@@ -162,8 +175,7 @@ void backpatch(list<int> toFill, int address) {
 /**************************************************************************/
 /*                           Main of parser                               */
 /**************************************************************************/
-//#define YYDEBUG 1
-//extern int yydebug;
+
 int main(void)
 {
     int rc;

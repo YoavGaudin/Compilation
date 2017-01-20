@@ -1,8 +1,8 @@
 main
-var a:integer;
+var a:real;
 {
    if 7 < 77 then 
-      	a = 1;
+      	a = 1.1;
    else 
       	a = 0;
 }

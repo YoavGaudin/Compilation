@@ -92,6 +92,8 @@ BLK:
 DECLARATIONS:
 		Var DECLARLIST {
 			cout << "DECLARATIONS" << endl;
+			// add declerations to current block
+			currBlock->insertSymbolTable($2->declarationList);
 			$$->declarationList = $2->declarationList;
 		} // the symbol table insertions are made during DECLARLIST parsing
 	|
@@ -189,8 +191,12 @@ ASSN:
 		    semanticError("type mismatch on assignment: can't assign " + dest + " to " + src);
 		  }
 		  // dest holds LVAL's address in memory
-		  string STOR = "STOR" + dest[0];
-		  emit(STOR + " " + src + dest + " 0 ");
+		  if(dest[0] == 'I') {
+		    emit("STORI " + src + " " + dest + " 0 ");
+		  }
+		  else {
+		    emit("STORR " + src + " " + dest + " 0 ");
+		  }
 		}
 ;
 LVAL: 
@@ -216,7 +222,7 @@ LVAL:
 		    // TODO: implement struct copy (load address in memory instead of value)
 		  }
 		  // load variable into a register
-		  emit(LOAD + tempreg + " I1 " + std::to_string(var->getOffset()));
+		  emit(LOAD + " " + tempreg + " I1 " + std::to_string(var->getOffset()));
 		}
 	|
 		STREF {
@@ -231,7 +237,7 @@ CNTRL:
 		  $$->nextList.insert($$->nextList.end(), $9->nextList.begin(), $9->nextList.end());
 		}
 	|
-		If BEXP Then M STMT {
+		If BEXP Then M STMT N{
 		  backpatch($2->trueList, $4->quad);
 		  $$->nextList.insert($$->nextList.end(), $2->falseList.begin(), $2->falseList.end());
 		  $$->nextList.insert($$->nextList.end(), $5->nextList.begin(), $5->nextList.end());
@@ -267,12 +273,12 @@ BEXP:
 		  string SNEQ = "";
 		  string opCommand = "";
 		  
-		  if(isInt($1->place) && isInt($3->place)) {
+		  if(isIntegerVariable($1->place) && isIntegerVariable($3->place)) {
 		    SLET = "SLETI";
 		    SGRT = "SGRTI";
 		    SEQU = "SEQUI";
 		    SNEQ = "SNEQI";
-		  } else if(isReal($1->place) && isReal($3->place)) {
+		  } else if(isRealVariable($1->place) && isRealVariable($3->place)) {
 		    SLET = "SLETR";
 		    SGRT = "SGRTR";
 		    SEQU = "SEQUR";
@@ -392,7 +398,14 @@ EXP:
 		}
 	|
 		NUM {
-		  $$->place = $$->tokenValue;
+		  if(isInteger($1->tokenValue)) {
+		    $$->place = getIntReg();
+			emit("COPYI " + $$->place + " " + $1->tokenValue);
+		  }
+		  else {
+		    $$->place = getRealReg();
+			emit("COPYR " + $$->place + " " + $1->tokenValue);
+		  }
 		}
 	|
 		CALL {

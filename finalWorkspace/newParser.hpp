@@ -16,6 +16,8 @@
 
 using namespace std;
 
+#define YYDEBUG 1
+extern int yydebug;
 
 enum Type {INTEGER, REAL, DEFSTRUCT};
 
@@ -220,7 +222,7 @@ struct Stype {
 
 'codeBuffer'        --- Vector (we want the back() function which is not included in std::array) which holds the RISKI instructions. This buffer will be the target of the emit() function and will be modified on backpatching. This buffer should not be larger then 1000 (memory size).
 
-'memMap'            --- Array which represents the run time memory layout, for each address (0-999) which type is thedata there.
+'memMap'            --- Array which represents the run time memory layout, for each address (0-999) which type is the data there.
 
 
 
@@ -258,8 +260,10 @@ void createArgumentsFromDCL(Stype* DCL, Stype* FUNC_ARGLIST);
 void addStructToSymbolTable(string name, map<string, Variable> fields);
 bool validateStructName(string name);
 int nextquad();
-bool isInt(string& in);
+bool isInteger(string& in);
 bool isReal(string& in);
+bool isIntegerVariable(string& in);
+bool isRealVariable(string& in);
 void Error(string& s);
 void printState();
 void backpatch(list<int> toFill, int address);
