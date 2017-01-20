@@ -174,6 +174,8 @@ struct Stype {
   string type;
   
   Stype(string v) : tokenValue(v) {}
+
+  Stype() {}
 };
 #define YYSTYPE Stype*
 

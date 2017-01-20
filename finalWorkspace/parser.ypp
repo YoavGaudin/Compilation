@@ -7,6 +7,8 @@
   using namespace std;
   
   int yylex (void);
+  extern char* yytext;
+  extern int yylineno;
   void yyerror (char const *);
   void semanticError(string s);
 %}
@@ -25,12 +27,15 @@
 %left ADD_OP
 %left MUL_OP
 %right NOT_OP
-%left '[' '{' '('
 %right ']' '}' ')'
+%left '[' '{' '('
+
+ //%right If Then Else
 %%
 
 PROGRAM: 
-		TDEFS FDEFS MAIN_FUNCTION {
+		M_program TDEFS FDEFS MAIN_FUNCTION {
+		  cout << "<\\PROGRAM>" << endl;
 		}
 ;
 TDEFS: 
@@ -77,20 +82,27 @@ FUNC_ARGLIST:
 		}
 ;
 MAIN_FUNCTION:
-		Main {currFunction = new Function("main"); currBlock = currFunction;} BLK {
-			Function* mainFunc = currFunction;
-			mainFunc->insertSymbolTable($2->declarationList);
-			funcSymbols.insert(std::pair<string, Function>("main", *mainFunc));
-			cout << "<\\MAIN_FUNCTION>" <<endl;
+                M_main Main {
+		  //cout << "<MAIN_FUNCTION>" <<endl;
+		  currFunction = new Function("main");
+		  currBlock = currFunction;
+		} BLK {
+		  Function* mainFunc = currFunction;
+		  mainFunc->insertSymbolTable($4->declarationList);
+		  funcSymbols.insert(std::pair<string, Function>("main", *mainFunc));
+		  cout << "<\\MAIN_FUNCTION>" <<endl;
 		} 
 	|
-		/*epsilon*/ {}
+		/*epsilon*/ {cout << "MAIN_FUNCTION to epsilon" << endl;}
 ;		
 BLK: 
-		DECLARATIONS '{' LIST '}' {
-		  cout << "<BLK>" << endl;
-		  $$->declarationList = $1->declarationList;
-		  $3->declarationList = $1->declarationList;
+                M_blk DECLARATIONS {
+		  cout << "*******************" << endl;
+		  $$->declarationList = $2->declarationList;
+		} '{' {
+		  cout << "**********before LIST************" << endl;
+		} LIST '}' {
+		  $6->declarationList = $2->declarationList;
 		  cout << "<\\BLK>" << endl;
 		}
 ;	
@@ -103,7 +115,10 @@ DECLARATIONS:
 		  cout << "<\\DECLARATIONS>" << endl;
 		}
 	|
-		/*epsilon*/ { cout << "DECLARATIONS to e" << endl; }
+		/*epsilon*/ {
+		  $$->declarationList.insert(std::pair<string, Variable>("XXX", *(new Variable("",""))));
+		  cout << "DECLARATIONS to epsilon" << endl;
+		}
 ;		
 DECLARLIST:
 		DECLARLIST DCL ';' {
@@ -157,7 +172,8 @@ TYPE:
 		} // $$->tokenValue is already assigned in .lex file
 ;	
 LIST: 
-		LIST STMT {
+		M_list LIST STMT {
+		  cout << "<\\LIST>" << endl;
 		}
 	|
 		/*epsilon*/ {}
@@ -167,6 +183,8 @@ STMT:
 		}
 	|
 		CNTRL {
+		  cout << "<STMT 2>" << endl;
+		  cout << "<\\STMT 2>" << endl;
 		}
 	|
 		READ {
@@ -179,6 +197,8 @@ STMT:
 		}
 	|
 		BLK {
+		  cout << "<STMT 6>" << endl;
+		  cout << "<\\STMT 6>" << endl;
 		}
 ;	
 STMT_RETURN: 
@@ -240,28 +260,29 @@ LVAL:
 		}
 ;
 CNTRL: 
-		If BEXP Then M STMT N Else M STMT {
-		  cout << "<CNTRL 1>" << endl;
-		  backpatch($2->trueList, $4->quad);
-		  backpatch($2->falseList, $8->quad);
-		  $$->nextList.insert($$->nextList.end(), $5->nextList.begin(), $5->nextList.end());
+		M_if_1 If BEXP Then M STMT N Else M STMT {
+		  //cout << "<CNTRL 1>" << endl;
+		  cout << yylineno << endl;
+		  backpatch($3->trueList, $5->quad);
+		  backpatch($3->falseList, $9->quad);
 		  $$->nextList.insert($$->nextList.end(), $6->nextList.begin(), $6->nextList.end());
-		  $$->nextList.insert($$->nextList.end(), $9->nextList.begin(), $9->nextList.end());
+		  $$->nextList.insert($$->nextList.end(), $7->nextList.begin(), $7->nextList.end());
+		  $$->nextList.insert($$->nextList.end(), $10->nextList.begin(), $10->nextList.end());
 		  cout << "<\\CNTRL 1>" << endl;
 		}
 	|
-		If BEXP Then M STMT N{
-		  cout << "<CNTRL 2>" << endl;
-		  backpatch($2->trueList, $4->quad);
-		  $$->nextList.insert($$->nextList.end(), $2->falseList.begin(), $2->falseList.end());
-		  $$->nextList.insert($$->nextList.end(), $5->nextList.begin(), $5->nextList.end());
+		M_if_2 If BEXP Then M STMT N{
+		  //cout << "<CNTRL 2>" << endl;
+		  backpatch($3->trueList, $5->quad);
+		  $$->nextList.insert($$->nextList.end(), $3->falseList.begin(), $3->falseList.end());
+		  $$->nextList.insert($$->nextList.end(), $6->nextList.begin(), $6->nextList.end());
 		  cout << "<\\CNTRL 2>" << endl;
 		}
 	|
-		While M BEXP Do M STMT {
-		  cout << "<CNTRL 3>" << endl;
-		  backpatch($3->trueList, $5->quad);
-		  backpatch($5->nextList, $2->quad);
+		M_while While M BEXP Do M STMT {
+		  //cout << "<CNTRL 3>" << endl;
+		  backpatch($4->trueList, $6->quad);
+		  backpatch($6->nextList, $3->quad);
 		  $$->nextList.insert($$->nextList.end(), $3->falseList.begin(), $3->falseList.end());
 		  emit((string)"UJUMP " + INT2STR($2->quad));
 		  cout << "<\\CNTRL 3>" << endl;
@@ -534,11 +555,16 @@ CALL_ARGS:
 		CALL_ARGS ',' EXP {
 		}
 ;
-	
-%%
 
-extern char* yytext;
-extern int yylineno;
+M_program:      /*epsilon*/ {cout << "<PROGRAM>" << endl;};
+M_main:         /*epsilon*/ {cout << "<MAIN_FUNCTION>" << endl;};
+M_blk:          /*epsilon*/ {cout << "<BLK>" << endl;};
+M_if_1:         /*epsilon*/ {cout << "<CNTRL 2>" << endl;};
+M_if_2:         /*epsilon*/ {cout << "<CNTRL 1>" << endl;};
+M_while:        /*epsilon*/ {cout << "<CNTRL 3>" << endl;};
+M_list:         /*epsilon*/ {cout << "<LIST>" << endl;};
+
+%%
 
 void yyerror (char const *err){
    printf("Syntax error: '%s' in line number %d\n", yytext, yylineno);

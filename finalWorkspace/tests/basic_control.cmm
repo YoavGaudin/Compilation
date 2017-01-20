@@ -1,8 +1,8 @@
 main
 var a:integer;
 {
-   if 7 < 77 then 
+   if 7 < 77 then {
       	a = 1;
-   else 
+   } else 
       	a = 0;
 }

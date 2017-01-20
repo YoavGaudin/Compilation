@@ -1,0 +1,27 @@
+main
+var a:integer;
+var b:integer;
+var c:integer;
+var d:integer;
+{
+a := 0;
+b := 1;
+c := 2;
+d := 3;
+
+  if a < b then {
+    if b < c then {
+      a := a + 100;
+      b := b + 100;
+      if (a > b) then {
+		      c := c +
+      }
+    } else {
+      c := c + 100;
+      d := d + 100;
+    }
+  }
+  a = 1;
+  else 
+    a = 0;
+}

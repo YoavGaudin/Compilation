@@ -71,10 +71,12 @@
   using namespace std;
   
   int yylex (void);
+  extern char* yytext;
+  extern int yylineno;
   void yyerror (char const *);
   void semanticError(string s);
 
-#line 78 "parser.tab.cpp" /* yacc.c:339  */
+#line 80 "parser.tab.cpp" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -153,7 +155,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 157 "parser.tab.cpp" /* yacc.c:358  */
+#line 159 "parser.tab.cpp" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -395,16 +397,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  3
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   171
+#define YYLAST   181
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  37
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  29
+#define YYNNTS  38
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  64
+#define YYNRULES  73
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  140
+#define YYNSTATES  156
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -422,15 +424,15 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-      33,    36,     2,     2,    21,     2,     2,     2,     2,     2,
+      36,    33,     2,     2,    21,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,    23,    22,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,    31,     2,    34,     2,     2,     2,     2,     2,     2,
+       2,    34,     2,    31,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,    32,     2,    35,     2,     2,     2,     2,
+       2,     2,     2,    35,     2,    32,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -453,13 +455,14 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    33,    33,    37,    41,    44,    53,    60,    63,    67,
-      70,    75,    80,    80,    87,    90,    98,   106,   109,   117,
-     125,   133,   144,   153,   156,   160,   163,   166,   169,   172,
-     175,   178,   181,   185,   189,   192,   196,   200,   234,   238,
-     243,   253,   261,   271,   280,   289,   344,   350,   358,   364,
-     372,   391,   409,   416,   438,   473,   479,   494,   501,   516,
-     520,   524,   528,   531,   534
+       0,    37,    37,    42,    46,    49,    58,    65,    68,    72,
+      75,    80,    85,    85,    96,    99,   102,    99,   110,   118,
+     124,   132,   140,   148,   159,   168,   171,   175,   179,   182,
+     185,   190,   193,   196,   199,   205,   209,   212,   216,   220,
+     254,   258,   263,   274,   282,   292,   301,   310,   365,   371,
+     379,   385,   393,   412,   430,   437,   459,   494,   500,   515,
+     522,   537,   541,   545,   549,   552,   555,   559,   560,   561,
+     562,   563,   564,   565
 };
 #endif
 
@@ -471,12 +474,13 @@ static const char *const yytname[] =
   "$end", "error", "$undefined", "NUM", "Defstruct", "Extern", "Main",
   "Var", "Integer", "Real", "If", "Then", "While", "Do", "Return", "Write",
   "Read", "Call", "Else", "ID", "STRING", "','", "';'", "':'", "ASSIGN",
-  "OR_OP", "AND_OP", "REL_OP", "ADD_OP", "MUL_OP", "NOT_OP", "'['", "'{'",
-  "'('", "']'", "'}'", "')'", "$accept", "PROGRAM", "TDEFS", "FDEFS",
-  "FUNC_ARGLIST_FULL", "FUNC_ARGLIST", "MAIN_FUNCTION", "@1", "BLK",
-  "DECLARATIONS", "DECLARLIST", "DCL", "TYPE", "LIST", "STMT",
+  "OR_OP", "AND_OP", "REL_OP", "ADD_OP", "MUL_OP", "NOT_OP", "']'", "'}'",
+  "')'", "'['", "'{'", "'('", "$accept", "PROGRAM", "TDEFS", "FDEFS",
+  "FUNC_ARGLIST_FULL", "FUNC_ARGLIST", "MAIN_FUNCTION", "$@1", "BLK", "@2",
+  "$@3", "DECLARATIONS", "DECLARLIST", "DCL", "TYPE", "LIST", "STMT",
   "STMT_RETURN", "WRITE", "READ", "ASSN", "LVAL", "CNTRL", "BEXP", "M",
-  "N", "EXP", "STREF", "CALL", "CALL_ARGS_FULL", "CALL_ARGS", YY_NULLPTR
+  "N", "EXP", "STREF", "CALL", "CALL_ARGS_FULL", "CALL_ARGS", "M_program",
+  "M_main", "M_blk", "M_if_1", "M_if_2", "M_while", "M_list", YY_NULLPTR
 };
 #endif
 
@@ -488,16 +492,16 @@ static const yytype_uint16 yytoknum[] =
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
      275,    44,    59,    58,   276,   277,   278,   279,   280,   281,
-     282,    91,   123,    40,    93,   125,    41
+     282,    93,   125,    41,    91,   123,    40
 };
 # endif
 
-#define YYPACT_NINF -100
+#define YYPACT_NINF -110
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-100)))
+  (!!((Yystate) == (-110)))
 
-#define YYTABLE_NINF -1
+#define YYTABLE_NINF -73
 
 #define yytable_value_is_error(Yytable_value) \
   0
@@ -506,20 +510,22 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-    -100,    14,    45,  -100,     5,   125,    36,    37,  -100,  -100,
-    -100,  -100,    43,    46,    -3,    50,    60,    77,    59,    36,
-     102,    82,    95,  -100,    73,    36,  -100,   106,    36,  -100,
-    -100,  -100,   110,  -100,    36,    36,  -100,   103,   119,  -100,
-    -100,   105,    83,    77,    36,   120,    41,  -100,   111,   112,
-     113,   116,  -100,  -100,  -100,  -100,  -100,  -100,  -100,   124,
-    -100,   118,  -100,  -100,  -100,  -100,   131,   116,    41,    21,
-      57,   108,   118,  -100,    41,    40,    61,   132,   133,    40,
-     134,   121,  -100,   107,    88,   -10,  -100,  -100,  -100,    40,
-      40,    40,    62,    33,   -16,   122,    87,   123,   126,   100,
-     127,    40,    40,  -100,  -100,    93,    41,    41,    97,   128,
-    -100,  -100,    91,   140,   141,   142,   143,  -100,  -100,  -100,
-      97,   130,   135,  -100,  -100,   129,  -100,    93,  -100,  -100,
-    -100,  -100,  -100,    40,   149,  -100,    97,  -100,    93,  -100
+    -110,     5,  -110,  -110,     8,   -20,   126,     3,   131,  -110,
+    -110,  -110,    19,    35,    98,     4,    25,    31,    30,  -110,
+       3,    55,    56,    57,  -110,    48,     3,  -110,  -110,  -110,
+    -110,    73,  -110,     3,    68,    86,  -110,  -110,   120,  -110,
+      96,  -110,     3,     3,  -110,   111,  -110,  -110,     3,   106,
+    -110,  -110,   110,   112,  -110,  -110,    94,   107,   113,   114,
+     117,  -110,  -110,  -110,  -110,  -110,  -110,   121,  -110,   118,
+     136,   137,   141,     1,    10,   129,   135,     1,   138,    64,
+      64,  -110,  -110,   139,   117,    53,    89,   118,  -110,   122,
+      95,   123,   128,    83,   130,    64,    23,    71,   109,    77,
+      64,   124,   132,    97,     1,     1,   140,   142,   144,   145,
+    -110,  -110,  -110,  -110,    66,    87,  -110,  -110,  -110,     1,
+    -110,    60,     1,     1,  -110,   134,  -110,  -110,  -110,  -110,
+    -110,  -110,    94,    64,    64,    40,    94,  -110,    40,   143,
+     147,  -110,  -110,   146,  -110,  -110,    94,  -110,     1,   151,
+    -110,  -110,    40,  -110,    94,  -110
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -527,127 +533,137 @@ static const yytype_int16 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       4,     0,     7,     1,     0,    14,     0,     0,    12,    23,
-      24,     2,     0,     0,     0,     0,     0,    17,     0,     0,
-       0,     0,     0,    19,     0,     0,    13,     0,     9,    22,
-      21,    20,     0,    18,     9,    16,    26,     0,     8,    11,
-       3,     0,    17,    17,     0,     0,     0,    48,     0,     0,
-       0,    38,    15,    32,    25,    31,    30,    29,    27,     0,
-      28,    39,     5,    10,     6,    56,     0,    54,     0,     0,
-       0,     0,    55,    57,     0,     0,     0,     0,     0,     0,
-       0,     0,    46,     0,     0,     0,    48,    48,    48,     0,
+      67,     0,     4,     1,     7,     0,    14,     0,     0,    25,
+      26,     2,     0,     0,     0,     0,     0,     0,     0,    12,
+       0,     0,     0,     0,    21,     0,     9,    69,    24,    23,
+      22,     0,    20,     9,     0,     8,    11,    13,    19,     3,
+       0,    69,     0,     0,    15,     0,     5,    10,    18,     0,
+       6,    16,    73,     0,    28,    17,    69,     0,     0,     0,
+      40,    34,    27,    33,    32,    31,    29,     0,    30,    41,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,    62,     0,    47,    52,    17,     0,     0,    45,    50,
-      51,    48,     0,     0,     0,     0,     0,    58,    37,    59,
-      63,     0,    61,    53,    49,    43,    44,    17,    33,    35,
-      34,    36,    60,     0,    41,    42,    64,    48,    17,    40
+       0,    50,    58,     0,    56,     0,     0,    57,    59,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+      60,    39,    61,    48,     0,     0,    50,    50,    50,     0,
+      50,     0,    64,     0,    54,    52,    53,    35,    37,    36,
+      38,    49,    69,     0,     0,    47,    69,    50,    65,     0,
+      63,    55,    51,    45,    46,    51,    69,    62,     0,     0,
+      43,    44,    66,    50,    69,    42
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
-    -100,  -100,  -100,  -100,   136,  -100,  -100,  -100,   -12,  -100,
-     144,    42,    84,  -100,   -99,  -100,  -100,  -100,  -100,    94,
-    -100,   -59,   -84,  -100,   -68,   -42,  -100,  -100,  -100
+    -110,  -110,  -110,  -110,   148,  -110,  -110,  -110,   -17,  -110,
+    -110,  -110,   127,    45,    37,   119,   -97,  -110,  -110,  -110,
+    -110,    99,  -110,   -79,  -109,    26,   -71,   -56,  -110,  -110,
+    -110,  -110,  -110,  -110,  -110,  -110,  -110,  -110
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int16 yydefgoto[] =
 {
-      -1,     1,     2,     5,    37,    38,    11,    17,    53,    27,
-      14,    15,    83,    42,    54,    55,    56,    57,    58,    59,
-      60,    70,    74,   134,    71,    72,    73,   121,   122
+      -1,     1,     4,     6,    34,    35,    11,    27,    61,    49,
+      52,    44,    15,    16,   102,    53,    62,    63,    64,    65,
+      66,    67,    68,    97,   100,   149,    98,    87,    88,   139,
+     140,     2,    13,    38,    70,    71,    72,    54
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
      positive, shift that token.  If negative, reduce the rule whose
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
-static const yytype_uint8 yytable[] =
+static const yytype_int16 yytable[] =
 {
-      61,    85,   105,   106,   107,    26,   124,    94,    96,    82,
-      84,    99,    90,    91,     3,    92,    13,    89,    90,    91,
-     113,   108,   109,   110,    65,   112,   104,   127,   135,     9,
-      10,    62,    21,   120,   123,    61,    65,     6,    66,   139,
-      67,     9,    10,    65,    65,     9,    10,   125,   126,     4,
-      66,    68,    67,   138,    69,    13,    22,    66,    66,    67,
-      67,    29,    18,    61,    65,   136,    93,    19,    86,    20,
-      39,    68,    23,    93,    69,   111,    39,    22,    66,    24,
-      67,    95,    87,    88,    25,    61,    63,    87,    88,    12,
-      25,    16,    28,    46,    93,    47,    61,    48,    49,    50,
-      25,    32,    51,    46,    31,    47,    34,    48,    49,    50,
-       9,    10,    51,    87,    88,    90,    91,    33,    52,    90,
-      91,    30,   118,   115,   103,    90,    91,   104,    90,    91,
-       7,     8,    40,     9,    10,    89,    90,    91,    36,    43,
-      44,    45,    64,   102,    75,    76,    77,    78,    79,    80,
-      81,    51,    98,   100,   101,    88,   133,    91,   114,   116,
-     117,   119,   128,   129,   130,   131,   132,   137,     0,    35,
-      41,    97
+      69,    99,    86,    90,    82,     3,    93,   132,   133,   134,
+      37,   136,     5,    82,   103,     7,   113,   114,    83,    69,
+      84,   121,    14,    14,    46,   115,    82,    83,   146,    84,
+      89,     9,    10,   125,   126,   142,    22,    85,    18,   145,
+      83,    19,    84,    12,   154,    17,    85,    24,   135,   151,
+      25,   138,   141,    95,   143,   144,    82,   155,    30,    96,
+      23,     9,    10,     9,    10,    28,    26,    82,   104,   105,
+      83,    36,    84,   137,    29,    31,    69,   152,    36,    32,
+      69,    83,   116,    84,    33,   117,   118,    47,   120,    85,
+      69,   117,   118,    23,    95,    39,   117,   118,    69,   131,
+      96,    41,   117,   118,   -70,   111,   -72,    42,    57,    58,
+      59,   104,   105,    60,   119,   104,   105,   104,   105,    20,
+     124,    21,   106,   104,   105,   104,   105,    43,   108,    45,
+     124,     8,   -68,    50,     9,    10,   119,   104,   105,     9,
+      10,    51,   -28,    73,    55,    77,    79,    80,    60,    74,
+      75,    76,    78,    81,    92,   107,   109,    94,   101,   110,
+     122,   112,   127,   105,   128,   123,   129,   130,   148,   153,
+      48,   150,   118,    56,    91,     0,   147,     0,     0,     0,
+       0,    40
 };
 
 static const yytype_int16 yycheck[] =
 {
-      42,    69,    86,    87,    88,    17,   105,    75,    76,    68,
-      69,    79,    28,    29,     0,    74,    19,    27,    28,    29,
-      36,    89,    90,    91,     3,    93,    36,   111,   127,     8,
-       9,    43,    35,   101,   102,    77,     3,    32,    17,   138,
-      19,     8,     9,     3,     3,     8,     9,   106,   107,     4,
-      17,    30,    19,   137,    33,    19,    14,    17,    17,    19,
-      19,    19,    19,   105,     3,   133,    33,    21,    11,    23,
-      28,    30,    22,    33,    33,    13,    34,    35,    17,    19,
-      19,    20,    25,    26,     7,   127,    44,    25,    26,     5,
-       7,     7,    33,    10,    33,    12,   138,    14,    15,    16,
-       7,    19,    19,    10,    20,    12,    33,    14,    15,    16,
-       8,     9,    19,    25,    26,    28,    29,    22,    35,    28,
-      29,    19,    22,    36,    36,    28,    29,    36,    28,    29,
-       5,     6,    22,     8,     9,    27,    28,    29,    32,    36,
-      21,    36,    22,    36,    33,    33,    33,    31,    24,    31,
-      19,    19,    19,    19,    33,    26,    21,    29,    36,    36,
-      34,    34,    22,    22,    22,    22,    36,    18,    -1,    25,
-      34,    77
+      56,    80,    73,    74,     3,     0,    77,   116,   117,   118,
+      27,   120,     4,     3,    85,    35,    95,    96,    17,    75,
+      19,   100,    19,    19,    41,    96,     3,    17,   137,    19,
+      20,     8,     9,   104,   105,   132,    32,    36,    19,   136,
+      17,     6,    19,     6,   153,     8,    36,    22,   119,   146,
+      19,   122,   123,    30,   133,   134,     3,   154,    21,    36,
+      15,     8,     9,     8,     9,    20,    36,     3,    28,    29,
+      17,    26,    19,    13,    19,    19,   132,   148,    33,    22,
+     136,    17,    11,    19,    36,    25,    26,    42,    11,    36,
+     146,    25,    26,    48,    30,    22,    25,    26,   154,    33,
+      36,    33,    25,    26,    10,    22,    12,    21,    14,    15,
+      16,    28,    29,    19,    27,    28,    29,    28,    29,    21,
+      33,    23,    33,    28,    29,    28,    29,     7,    33,    33,
+      33,     5,     6,    22,     8,     9,    27,    28,    29,     8,
+       9,    35,    32,    36,    32,    24,    10,    10,    19,    36,
+      36,    34,    34,    12,    19,    33,    33,    19,    19,    31,
+      36,    31,    22,    29,    22,    33,    22,    22,    21,    18,
+      43,   145,    26,    54,    75,    -1,    33,    -1,    -1,    -1,
+      -1,    33
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    38,    39,     0,     4,    40,    32,     5,     6,     8,
-       9,    43,    49,    19,    47,    48,    49,    44,    19,    21,
-      23,    35,    48,    22,    19,     7,    45,    46,    33,    48,
-      19,    49,    19,    22,    33,    47,    32,    41,    42,    48,
-      22,    41,    50,    36,    21,    36,    10,    12,    14,    15,
-      16,    19,    35,    45,    51,    52,    53,    54,    55,    56,
-      57,    62,    45,    48,    22,     3,    17,    19,    30,    33,
-      58,    61,    62,    63,    59,    33,    33,    33,    31,    24,
-      31,    19,    58,    49,    58,    61,    11,    25,    26,    27,
-      28,    29,    58,    33,    61,    20,    61,    56,    19,    61,
-      19,    33,    36,    36,    36,    59,    59,    59,    61,    61,
-      61,    13,    61,    36,    36,    36,    36,    34,    22,    34,
-      61,    64,    65,    61,    51,    58,    58,    59,    22,    22,
-      22,    22,    36,    21,    60,    51,    61,    18,    59,    51
+       0,    38,    68,     0,    39,     4,    40,    35,     5,     8,
+       9,    43,    51,    69,    19,    49,    50,    51,    19,     6,
+      21,    23,    32,    50,    22,    19,    36,    44,    50,    19,
+      51,    19,    22,    36,    41,    42,    50,    45,    70,    22,
+      41,    33,    21,     7,    48,    33,    45,    50,    49,    46,
+      22,    35,    47,    52,    74,    32,    52,    14,    15,    16,
+      19,    45,    53,    54,    55,    56,    57,    58,    59,    64,
+      71,    72,    73,    36,    36,    36,    34,    24,    34,    10,
+      10,    12,     3,    17,    19,    36,    63,    64,    65,    20,
+      63,    58,    19,    63,    19,    30,    36,    60,    63,    60,
+      61,    19,    51,    63,    28,    29,    33,    33,    33,    33,
+      31,    22,    31,    60,    60,    63,    11,    25,    26,    27,
+      11,    60,    36,    33,    33,    63,    63,    22,    22,    22,
+      22,    33,    61,    61,    61,    63,    61,    13,    63,    66,
+      67,    63,    53,    60,    60,    53,    61,    33,    21,    62,
+      62,    53,    63,    18,    61,    53
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
        0,    37,    38,    39,    39,    40,    40,    40,    41,    41,
-      42,    42,    44,    43,    43,    45,    46,    46,    47,    47,
-      48,    48,    48,    49,    49,    50,    50,    51,    51,    51,
-      51,    51,    51,    52,    53,    53,    54,    55,    56,    56,
-      57,    57,    57,    58,    58,    58,    58,    58,    59,    60,
-      61,    61,    61,    61,    61,    61,    61,    61,    62,    62,
-      63,    64,    64,    65,    65
+      42,    42,    44,    43,    43,    46,    47,    45,    48,    48,
+      49,    49,    50,    50,    50,    51,    51,    52,    52,    53,
+      53,    53,    53,    53,    53,    54,    55,    55,    56,    57,
+      58,    58,    59,    59,    59,    60,    60,    60,    60,    60,
+      61,    62,    63,    63,    63,    63,    63,    63,    63,    63,
+      64,    64,    65,    66,    66,    67,    67,    68,    69,    70,
+      71,    72,    73,    74
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     3,     7,     0,     7,     8,     0,     1,     0,
-       3,     1,     0,     3,     0,     4,     2,     0,     3,     2,
-       3,     3,     3,     1,     1,     2,     0,     1,     1,     1,
-       1,     1,     1,     5,     5,     5,     5,     4,     1,     1,
-       9,     6,     6,     4,     4,     3,     2,     3,     0,     0,
-       3,     3,     3,     4,     1,     1,     1,     1,     4,     4,
-       5,     1,     0,     1,     3
+       0,     2,     4,     7,     0,     7,     8,     0,     1,     0,
+       3,     1,     0,     4,     0,     0,     0,     7,     2,     0,
+       3,     2,     3,     3,     3,     1,     1,     3,     0,     1,
+       1,     1,     1,     1,     1,     5,     5,     5,     5,     4,
+       1,     1,    10,     7,     7,     4,     4,     3,     2,     3,
+       0,     0,     3,     3,     3,     4,     1,     1,     1,     1,
+       4,     4,     5,     1,     0,     1,     3,     0,     0,     0,
+       0,     0,     0,     0
 };
 
 
@@ -1324,28 +1340,29 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 33 "parser.ypp" /* yacc.c:1646  */
+#line 37 "parser.ypp" /* yacc.c:1646  */
     {
+		  cout << "<\\PROGRAM>" << endl;
 		}
-#line 1331 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1348 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 37 "parser.ypp" /* yacc.c:1646  */
+#line 42 "parser.ypp" /* yacc.c:1646  */
     {
 		  addStructToSymbolTable((yyvsp[-1])->tokenValue, (yyvsp[-3])->declarationList);
 		}
-#line 1339 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1356 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 41 "parser.ypp" /* yacc.c:1646  */
+#line 46 "parser.ypp" /* yacc.c:1646  */
     { cout << "TDEFS to epsilon" << endl; }
-#line 1345 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1362 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 44 "parser.ypp" /* yacc.c:1646  */
+#line 49 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<FDEFS 1>" << endl;
 		  cout << "\t" << (yyvsp[-4])->tokenValue << endl;
@@ -1354,93 +1371,112 @@ yyreduce:
 		  funcSymbols.insert(std::pair<string, Function>((yyvsp[-4])->tokenValue, *func));
 		  cout << "<\\FDEFS 1>" << endl;
 		}
-#line 1358 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1375 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 53 "parser.ypp" /* yacc.c:1646  */
+#line 58 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<FDEFS 2>" << endl;
 		  Function* func = new Function((yyvsp[-4])->tokenValue, (yyvsp[-2])->argsList);
 		  funcSymbols.insert(std::pair<string, Function>((yyvsp[-4])->tokenValue, *func));
 		  cout << "<\\FDEFS 2>" << endl;
 		}
-#line 1369 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1386 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 60 "parser.ypp" /* yacc.c:1646  */
+#line 65 "parser.ypp" /* yacc.c:1646  */
     { cout << "FDEFS to epsilon" << endl;}
-#line 1375 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1392 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 63 "parser.ypp" /* yacc.c:1646  */
+#line 68 "parser.ypp" /* yacc.c:1646  */
     {
 		  (yyval)->argsList = (yyvsp[0])->argsList;
 		}
-#line 1383 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1400 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 67 "parser.ypp" /* yacc.c:1646  */
+#line 72 "parser.ypp" /* yacc.c:1646  */
     {}
-#line 1389 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1406 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 70 "parser.ypp" /* yacc.c:1646  */
+#line 75 "parser.ypp" /* yacc.c:1646  */
     {
 		  createArgumentsFromDCL((yyvsp[0]), (yyvsp[-2]));
 		  (yyval)->argsList = (yyvsp[-2])->argsList;
 		}
-#line 1398 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1415 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 75 "parser.ypp" /* yacc.c:1646  */
+#line 80 "parser.ypp" /* yacc.c:1646  */
     {
 		  createArgumentsFromDCL((yyvsp[0]), (yyval));
-		}
-#line 1406 "parser.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 12:
-#line 80 "parser.ypp" /* yacc.c:1646  */
-    {currFunction = new Function("main"); currBlock = currFunction;}
-#line 1412 "parser.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 13:
-#line 80 "parser.ypp" /* yacc.c:1646  */
-    {
-			Function* mainFunc = currFunction;
-			mainFunc->insertSymbolTable((yyvsp[-1])->declarationList);
-			funcSymbols.insert(std::pair<string, Function>("main", *mainFunc));
-			cout << "<\\MAIN_FUNCTION>" <<endl;
 		}
 #line 1423 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
+  case 12:
+#line 85 "parser.ypp" /* yacc.c:1646  */
+    {
+		  //cout << "<MAIN_FUNCTION>" <<endl;
+		  currFunction = new Function("main");
+		  currBlock = currFunction;
+		}
+#line 1433 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 13:
+#line 89 "parser.ypp" /* yacc.c:1646  */
+    {
+		  Function* mainFunc = currFunction;
+		  mainFunc->insertSymbolTable((yyvsp[0])->declarationList);
+		  funcSymbols.insert(std::pair<string, Function>("main", *mainFunc));
+		  cout << "<\\MAIN_FUNCTION>" <<endl;
+		}
+#line 1444 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
   case 14:
-#line 87 "parser.ypp" /* yacc.c:1646  */
-    {}
-#line 1429 "parser.tab.cpp" /* yacc.c:1646  */
+#line 96 "parser.ypp" /* yacc.c:1646  */
+    {cout << "MAIN_FUNCTION to epsilon" << endl;}
+#line 1450 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 90 "parser.ypp" /* yacc.c:1646  */
+#line 99 "parser.ypp" /* yacc.c:1646  */
     {
-		  cout << "<BLK>" << endl;
-		  (yyval)->declarationList = (yyvsp[-3])->declarationList;
-		  (yyvsp[-1])->declarationList = (yyvsp[-3])->declarationList;
-		  cout << "<\\BLK>" << endl;
+		  cout << "*******************" << endl;
+		  (yyval)->declarationList = (yyvsp[0])->declarationList;
 		}
-#line 1440 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1459 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 98 "parser.ypp" /* yacc.c:1646  */
+#line 102 "parser.ypp" /* yacc.c:1646  */
+    {
+		  cout << "**********before LIST************" << endl;
+		}
+#line 1467 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 17:
+#line 104 "parser.ypp" /* yacc.c:1646  */
+    {
+		  (yyvsp[-1])->declarationList = (yyvsp[-5])->declarationList;
+		  cout << "<\\BLK>" << endl;
+		}
+#line 1476 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 18:
+#line 110 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<DECLARATIONS>" << endl;
 		  // add declerations to current block
@@ -1448,17 +1484,20 @@ yyreduce:
 		  (yyval)->declarationList = (yyvsp[0])->declarationList;
 		  cout << "<\\DECLARATIONS>" << endl;
 		}
-#line 1452 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1488 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 17:
-#line 106 "parser.ypp" /* yacc.c:1646  */
-    { cout << "DECLARATIONS to e" << endl; }
-#line 1458 "parser.tab.cpp" /* yacc.c:1646  */
+  case 19:
+#line 118 "parser.ypp" /* yacc.c:1646  */
+    {
+		  (yyval)->declarationList.insert(std::pair<string, Variable>("XXX", *(new Variable("",""))));
+		  cout << "DECLARATIONS to epsilon" << endl;
+		}
+#line 1497 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 18:
-#line 109 "parser.ypp" /* yacc.c:1646  */
+  case 20:
+#line 124 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<DECLARELIST 1>" << endl;
 		  cout << "\t" << (yyvsp[-1])->dcl_type << endl;
@@ -1466,22 +1505,22 @@ yyreduce:
 		  (yyval)->declarationList = (yyvsp[-2])->declarationList;
 		  cout << "<\\DECLARELIST 1>" << endl;
 		}
-#line 1470 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1509 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 19:
-#line 117 "parser.ypp" /* yacc.c:1646  */
+  case 21:
+#line 132 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<DECLARELIST 2>" << endl;
 		  cout << "\t" << (yyvsp[-1])->dcl_type << endl;
 		  createVariablesFromDCL((yyvsp[-1]), (yyval));
 		  cout << "<\\DECLARELIST 2>" << endl;
 		}
-#line 1481 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1520 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 20:
-#line 125 "parser.ypp" /* yacc.c:1646  */
+  case 22:
+#line 140 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<DCL 1>" << endl;
 		  cout << "\tvariable "+ (yyvsp[-2])->tokenValue +" of type "+ (yyvsp[0])->tokenValue +" declared" << endl;
@@ -1489,11 +1528,11 @@ yyreduce:
 		  ((yyval)->dcl_ids).push_front((yyvsp[-2])->tokenValue);
 		  cout << "<\\DCL 1>" << endl;
 		}
-#line 1493 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1532 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 21:
-#line 133 "parser.ypp" /* yacc.c:1646  */
+  case 23:
+#line 148 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<DCL 2>" << endl;
 		  if(validateStructName((yyvsp[0])->tokenValue) == false){
@@ -1504,11 +1543,11 @@ yyreduce:
 		  //The 2nd ID might be the name of a custom typedef
 		  cout << "<\\DCL 2>" << endl;
 		}
-#line 1508 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1547 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 22:
-#line 144 "parser.ypp" /* yacc.c:1646  */
+  case 24:
+#line 159 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<DCL 3>" << endl;
 		  ((yyvsp[0])->dcl_ids).push_front((yyvsp[-2])->tokenValue);
@@ -1516,108 +1555,113 @@ yyreduce:
 		  (yyval)->dcl_type = (yyvsp[0])->dcl_type;
 		  cout << "<\\DCL 3>" << endl;
 		}
-#line 1520 "parser.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 23:
-#line 153 "parser.ypp" /* yacc.c:1646  */
-    { 
-		}
-#line 1527 "parser.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 24:
-#line 156 "parser.ypp" /* yacc.c:1646  */
-    {
-		}
-#line 1534 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1559 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 160 "parser.ypp" /* yacc.c:1646  */
-    {
+#line 168 "parser.ypp" /* yacc.c:1646  */
+    { 
 		}
-#line 1541 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1566 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 163 "parser.ypp" /* yacc.c:1646  */
-    {}
-#line 1547 "parser.tab.cpp" /* yacc.c:1646  */
+#line 171 "parser.ypp" /* yacc.c:1646  */
+    {
+		}
+#line 1573 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 166 "parser.ypp" /* yacc.c:1646  */
+#line 175 "parser.ypp" /* yacc.c:1646  */
     {
+		  cout << "<\\LIST>" << endl;
 		}
-#line 1554 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1581 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 169 "parser.ypp" /* yacc.c:1646  */
-    {
-		}
-#line 1561 "parser.tab.cpp" /* yacc.c:1646  */
+#line 179 "parser.ypp" /* yacc.c:1646  */
+    {}
+#line 1587 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 172 "parser.ypp" /* yacc.c:1646  */
+#line 182 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 1568 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1594 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 175 "parser.ypp" /* yacc.c:1646  */
-    {
-		}
-#line 1575 "parser.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 31:
-#line 178 "parser.ypp" /* yacc.c:1646  */
-    {
-		}
-#line 1582 "parser.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 32:
-#line 181 "parser.ypp" /* yacc.c:1646  */
-    {
-		}
-#line 1589 "parser.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 33:
 #line 185 "parser.ypp" /* yacc.c:1646  */
     {
-		}
-#line 1596 "parser.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 34:
-#line 189 "parser.ypp" /* yacc.c:1646  */
-    {
+		  cout << "<STMT 2>" << endl;
+		  cout << "<\\STMT 2>" << endl;
 		}
 #line 1603 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 35:
-#line 192 "parser.ypp" /* yacc.c:1646  */
+  case 31:
+#line 190 "parser.ypp" /* yacc.c:1646  */
     {
 		}
 #line 1610 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 36:
-#line 196 "parser.ypp" /* yacc.c:1646  */
+  case 32:
+#line 193 "parser.ypp" /* yacc.c:1646  */
     {
 		}
 #line 1617 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
+  case 33:
+#line 196 "parser.ypp" /* yacc.c:1646  */
+    {
+		}
+#line 1624 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 34:
+#line 199 "parser.ypp" /* yacc.c:1646  */
+    {
+		  cout << "<STMT 6>" << endl;
+		  cout << "<\\STMT 6>" << endl;
+		}
+#line 1633 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 35:
+#line 205 "parser.ypp" /* yacc.c:1646  */
+    {
+		}
+#line 1640 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 36:
+#line 209 "parser.ypp" /* yacc.c:1646  */
+    {
+		}
+#line 1647 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
   case 37:
-#line 200 "parser.ypp" /* yacc.c:1646  */
+#line 212 "parser.ypp" /* yacc.c:1646  */
+    {
+		}
+#line 1654 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 38:
+#line 216 "parser.ypp" /* yacc.c:1646  */
+    {
+		}
+#line 1661 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 39:
+#line 220 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<ASSN>" << endl;
 		  // get LVAL's variable and check it was declared
@@ -1650,29 +1694,30 @@ yyreduce:
 
 		  cout << "<\\ASSN>" << endl;
 		}
-#line 1654 "parser.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 38:
-#line 234 "parser.ypp" /* yacc.c:1646  */
-    {
-		  (yyval)->variableName = (yyvsp[0])->tokenValue;
-		}
-#line 1662 "parser.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 39:
-#line 238 "parser.ypp" /* yacc.c:1646  */
-    {
-		  (yyval)->variableName = (yyvsp[0])->tokenValue;
-		}
-#line 1670 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1698 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 243 "parser.ypp" /* yacc.c:1646  */
+#line 254 "parser.ypp" /* yacc.c:1646  */
     {
-		  cout << "<CNTRL 1>" << endl;
+		  (yyval)->variableName = (yyvsp[0])->tokenValue;
+		}
+#line 1706 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 41:
+#line 258 "parser.ypp" /* yacc.c:1646  */
+    {
+		  (yyval)->variableName = (yyvsp[0])->tokenValue;
+		}
+#line 1714 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 42:
+#line 263 "parser.ypp" /* yacc.c:1646  */
+    {
+		  //cout << "<CNTRL 1>" << endl;
+		  cout << yylineno << endl;
 		  backpatch((yyvsp[-7])->trueList, (yyvsp[-5])->quad);
 		  backpatch((yyvsp[-7])->falseList, (yyvsp[-1])->quad);
 		  (yyval)->nextList.insert((yyval)->nextList.end(), (yyvsp[-4])->nextList.begin(), (yyvsp[-4])->nextList.end());
@@ -1680,36 +1725,36 @@ yyreduce:
 		  (yyval)->nextList.insert((yyval)->nextList.end(), (yyvsp[0])->nextList.begin(), (yyvsp[0])->nextList.end());
 		  cout << "<\\CNTRL 1>" << endl;
 		}
-#line 1684 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1729 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 41:
-#line 253 "parser.ypp" /* yacc.c:1646  */
+  case 43:
+#line 274 "parser.ypp" /* yacc.c:1646  */
     {
-		  cout << "<CNTRL 2>" << endl;
+		  //cout << "<CNTRL 2>" << endl;
 		  backpatch((yyvsp[-4])->trueList, (yyvsp[-2])->quad);
 		  (yyval)->nextList.insert((yyval)->nextList.end(), (yyvsp[-4])->falseList.begin(), (yyvsp[-4])->falseList.end());
 		  (yyval)->nextList.insert((yyval)->nextList.end(), (yyvsp[-1])->nextList.begin(), (yyvsp[-1])->nextList.end());
 		  cout << "<\\CNTRL 2>" << endl;
 		}
-#line 1696 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1741 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 42:
-#line 261 "parser.ypp" /* yacc.c:1646  */
+  case 44:
+#line 282 "parser.ypp" /* yacc.c:1646  */
     {
-		  cout << "<CNTRL 3>" << endl;
+		  //cout << "<CNTRL 3>" << endl;
 		  backpatch((yyvsp[-3])->trueList, (yyvsp[-1])->quad);
 		  backpatch((yyvsp[-1])->nextList, (yyvsp[-4])->quad);
-		  (yyval)->nextList.insert((yyval)->nextList.end(), (yyvsp[-3])->falseList.begin(), (yyvsp[-3])->falseList.end());
-		  emit((string)"UJUMP " + INT2STR((yyvsp[-4])->quad));
+		  (yyval)->nextList.insert((yyval)->nextList.end(), (yyvsp[-4])->falseList.begin(), (yyvsp[-4])->falseList.end());
+		  emit((string)"UJUMP " + INT2STR((yyvsp[-5])->quad));
 		  cout << "<\\CNTRL 3>" << endl;
 		}
-#line 1709 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1754 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 43:
-#line 271 "parser.ypp" /* yacc.c:1646  */
+  case 45:
+#line 292 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<BEXP 1>" << endl;
 		  backpatch((yyvsp[-3])->falseList, (yyvsp[-1])->quad);
@@ -1718,11 +1763,11 @@ yyreduce:
 		  (yyval)->falseList.insert((yyval)->falseList.end(), (yyvsp[0])->falseList.begin(), (yyvsp[0])->falseList.end());
 		  cout << "<\\BEXP 1>" << endl;
 		}
-#line 1722 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1767 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 44:
-#line 280 "parser.ypp" /* yacc.c:1646  */
+  case 46:
+#line 301 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<BEXP 2>" << endl;
 		  backpatch((yyvsp[-3])->trueList, (yyvsp[-1])->quad);
@@ -1731,11 +1776,11 @@ yyreduce:
 		  (yyval)->trueList.insert((yyval)->trueList.end(), (yyvsp[0])->trueList.begin(), (yyvsp[0])->trueList.end());
 		  cout << "<\\BEXP 2>" << endl;
 		}
-#line 1735 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1780 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 45:
-#line 289 "parser.ypp" /* yacc.c:1646  */
+  case 47:
+#line 310 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<BEXP 3>" << endl;
 		  string tempReg = getIntReg();
@@ -1789,51 +1834,51 @@ yyreduce:
 		  emit((string)"UJUMP " + "___");
 		  cout << "<\\BEXP 3>" << endl;
 		}
-#line 1793 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1838 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 46:
-#line 344 "parser.ypp" /* yacc.c:1646  */
+  case 48:
+#line 365 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<BEXP 4>" << endl;
 		  (yyval)->trueList.swap((yyval)->falseList);
 		  cout << "<\\BEXP 4>" << endl;
 		}
-#line 1803 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1848 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 47:
-#line 350 "parser.ypp" /* yacc.c:1646  */
+  case 49:
+#line 371 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<BEXP 5>" << endl;
 		  (yyval)->trueList = (yyvsp[-1])->trueList;
 		  (yyval)->falseList = (yyvsp[-1])->falseList;
 		  cout << "<\\BEXP 5>" << endl;
 		}
-#line 1814 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1859 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 48:
-#line 358 "parser.ypp" /* yacc.c:1646  */
+  case 50:
+#line 379 "parser.ypp" /* yacc.c:1646  */
     {
   		  cout << "<M>" << endl;
                   (yyval)->quad = nextquad();
                 }
-#line 1823 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1868 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 49:
-#line 364 "parser.ypp" /* yacc.c:1646  */
+  case 51:
+#line 385 "parser.ypp" /* yacc.c:1646  */
     {
   		  cout << "<N>" << endl;
                   (yyval)->nextList.push_back(nextquad());
 		  emit((string)"UJUMP" + " ___");
                 }
-#line 1833 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1878 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 50:
-#line 372 "parser.ypp" /* yacc.c:1646  */
+  case 52:
+#line 393 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<EXP 1>" << endl;
 		  if(!isPrimitive((yyvsp[-2])->type) || !isPrimitive((yyvsp[0])->type)) {
@@ -1852,11 +1897,11 @@ yyreduce:
 		  }
 		  cout << "<\\EXP 1>" << endl;
 		}
-#line 1856 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1901 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 51:
-#line 391 "parser.ypp" /* yacc.c:1646  */
+  case 53:
+#line 412 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<EXP 2>" << endl;
 		  if(!isPrimitive((yyvsp[-2])->type) || !isPrimitive((yyvsp[0])->type)) {
@@ -1874,22 +1919,22 @@ yyreduce:
 		  }
 		  cout << "<\\EXP 2>" << endl;
 		}
-#line 1878 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1923 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 52:
-#line 409 "parser.ypp" /* yacc.c:1646  */
+  case 54:
+#line 430 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<EXP 3>" << endl;
 		  (yyval)->place = (yyvsp[-1])->place;
 		  (yyval)->type = (yyvsp[-1])->type;
 		  cout << "<\\EXP 3>" << endl;
 		}
-#line 1889 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1934 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 53:
-#line 416 "parser.ypp" /* yacc.c:1646  */
+  case 55:
+#line 437 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<EXP 4>" << endl;
 		  if((yyvsp[-2])->tokenValue == "Integer") {
@@ -1911,11 +1956,11 @@ yyreduce:
 		  }
 		  cout << "<\\EXP 4>" << endl;
 		}
-#line 1915 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1960 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 54:
-#line 438 "parser.ypp" /* yacc.c:1646  */
+  case 56:
+#line 459 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<EXP 5>" << endl;
 		  // make sure ID is a variable in current scope
@@ -1950,21 +1995,21 @@ yyreduce:
 		  }
 		  cout << "<\\EXP 5>" << endl;
 		}
-#line 1954 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1999 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 55:
-#line 473 "parser.ypp" /* yacc.c:1646  */
+  case 57:
+#line 494 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<EXP 6>" << endl;
 		  
 		  cout << "<\\EXP 6>" << endl;
 		}
-#line 1964 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2009 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 56:
-#line 479 "parser.ypp" /* yacc.c:1646  */
+  case 58:
+#line 500 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<EXP 7>" << endl;
 		  if(isInteger((yyvsp[0])->tokenValue)) {
@@ -1979,21 +2024,21 @@ yyreduce:
 		  }
 		  cout << "<\\EXP 7>" << endl;
 		}
-#line 1983 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2028 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 57:
-#line 494 "parser.ypp" /* yacc.c:1646  */
+  case 59:
+#line 515 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<EXP 8>" << endl;
 		  (yyval)->place = (yyvsp[0])->place;
 		  cout << "<\\EXP 8>" << endl;
 		}
-#line 1993 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2038 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 58:
-#line 501 "parser.ypp" /* yacc.c:1646  */
+  case 60:
+#line 522 "parser.ypp" /* yacc.c:1646  */
     {
 		  // check if $1 is a variable of type defstruct
 		  Variable* var = currBlock->getScopeVariable((yyvsp[-3])->tokenValue);
@@ -2008,52 +2053,94 @@ yyreduce:
 		    semanticError((yyvsp[-3])->tokenValue + " of type " + var->getType() + " is not subscriptable");
 		  }
 		}
-#line 2012 "parser.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 59:
-#line 516 "parser.ypp" /* yacc.c:1646  */
-    {
-		}
-#line 2019 "parser.tab.cpp" /* yacc.c:1646  */
-    break;
-
-  case 60:
-#line 520 "parser.ypp" /* yacc.c:1646  */
-    {
-		}
-#line 2026 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2057 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 524 "parser.ypp" /* yacc.c:1646  */
+#line 537 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 2033 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2064 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 528 "parser.ypp" /* yacc.c:1646  */
-    {}
-#line 2039 "parser.tab.cpp" /* yacc.c:1646  */
+#line 541 "parser.ypp" /* yacc.c:1646  */
+    {
+		}
+#line 2071 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 531 "parser.ypp" /* yacc.c:1646  */
+#line 545 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 2046 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2078 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 534 "parser.ypp" /* yacc.c:1646  */
+#line 549 "parser.ypp" /* yacc.c:1646  */
+    {}
+#line 2084 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 65:
+#line 552 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 2053 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2091 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 66:
+#line 555 "parser.ypp" /* yacc.c:1646  */
+    {
+		}
+#line 2098 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 67:
+#line 559 "parser.ypp" /* yacc.c:1646  */
+    {cout << "<PROGRAM>" << endl;}
+#line 2104 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 68:
+#line 560 "parser.ypp" /* yacc.c:1646  */
+    {cout << "<MAIN_FUNCTION>" << endl;}
+#line 2110 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 69:
+#line 561 "parser.ypp" /* yacc.c:1646  */
+    {cout << "<BLK>" << endl;}
+#line 2116 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 70:
+#line 562 "parser.ypp" /* yacc.c:1646  */
+    {cout << "<CNTRL 2>" << endl;}
+#line 2122 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 71:
+#line 563 "parser.ypp" /* yacc.c:1646  */
+    {cout << "<CNTRL 1>" << endl;}
+#line 2128 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 72:
+#line 564 "parser.ypp" /* yacc.c:1646  */
+    {cout << "<CNTRL 3>" << endl;}
+#line 2134 "parser.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 73:
+#line 565 "parser.ypp" /* yacc.c:1646  */
+    {cout << "<LIST>" << endl;}
+#line 2140 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 2057 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2144 "parser.tab.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2281,11 +2368,8 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 538 "parser.ypp" /* yacc.c:1906  */
+#line 567 "parser.ypp" /* yacc.c:1906  */
 
-
-extern char* yytext;
-extern int yylineno;
 
 void yyerror (char const *err){
    printf("Syntax error: '%s' in line number %d\n", yytext, yylineno);

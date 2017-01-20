@@ -1,0 +1,30 @@
+main
+var a,b,c,d:integer;
+x , y , z , k : real;
+{
+a = 0;
+b = 1;
+c = 2;
+d = 3;
+
+  if a < b then {
+    if b < c then {
+      a = a + 100;
+      b = b + 100;
+      if (a > b) then {
+        c = c + 100;
+      } else if (c + d < d) {
+      	c = c + 100;
+	d = d + 100;
+	if true then
+	  c = 100000;
+      } else {
+      	a = a + 100;
+	b = b + 100;
+      }
+    } else {
+      c = c + 100;
+      d = d + 100;
+    }
+  }
+}
