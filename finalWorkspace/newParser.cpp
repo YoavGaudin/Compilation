@@ -92,20 +92,20 @@ bool isRealVariable(string& in) {
 bool isInteger(string& in) {
   size_t *idx;
   int i = stoi(in, idx);
-  cout << "stoi idx = " << *idx << "; size = " << in.size() << endl;
+  cout << "\tstoi idx = " << *idx << "; size = " << in.size() << endl;
   return *idx == in.size();
 }
 
 bool isReal(string& in) {
   size_t *idx;
   int i = stod(in, idx);
-  cout << "stod idx = " << *idx << "; size = " << in.size() << endl;
+  cout << "\tstod idx = " << *idx << "; size = " << in.size() << endl;
   return *idx == in.size();
 }
 
 // iterate over the ids list and for each id create Variable with the DCL type and this id.
 void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
-	cout << "createVariablesFromDCL: type- " + DCL->dcl_type << endl;
+	cout << "\tcreateVariablesFromDCL: type- " + DCL->dcl_type << endl;
   for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != (DCL->dcl_ids).end(); ++i) {
     Variable* v = new Variable(*i, DCL->dcl_type);
 	DECLARLIST->declarationList.insert(std::pair<string,Variable>(*i, *v));
@@ -140,16 +140,16 @@ int nextquad() {
 }
 
 void Error(string s) {
-  cout << "undefined error: " << s;
+  cout << "**********undefined error*********" << s;
   exit(1);
 }
 
 void printState() {
-  cout << "Functions table:" << funcSymbols.size() << endl;
+  cout << "\tFunctions table:" << funcSymbols.size() << endl;
   for(std::map<string, Function>::iterator f = funcSymbols.begin() ; f != funcSymbols.end() ; ++f) {
-    cout << "argumants and variables:" << endl;
+    cout << "\targumants and variables:" << endl;
     for(std::map<string, Variable>::iterator j = (f->second).symbolTable.begin(); j != (f->second).symbolTable.end(); ++j) {
-      cout << "\t" << j->first << " : " << (j->second).getType() << "(" << (j->second).getOffset() << ")" << endl;
+      cout << "\t\t" << j->first << " : " << (j->second).getType() << "(" << (j->second).getOffset() << ")" << endl;
     }
   }
 }
@@ -185,7 +185,7 @@ int main(void)
 	cout << "START Compilation" << endl;
     rc = yyparse();
     if (rc == 0) { // Parsed successfully
-      cout << "OK!!!" << endl;
+      cout << "---------------- OK!!! ----------------" << endl;
 	  printState();
 	  cout << "typedefs:" << endl;
 	  for(std::map<string, Defstruct>::iterator i = typedefsTable.begin() ; i != typedefsTable.end() ; ++i) {
