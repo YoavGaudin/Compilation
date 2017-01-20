@@ -63,7 +63,7 @@ string getRealReg() {
 
 
 void emit(string const& singleInstruction) {
-  cout << singleInstruction << endl;
+  cout << "\t" << singleInstruction << endl;
   codeBuffer.push_back(singleInstruction);
 }
 

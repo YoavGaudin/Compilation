@@ -1629,7 +1629,7 @@ yyreduce:
 		  }
 
 		  if(lvalVar->getType() != (yyvsp[-1])->type) {
-		    semanticError("type mismatch on assignment operation");
+		    semanticError("type mismatch on assignment operation: trying to assign " + (yyvsp[-1])->type + " to " + lvalVar->getType());
 		  }
 		  
 		  if(isPrimitive((yyvsp[-1])->type)) {
@@ -1968,12 +1968,12 @@ yyreduce:
     {
 		  cout << "<EXP 7>" << endl;
 		  if(isInteger((yyvsp[0])->tokenValue)) {
-		    cout << "<EXP 7 1>" << endl;
+		    (yyval)->type = "integer";
 		    (yyval)->place = getIntReg();
-		    cout << "<EXP 7 2>" << endl;
 		    emit("COPYI " + (yyval)->place + " " + (yyvsp[0])->tokenValue);
 		  }
 		  else {
+		    (yyval)->type = "real";
 		    (yyval)->place = getRealReg();
 		    emit("COPYR " + (yyval)->place + " " + (yyvsp[0])->tokenValue);
 		  }

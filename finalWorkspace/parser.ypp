@@ -208,7 +208,7 @@ ASSN:
 		  }
 
 		  if(lvalVar->getType() != $3->type) {
-		    semanticError("type mismatch on assignment operation");
+		    semanticError("type mismatch on assignment operation: trying to assign " + $3->type + " to " + lvalVar->getType());
 		  }
 		  
 		  if(isPrimitive($3->type)) {
@@ -479,12 +479,12 @@ EXP:
 		NUM {
 		  cout << "<EXP 7>" << endl;
 		  if(isInteger($1->tokenValue)) {
-		    cout << "<EXP 7 1>" << endl;
+		    $$->type = "integer";
 		    $$->place = getIntReg();
-		    cout << "<EXP 7 2>" << endl;
 		    emit("COPYI " + $$->place + " " + $1->tokenValue);
 		  }
 		  else {
+		    $$->type = "real";
 		    $$->place = getRealReg();
 		    emit("COPYR " + $$->place + " " + $1->tokenValue);
 		  }
