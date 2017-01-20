@@ -167,8 +167,7 @@ STMT:
 		}
 ;	
 STMT_RETURN: 
-		Return '(' EXP ')' ';' {
-		}
+		Return '(' EXP ')' ';' {		}
 ;	
 WRITE: 
 		Write '(' EXP ')' ';' {
@@ -414,6 +413,18 @@ EXP:
 ;	
 STREF: 
 		ID '[' ID ']' {
+		  // check if $1 is a variable of type defstruct
+		  Variable* var = currBlock->getScopeVariable($1->tokenValue);
+		  if(!var) {
+		    semanticError("");
+		  }
+		  if(var->getType() == "defstruct") {
+		    
+			Variable* field;
+			// get the value if var[field] from memory
+		  } else {
+		    semanticError($1->tokenValue + " of type " + var->getType + " is not subscriptable");
+		  }
 		}
 	|
 		STREF '[' ID ']' {
