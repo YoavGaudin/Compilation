@@ -449,12 +449,14 @@ EXP:
 		NUM {
 		  cout << "<EXP 7>" << endl;
 		  if(isInteger($1->tokenValue)) {
+		    cout << "<EXP 7 1>" << endl;
 		    $$->place = getIntReg();
-			emit("COPYI " + $$->place + " " + $1->tokenValue);
+		    cout << "<EXP 7 2>" << endl;
+		    emit("COPYI " + $$->place + " " + $1->tokenValue);
 		  }
 		  else {
 		    $$->place = getRealReg();
-			emit("COPYR " + $$->place + " " + $1->tokenValue);
+		    emit("COPYR " + $$->place + " " + $1->tokenValue);
 		  }
 		  cout << "<\\EXP 7>" << endl;
 		}

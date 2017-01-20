@@ -458,8 +458,8 @@ static const yytype_uint16 yyrline[] =
      125,   133,   144,   153,   156,   160,   163,   166,   169,   172,
      175,   178,   181,   185,   189,   192,   196,   200,   220,   247,
      251,   261,   269,   279,   288,   297,   352,   358,   366,   372,
-     380,   395,   409,   415,   437,   443,   449,   462,   469,   472,
-     476,   480,   484,   487,   490
+     380,   395,   409,   415,   437,   443,   449,   464,   471,   474,
+     478,   482,   486,   489,   492
 };
 #endif
 
@@ -1938,78 +1938,80 @@ yyreduce:
     {
 		  cout << "<EXP 7>" << endl;
 		  if(isInteger((yyvsp[0])->tokenValue)) {
+		    cout << "<EXP 7 1>" << endl;
 		    (yyval)->place = getIntReg();
-			emit("COPYI " + (yyval)->place + " " + (yyvsp[0])->tokenValue);
+		    cout << "<EXP 7 2>" << endl;
+		    emit("COPYI " + (yyval)->place + " " + (yyvsp[0])->tokenValue);
 		  }
 		  else {
 		    (yyval)->place = getRealReg();
-			emit("COPYR " + (yyval)->place + " " + (yyvsp[0])->tokenValue);
+		    emit("COPYR " + (yyval)->place + " " + (yyvsp[0])->tokenValue);
 		  }
 		  cout << "<\\EXP 7>" << endl;
 		}
-#line 1951 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1953 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 462 "parser.ypp" /* yacc.c:1646  */
+#line 464 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<EXP 8>" << endl;
 		  (yyval)->place = (yyvsp[0])->place;
 		  cout << "<\\EXP 8>" << endl;
 		}
-#line 1961 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1963 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 469 "parser.ypp" /* yacc.c:1646  */
+#line 471 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 1968 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1970 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 472 "parser.ypp" /* yacc.c:1646  */
+#line 474 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 1975 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1977 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 476 "parser.ypp" /* yacc.c:1646  */
+#line 478 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 1982 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1984 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 480 "parser.ypp" /* yacc.c:1646  */
+#line 482 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 1989 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1991 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 484 "parser.ypp" /* yacc.c:1646  */
+#line 486 "parser.ypp" /* yacc.c:1646  */
     {}
-#line 1995 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1997 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 487 "parser.ypp" /* yacc.c:1646  */
+#line 489 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 2002 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2004 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 490 "parser.ypp" /* yacc.c:1646  */
+#line 492 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 2009 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2011 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 2013 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2015 "parser.tab.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2237,7 +2239,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 494 "parser.ypp" /* yacc.c:1906  */
+#line 496 "parser.ypp" /* yacc.c:1906  */
 
 
 extern char* yytext;
