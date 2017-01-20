@@ -1,4 +1,4 @@
-1/* Reverse polish notation calculator.  */
+/* Reverse polish notation calculator.  */
 %{
   #include <stdio.h>
   #include <iostream>
@@ -182,7 +182,8 @@ STMT:
 		}
 ;	
 STMT_RETURN: 
-		Return '(' EXP ')' ';' {		}
+		Return '(' EXP ')' ';' {
+		}
 ;	
 WRITE: 
 		Write '(' EXP ')' ';' {
@@ -198,52 +199,44 @@ READ:
 ASSN: 
 		LVAL ASSIGN EXP ';' {
 		  cout << "<ASSN>" << endl;
-		  string tempreg = getIntReg();
-		  // assert leagal assignment
-		  string dest = $1->place;
-		  string src = $3->place;
-		  if(dest[0] != src[0]) {
-		    semanticError("type mismatch on assignment: can't assign " + dest + " to " + src);
+		  // get LVAL's variable and check it was declared
+		  Variable* lvalVar = currBlock->getScopeVariable($1->variableName);
+		  if(lvalVar == NULL) {
+		    cout << "currFunction: " << currFunction->name << endl;
+		    printState();
+		    semanticError($1->tokenValue + " was not declared in this scope");
 		  }
-		  // dest holds LVAL's address in memory
-		  if(dest[0] == 'I') {
-		    emit("STORI " + src + " " + dest + " 0 ");
+
+		  if(lvalVar->getType() != $3->type) {
+		    semanticError("type mismatch on assignment operation");
 		  }
-		  else {
-		    emit("STORR " + src + " " + dest + " 0 ");
+		  
+		  if(isPrimitive($3->type)) {
+		    // EXP->place is the name of the register holding the actual value
+		    string STOR = "";
+		    if(isUsedIntReg($3->place)) {
+		      STOR = "STORI";
+		    } else if(isUsedRealReg($3->place)) {
+		      STOR = "STORR";
+		    } else {
+		      assert(0);
+		    }
+		    emit(STOR + " " + $3->place + " I1 " + $1->offset);
+		  } else { // EXP is defstruct
+		    //EXP->place is offset from FP
+		    copyStruct(lvalVar, $3->place);
 		  }
+
 		  cout << "<\\ASSN>" << endl;
 		}
 ;
 LVAL: 
 		ID {
-		  cout << "<LVAL 1>" << endl;
-		  // make sure ID is a variable in current scope
-		  Variable* var = currBlock->getScopeVariable($1->tokenValue);
-		  if(var == NULL) {
-		    cout << "currFunction: " << currFunction->name << endl;
-		    printState();
-		    semanticError($1->tokenValue + " was not declared in this scope");
-		  }
-		  
-		  string tempreg = getIntReg();
-		  $$->place = tempreg;
-		  string LOAD = "";
-		  if(var->getType() == "integer") {
-		    LOAD = "LOADI";
-		  }
-		  else if(var->getType() == "real") {
-		    LOAD = "LOADR";
-		  }
-		  else {
-		    // TODO: implement struct copy (load address in memory instead of value)
-		  }
-		  // load variable into a register
-		  emit(LOAD + " " + tempreg + " I1 " + std::to_string(var->getOffset()));
-		  cout << "<\\LVAL 1>" << endl;
+		  $$->variableName = $1->tokenValue;
 		}
 	|
 		STREF {
+		  $$->variableName = $1->tokenValue;
 		}
 ;
 CNTRL: 
@@ -378,6 +371,10 @@ N:    		/*epsilon*/ {
 EXP: 
 		EXP ADD_OP EXP {
 		  cout << "<EXP 1>" << endl;
+		  if(!isPrimitive($1->type) || !isPrimitive($3->type)) {
+		    semanticError("can not perform add operation on defstruct");
+		  }
+
 		  // EXP->place is always in register!
 		  if(isUsedIntReg($1->place) && isUsedIntReg($3->place)) {
 		    $$->place = getIntReg();
@@ -393,6 +390,10 @@ EXP:
 	|
 		EXP MUL_OP EXP {
 		  cout << "<EXP 2>" << endl;
+		  if(!isPrimitive($1->type) || !isPrimitive($3->type)) {
+		    semanticError("can not perform add operation on defstruct");
+		  }
+
 		  if(isUsedIntReg($1->place) && isUsedIntReg($3->place)) {
 		    $$->place = getIntReg();
 		    emit("MULTI " + $$->place + " " + $1->place + " " + $2->place);
@@ -408,6 +409,7 @@ EXP:
 		'(' EXP ')' {
 		  cout << "<EXP 3>" << endl;
 		  $$->place = $2->place;
+		  $$->type = $2->type;
 		  cout << "<\\EXP 3>" << endl;
 		}
 	|
@@ -435,13 +437,42 @@ EXP:
 	|
 		ID {
 		  cout << "<EXP 5>" << endl;
-		  $$->place = $$->tokenValue;
+		  // make sure ID is a variable in current scope
+		  Variable* var = currBlock->getScopeVariable($1->tokenValue);
+		  if(var == NULL) {
+		    cout << "currFunction: " << currFunction->name << endl;
+		    printState();
+		    semanticError($1->tokenValue + " was not declared in this scope");
+		  }
+
+		  if(isPrimitive(var)) {
+		    // EXP's register will hold the variable's value!
+		    string LOAD = "";
+		    if(var->getType() == "integer") {
+		      LOAD = "LOADI";
+		      $$->place = getIntReg();
+		    }
+		    else if(var->getType() == "real") {
+		      LOAD = "LOADR";
+		      $$->place = getRealReg();
+		    }
+		    else {
+		      assert(0);
+		    }
+		    emit(LOAD + " " + $$->place + " I1 " + to_string(var->getOffset()));
+		    $$->type = var->getType();
+		  }
+		  else { // var is struct
+		    // EXP's register will hold the defstruct's offset from FP!
+		    emit("ADD2I " + $$->place + " 0 " + to_string(var->getOffset()));
+		    $$->type = var->getType();
+		  }
 		  cout << "<\\EXP 5>" << endl;
 		}
 	|
 		STREF {
 		  cout << "<EXP 6>" << endl;
-		  $$->place = $1->place;
+		  
 		  cout << "<\\EXP 6>" << endl;
 		}
 	|
@@ -475,10 +506,10 @@ STREF:
 		  }
 		  if(var->getType() == "defstruct") {
 		    
-			Variable* field;
-			// get the value if var[field] from memory
+		    Variable* field;
+		    // get the value if var[field] from memory
 		  } else {
-		    semanticError($1->tokenValue + " of type " + var->getType + " is not subscriptable");
+		    semanticError($1->tokenValue + " of type " + var->getType() + " is not subscriptable");
 		  }
 		}
 	|

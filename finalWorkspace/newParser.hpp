@@ -165,6 +165,13 @@ struct Stype {
 
   // for N marker and STMT
   list<int> nextList;
+
+  // for LVAL
+  string offset;
+  string variableName;
+
+  // for EXP
+  string type;
   
   Stype(string v) : tokenValue(v) {}
 };
@@ -270,6 +277,9 @@ bool isRealVariable(string& in);
 void Error(string& s);
 void printState();
 void backpatch(list<int> toFill, int address);
+bool isPrimitive(Variable* var);
+bool isPrimitive(string type);
+void copyStruct(Variable* lvalVar, string reg);
 
 /* ----------------- Run Time Memory layout: -------------------
 

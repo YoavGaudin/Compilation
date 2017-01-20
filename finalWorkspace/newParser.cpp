@@ -172,6 +172,21 @@ void backpatch(list<int> toFill, int address) {
   }
 }
 
+bool isPrimitive(Variable* var) {
+  return var->getType() == "integer" || var->getType() == "real";
+}
+
+bool isPrimitive(string type) {
+  return type == "integer" || type == "real";
+}
+
+/* lvalVar - holds all LVAL's information and specifically offset from FP where to copy
+   reg - holds the offset from FP from where to copy
+*/
+void copyStruct(Variable* lvalVar, string reg) {
+  
+}
+
 /**************************************************************************/
 /*                           Main of parser                               */
 /**************************************************************************/
