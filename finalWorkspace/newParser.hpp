@@ -177,7 +177,7 @@ struct Stype {
 
   Stype() {}
 };
-#define YYSTYPE Stype*
+#define YYSTYPE Stype
 
 
 /* ----------------- Compile Time Data Structures: -------------------
