@@ -38,22 +38,26 @@ TDEFS:
 		  addStructToSymbolTable($6->tokenValue, $4->declarationList);
 		}		
 	|
-		/*epsilon*/ { cout << "TDEFS to e" << endl; }
+		/*epsilon*/ { cout << "TDEFS to epsilon" << endl; }
 ;		
 FDEFS: 
 		FDEFS TYPE ID '(' FUNC_ARGLIST_FULL ')' BLK {
-		  cout << "FDEFS: " << $3->tokenValue << endl;
+		  cout << "<FDEFS 1>" << endl;
+		  cout << "\t" << $3->tokenValue << endl;
 		  Function* func = new Function($3->tokenValue, $5->argsList);
 		  func->insertSymbolTable($7->declarationList);
 		  funcSymbols.insert(std::pair<string, Function>($3->tokenValue, *func));
+		  cout << "<\\FDEFS 1>" << endl;
 		}
 	|
 		FDEFS Extern TYPE ID '(' FUNC_ARGLIST_FULL ')' ';' {
+		  cout << "<FDEFS 2>" << endl;
 		  Function* func = new Function($4->tokenValue, $6->argsList);
 		  funcSymbols.insert(std::pair<string, Function>($4->tokenValue, *func));
+		  cout << "<\\FDEFS 2>" << endl;
 		}		
 	|
-		/*epsilon*/ { cout << "FDEFS to e" << endl;}
+		/*epsilon*/ { cout << "FDEFS to epsilon" << endl;}
 ;
 FUNC_ARGLIST_FULL: 
 		FUNC_ARGLIST {
@@ -77,61 +81,72 @@ MAIN_FUNCTION:
 			Function* mainFunc = currFunction;
 			mainFunc->insertSymbolTable($2->declarationList);
 			funcSymbols.insert(std::pair<string, Function>("main", *mainFunc));
-			cout << "MAIN_FUNCTION" <<endl;
+			cout << "<\\MAIN_FUNCTION>" <<endl;
 		} 
 	|
 		/*epsilon*/ {}
 ;		
 BLK: 
 		DECLARATIONS '{' LIST '}' {
-			$$->declarationList = $1->declarationList;
-			$3->declarationList = $1->declarationList;
-			cout << "BLK" << endl;
+		  cout << "<BLK>" << endl;
+		  $$->declarationList = $1->declarationList;
+		  $3->declarationList = $1->declarationList;
+		  cout << "<\\BLK>" << endl;
 		}
 ;	
 DECLARATIONS:
 		Var DECLARLIST {
-			cout << "DECLARATIONS" << endl;
-			// add declerations to current block
-			currBlock->insertSymbolTable($2->declarationList);
-			$$->declarationList = $2->declarationList;
-		} // the symbol table insertions are made during DECLARLIST parsing
+		  cout << "<DECLARATIONS>" << endl;
+		  // add declerations to current block
+		  currBlock->insertSymbolTable($2->declarationList);
+		  $$->declarationList = $2->declarationList;
+		  cout << "<\\DECLARATIONS>" << endl;
+		}
 	|
 		/*epsilon*/ { cout << "DECLARATIONS to e" << endl; }
 ;		
 DECLARLIST:
 		DECLARLIST DCL ';' {
-			cout << "DECLARLIST1: " << $2->dcl_type << endl;
+		  cout << "<DECLARELIST 1>" << endl;
+		  cout << "\t" << $2->dcl_type << endl;
 		  createVariablesFromDCL($2, $1);
 		  $$->declarationList = $1->declarationList;
+		  cout << "<\\DECLARELIST 1>" << endl;
 		}
 	|
 		DCL ';' {
-			cout << "DECLARLIST2: " << $1->dcl_type << endl;
-		  // $$.declarationList = new
+		  cout << "<DECLARELIST 2>" << endl;
+		  cout << "\t" << $1->dcl_type << endl;
 		  createVariablesFromDCL($1, $$);
+		  cout << "<\\DECLARELIST 2>" << endl;
 		}
 ;		
 DCL: 
 		ID ':' TYPE {
-		  cout << "variable "+ $1->tokenValue +" of type "+ $3->tokenValue +" declared" << endl;
+		  cout << "<DCL 1>" << endl;
+		  cout << "\tvariable "+ $1->tokenValue +" of type "+ $3->tokenValue +" declared" << endl;
 		  $$->dcl_type = $3->tokenValue;
 		  ($$->dcl_ids).push_front($1->tokenValue);
+		  cout << "<\\DCL 1>" << endl;
 		} 
 	|
 		ID ':' ID {
-			if(validateStructName($3->tokenValue) == false){
-			  semanticError("illegal type name");
-			}
-		    $$->dcl_type = $3->tokenValue;
-		    ($$->dcl_ids).push_front($1->tokenValue);
+		  cout << "<DCL 2>" << endl;
+		  if(validateStructName($3->tokenValue) == false){
+		    semanticError("illegal type name");
+		  }
+		  $$->dcl_type = $3->tokenValue;
+		  ($$->dcl_ids).push_front($1->tokenValue);
 		  //The 2nd ID might be the name of a custom typedef
+		  cout << "<\\DCL 2>" << endl;
 		}
 	|
 		ID ',' DCL {
+		  cout << "<DCL 3>" << endl;
 		  ($3->dcl_ids).push_front($1->tokenValue);
 		  ($$->dcl_ids).merge($3->dcl_ids);
 		  $$->dcl_type = $3->dcl_type;
+		  cout << "<\\DCL 3>" << endl;
 		}
 ;	
 TYPE: 
@@ -182,6 +197,7 @@ READ:
 ;	
 ASSN: 
 		LVAL ASSIGN EXP ';' {
+		  cout << "<ASSN>" << endl;
 		  string tempreg = getIntReg();
 		  // assert leagal assignment
 		  string dest = $1->place;
@@ -196,10 +212,12 @@ ASSN:
 		  else {
 		    emit("STORR " + src + " " + dest + " 0 ");
 		  }
+		  cout << "<\\ASSN>" << endl;
 		}
 ;
 LVAL: 
 		ID {
+		  cout << "<LVAL 1>" << endl;
 		  // make sure ID is a variable in current scope
 		  Variable* var = currBlock->getScopeVariable($1->tokenValue);
 		  if(var == NULL) {
@@ -222,6 +240,7 @@ LVAL:
 		  }
 		  // load variable into a register
 		  emit(LOAD + " " + tempreg + " I1 " + std::to_string(var->getOffset()));
+		  cout << "<\\LVAL 1>" << endl;
 		}
 	|
 		STREF {
@@ -229,42 +248,53 @@ LVAL:
 ;
 CNTRL: 
 		If BEXP Then M STMT N Else M STMT {
+		  cout << "<CNTRL 1>" << endl;
 		  backpatch($2->trueList, $4->quad);
 		  backpatch($2->falseList, $8->quad);
 		  $$->nextList.insert($$->nextList.end(), $5->nextList.begin(), $5->nextList.end());
 		  $$->nextList.insert($$->nextList.end(), $6->nextList.begin(), $6->nextList.end());
 		  $$->nextList.insert($$->nextList.end(), $9->nextList.begin(), $9->nextList.end());
+		  cout << "<\\CNTRL 1>" << endl;
 		}
 	|
 		If BEXP Then M STMT N{
+		  cout << "<CNTRL 2>" << endl;
 		  backpatch($2->trueList, $4->quad);
 		  $$->nextList.insert($$->nextList.end(), $2->falseList.begin(), $2->falseList.end());
 		  $$->nextList.insert($$->nextList.end(), $5->nextList.begin(), $5->nextList.end());
+		  cout << "<\\CNTRL 2>" << endl;
 		}
 	|
 		While M BEXP Do M STMT {
+		  cout << "<CNTRL 3>" << endl;
 		  backpatch($3->trueList, $5->quad);
 		  backpatch($5->nextList, $2->quad);
 		  $$->nextList.insert($$->nextList.end(), $3->falseList.begin(), $3->falseList.end());
 		  emit((string)"UJUMP " + INT2STR($2->quad));
+		  cout << "<\\CNTRL 3>" << endl;
 		}
 ;	
 BEXP: 
 		BEXP OR_OP M BEXP {
+		  cout << "<BEXP 1>" << endl;
 		  backpatch($1->falseList, $3->quad);
 		  $$->trueList.insert($$->trueList.end(), $1->trueList.begin(), $1->trueList.end());
 		  $$->trueList.insert($$->trueList.end(), $4->trueList.begin(), $4->trueList.end());
 		  $$->falseList.insert($$->falseList.end(), $4->falseList.begin(), $4->falseList.end());
+		  cout << "<\\BEXP 1>" << endl;
 		}
 	|
 		BEXP AND_OP M BEXP {
+		  cout << "<BEXP 2>" << endl;
 		  backpatch($1->trueList, $3->quad);
 		  $$->falseList.insert($$->falseList.end(), $1->falseList.begin(), $1->falseList.end());
 		  $$->falseList.insert($$->falseList.end(), $4->falseList.begin(), $4->falseList.end());
 		  $$->trueList.insert($$->trueList.end(), $4->trueList.begin(), $4->trueList.end());
+		  cout << "<\\BEXP 2>" << endl;
 		}
 	|
 		EXP REL_OP EXP {
+		  cout << "<BEXP 3>" << endl;
 		  string tempReg = getIntReg();
 		  string SLET = "";
 		  string SGRT = "";
@@ -314,25 +344,32 @@ BEXP:
 		  }
 		  $$->falseList.push_back(nextquad());
 		  emit((string)"UJUMP " + "___");
+		  cout << "<\\BEXP 3>" << endl;
 		}
 
 	|
 		NOT_OP BEXP {
+		  cout << "<BEXP 4>" << endl;
 		  $$->trueList.swap($$->falseList);
+		  cout << "<\\BEXP 4>" << endl;
 		}
 	|
 		'(' BEXP ')' {
+		  cout << "<BEXP 5>" << endl;
 		  $$->trueList = $2->trueList;
 		  $$->falseList = $2->falseList;
+		  cout << "<\\BEXP 5>" << endl;
 		}
 ;
 
 M:    		/*epsilon*/ {
+  		  cout << "<M>" << endl;
                   $$->quad = nextquad();
                 }
 ;
 
 N:    		/*epsilon*/ {
+  		  cout << "<N>" << endl;
                   $$->nextList.push_back(nextquad());
 		  emit((string)"UJUMP" + " ___");
                 }
@@ -340,6 +377,7 @@ N:    		/*epsilon*/ {
 
 EXP: 
 		EXP ADD_OP EXP {
+		  cout << "<EXP 1>" << endl;
 		  // EXP->place is always in register!
 		  if(isUsedIntReg($1->place) && isUsedIntReg($3->place)) {
 		    $$->place = getIntReg();
@@ -350,9 +388,11 @@ EXP:
 		  } else {
 		    semanticError("type missmatch within add operation");
 		  }
+		  cout << "<\\EXP 1>" << endl;
 		}
 	|
 		EXP MUL_OP EXP {
+		  cout << "<EXP 2>" << endl;
 		  if(isUsedIntReg($1->place) && isUsedIntReg($3->place)) {
 		    $$->place = getIntReg();
 		    emit("MULTI " + $$->place + " " + $1->place + " " + $2->place);
@@ -362,13 +402,17 @@ EXP:
 		  } else {
 		    semanticError("type missmatch within mul operation");
 		  }
+		  cout << "<\\EXP 2>" << endl;
 		}
 	|
 		'(' EXP ')' {
+		  cout << "<EXP 3>" << endl;
 		  $$->place = $2->place;
+		  cout << "<\\EXP 3>" << endl;
 		}
 	|
 		'(' TYPE ')' EXP {
+		  cout << "<EXP 4>" << endl;
 		  if($2->tokenValue == "Integer") {
 		    if(isUsedIntReg($4->place)) {
 		      $$->place = $4->place;
@@ -386,17 +430,23 @@ EXP:
 		  } else {
 		    semanticError("undefined explicit cast");
 		  }
+		  cout << "<\\EXP 4>" << endl;
 		}
 	|
 		ID {
+		  cout << "<EXP 5>" << endl;
 		  $$->place = $$->tokenValue;
+		  cout << "<\\EXP 5>" << endl;
 		}
 	|
 		STREF {
+		  cout << "<EXP 6>" << endl;
 		  $$->place = $1->place;
+		  cout << "<\\EXP 6>" << endl;
 		}
 	|
 		NUM {
+		  cout << "<EXP 7>" << endl;
 		  if(isInteger($1->tokenValue)) {
 		    $$->place = getIntReg();
 			emit("COPYI " + $$->place + " " + $1->tokenValue);
@@ -405,10 +455,13 @@ EXP:
 		    $$->place = getRealReg();
 			emit("COPYR " + $$->place + " " + $1->tokenValue);
 		  }
+		  cout << "<\\EXP 7>" << endl;
 		}
 	|
 		CALL {
+		  cout << "<EXP 8>" << endl;
 		  $$->place = $1->place;
+		  cout << "<\\EXP 8>" << endl;
 		}
 ;	
 STREF: 

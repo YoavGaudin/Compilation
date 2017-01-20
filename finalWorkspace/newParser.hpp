@@ -16,8 +16,11 @@
 
 using namespace std;
 
-#define YYDEBUG 1
+//#define YYDEBUG 1
 extern int yydebug;
+
+
+// ---------------------------- Classes definitions ------------------------------
 
 enum Type {INTEGER, REAL, DEFSTRUCT};
 
@@ -99,13 +102,14 @@ public:
   
   void insertSymbolTable(map<string, Variable>& vars) {
     for(std::map<string, Variable>::iterator i = vars.begin(); i != vars.end(); ++i) {
-      cout << "\t" << i->first << i->second.getType() << endl;
+      cout << "\tinserting var " << i->first << " is of type " << i->second.getType() << endl;
       this->addVariable(i->first, i->second);
     }
   }
 
   void insertSymbolTable(vector<Variable>& vars) {
     for(std::vector<Variable>::iterator i = vars.begin(); i != vars.end(); ++i) {
+      cout << "\tvar " << i->getName() << " is of type " << i->getType() << endl;
       addVariable(i->getName(), *i);
     }
   }
@@ -131,6 +135,7 @@ struct Function : Block {
   
 };
 
+
 // ---------------------------- S-type definition --------------------------
 
 struct Stype {
@@ -140,7 +145,7 @@ struct Stype {
   // for tokens
   string tokenValue;
   
-  // for DECLARLIST - 
+  // for DECLARLIST and DECLARATIONS - contains the declared Variables 
   map<string, Variable> declarationList;
 
   // for DCL - the type for the last arguments
@@ -163,8 +168,6 @@ struct Stype {
   
   Stype(string v) : tokenValue(v) {}
 };
-
-
 #define YYSTYPE Stype*
 
 
