@@ -90,17 +90,11 @@ bool isRealVariable(string& in) {
 }
 
 bool isInteger(string& in) {
-  size_t *idx;
-  int i = stoi(in, idx);
-  cout << "\tstoi idx = " << *idx << "; size = " << in.size() << endl;
-  return *idx == in.size();
+  return !isReal(in);
 }
 
 bool isReal(string& in) {
-  size_t *idx;
-  int i = stod(in, idx);
-  cout << "\tstod idx = " << *idx << "; size = " << in.size() << endl;
-  return *idx == in.size();
+  return in.find('.') != std::string::npos;
 }
 
 // iterate over the ids list and for each id create Variable with the DCL type and this id.
