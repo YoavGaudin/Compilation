@@ -1,4 +1,4 @@
-/* Reverse polish notation calculator.  */
+1/* Reverse polish notation calculator.  */
 %{
   #include <stdio.h>
   #include <iostream>
@@ -136,7 +136,7 @@ DCL:
 		    semanticError("illegal type name");
 		  }
 		  $$->dcl_type = $3->tokenValue;
-		  ($$->dcl_ids).push_front($1->tokenValue);
+		  $$->dcl_ids.push_front($1->tokenValue);
 		  //The 2nd ID might be the name of a custom typedef
 		  cout << "<\\DCL 2>" << endl;
 		}
