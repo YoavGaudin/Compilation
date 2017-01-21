@@ -234,7 +234,6 @@ ASSN:
 		  cout << "<ASSN>" << endl;
 		  // get LVAL's variable and check it was declared
 		  Variable* lvalVar = currBlock->getScopeVariable($1.variableName);
-		  //Defstruct* ds = new Defstruct();
 		  if(lvalVar == NULL) {
 		    cout << "currFunction: " << currFunction->name << endl;
 		    printState();
@@ -258,7 +257,7 @@ ASSN:
 		    emit(STOR + " " + $3.place + " I1 " + to_string(lvalVar->getOffset()));
 		  } else { // EXP is defstruct
 		    //EXP->place is offset from FP
-		    //copyStruct(dynamic_cast<Defstruct*>(lvalVar), $3.place);
+		    copyStruct(dynamic_cast<Defstruct>(lvalVar), $3.place);
 		  }
 
 		  cout << "<\\ASSN>" << endl;
@@ -302,7 +301,7 @@ CNTRL:
 		  backpatch($4.trueList, $6.quad);
 		  backpatch($6.nextList, $3.quad);
 		  $$.nextList.insert($$.nextList.end(), $3.falseList.begin(), $3.falseList.end());
-		  emit((string)"UJUMP " + to_string($2.quad));
+		  emit((string)"UJUMP " + INT2STR($2.quad));
 		  cout << "<\\CNTRL 3>" << endl;
 		}
 ;	
@@ -581,12 +580,13 @@ M_while:        /*epsilon*/ {cout << "<CNTRL 3>" << endl;};
 
 %%
 
-void yyerror (char const *err){
+void yyerror (char const *err) {
    printf("Syntax error: '%s' in line number %d\n", yytext, yylineno);
    exit(1);
 }
-
+/*
 void semanticError(string s) {
   printf("Semantic error: '%s' in line number %d\n", s.c_str(), yylineno);
   exit(1);
 }
+

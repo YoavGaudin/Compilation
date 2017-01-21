@@ -35,7 +35,7 @@ void regSetInit() {
 string getIntReg() {
   // 0,1,2 reserved from init
   for(int i = 3; i < 1000; ++i) {
-    string currReg = "I" + INT2STR(i);
+    string currReg = "I" + to_string(i);
     // in c++ string.operator== and string.compare() is the same (unlike JAVA) so it should work fine
     // return the first register name which is not used
     if(usedIntRegs.count(currReg) == 0) {
@@ -50,7 +50,7 @@ string getIntReg() {
 // returns unused register name and adds it to usedRealRegs set
 string getRealReg() {
   for(int i = 0; i < 1000; ++i) {
-    string currReg = "R" + INT2STR(i);
+    string currReg = "R" + to_string(i);
     // in c++ string.operator== and string.compare() is the same (unlike JAVA) so it should work fine
     // return the first register name which is not used
     if(usedRealRegs.count(currReg) == 0) {
@@ -167,7 +167,7 @@ static bool subStrReplace(std::string& str, const std::string& from, const std::
  */
 void backpatch(list<int> toFill, int address) {
   for(std::list<int>::iterator i = toFill.begin(); i != toFill.end(); ++i) {
-    subStrReplace(codeBuffer[*i], "___", INT2STR(address));
+    subStrReplace(codeBuffer[*i], "___", to_string(address));
   }
 }
 
@@ -185,7 +185,7 @@ bool isPrimitive(string type) {
 void copyStruct(Defstruct* lvalVar, string reg) {
   string intTempReg = getIntReg();
   string realTempReg = getRealReg();
-  for(int i = 0; i < lvalVar.sizeInMemory; ++i) {
+  for(int i = 0; i < lvalVar->sizeInMemory; ++i) {
     string STOR = "";
     string LOAD = "";
     string tempReg = "";
@@ -199,8 +199,8 @@ void copyStruct(Defstruct* lvalVar, string reg) {
       tempReg = realTempReg;
     } else assert(0);
 
-    emit(LOAD + " " + tempReg + " I1 " + to_string(STR2INT(reg) + i));
-    emit(STOR + " " + tempReg + " I1 " + to_string(STR2INT(lvalVar) + i));
+    emit(LOAD + " " + tempReg + " I1 " + to_string(atoi(reg.c_str()) + i));
+    emit(STOR + " " + tempReg + " I1 " + to_string(lvalVar->getOffset() + i));
   }
 }
 

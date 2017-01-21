@@ -11,9 +11,6 @@
 #include <array>
 #include <iostream>
 
-#include <sstream>
-#define INT2STR( x ) static_cast< std::ostringstream & >( ( std::ostringstream() << std::dec << x ) ).str()
-
 using namespace std;
 
 //#define YYDEBUG 1
@@ -45,7 +42,9 @@ public:
   }
 
   Variable(const string name_, string type_) : name(name_), type(type_) {}
-  
+
+  virtual ~Variable() {}
+
   void setOffset(int offset) { this->offset = offset; }
   int getOffset() { return this->offset; }
   string const& getName() { return name; }
@@ -53,7 +52,10 @@ public:
 };
 
 
-class Defstruct : Variable {
+bool isPrimitive(Variable* var);
+bool isPrimitive(string type);
+
+class Defstruct : public Variable {
 public:
   map<string, Variable> fields;
   int sizeInMemory;
@@ -64,7 +66,7 @@ public:
       if(isPrimitive(&(i->second)))
 	++sizeInMemory;
       else // field is struct
-        sizeInMemory += dynamic_cast<Defstruct>(i->second).sizeInMemory;
+        sizeInMemory += dynamic_cast<Defstruct&>(i->second).sizeInMemory;
     }
   }
 
@@ -125,7 +127,7 @@ public:
 };
 
 
-struct Function : Block {
+struct Function : public Block {
 
   string name;
   // the argumants are inserted straight into the symbol table in the constructor.
@@ -287,8 +289,8 @@ bool isRealVariable(string& in);
 void Error(string& s);
 void printState();
 void backpatch(list<int> toFill, int address);
-bool isPrimitive(Variable* var);
-bool isPrimitive(string type);
+//bool isPrimitive(Variable* var);
+//bool isPrimitive(string type);
 void copyStruct(Defstruct* lvalVar, string reg);
 
 /* ----------------- Run Time Memory layout: -------------------
