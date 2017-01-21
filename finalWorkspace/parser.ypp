@@ -395,13 +395,13 @@ BEXP:
 
 M:    		/*epsilon*/ {
                   $$.quad = nextquad();
-				  cout << "<M>" << "quad=" << $$.quad << endl;
+		  cout << "<M>" << "quad=" << $$.quad << endl;
                 }
 ;
 
 N:    		/*epsilon*/ {
   		  cout << "<N>" << endl;
-          $$.nextList.push_back(nextquad());
+		  $$.nextList.push_back(nextquad());
 		  emit((string)"UJUMP" + " ___");
                 }
 ;
