@@ -10,7 +10,7 @@ map<string, Function> funcSymbols;
 stack<string> funcStack;
 Function* currFunction;
 Block* currBlock;
-map<string, Type> structTypeTable;
+map<string, StructType> structTypeTable;
 // TODO remove this
 map<string, Defstruct> typedefsTable;
 vector<string> codeBuffer;
@@ -104,26 +104,28 @@ bool isReal(string& in) {
 
 // iterate over the ids list and for each id create Variable with the DCL type and this id.
 void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
-  for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != (DCL->dcl_ids).end(); ++i) {
+  for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != DCL->dcl_ids.end(); ++i) {
     Variable* v = new Variable(*i, DCL->dcl_type);
     DECLARLIST->declarationList.insert(std::pair<string,Variable>(*i, *v));
   }
 }
 
 // iterate over the ids list and insert them with the relevant type to typedefList. Finally, typedefList will be used to create one new StructType and insert it into the structTypeTable!
-void createTypeFromDCL(Stype* DCL, Stype* DECLARLIST) {
-  for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != (DCL->dcl_ids).end(); ++i) {
+int createTypeFromDCL(Stype* DCL, Stype* DECLARLIST) {
+  for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != DCL->dcl_ids.end(); ++i) {
     cout << "DCL->dcl_type : " << DCL->dcl_type << endl;
     if(isPrimitive(DCL->dcl_type)) {
       Type* t = new Type(DCL->dcl_type);
       DECLARLIST->typedefList.insert(std::pair<string, Type>(*i, *t));
     } else { // DCL->type is a name of some previously typedefined struct!
-      assert(validateStructName(DCL->dcl_type));
-      cout << "TTTTTTTTTTTTTTTTTTT : " << *i << endl;
-      StructType& st = dynamic_cast<StructType&>(structTypeTable.find(*i)->second);
+      if(!validateStructName(DCL->dcl_type))
+	return -1;
+      cout << "field id : " << *i << endl;
+      StructType& st = structTypeTable.find(DCL->dcl_type)->second;
       DECLARLIST->typedefList.insert(std::pair<string, Type>(*i, st));
     }
   }
+  return 0;
 }
 
 // 
@@ -150,21 +152,6 @@ int nextquad() {
 void Error(string s) {
   cout << "**********undefined error*********" << s;
   exit(1);
-}
-
-void printState() {
-  cout << "\tCodeBuffer: " << endl;
-  int j = 0;
-  for(std::vector<string>::iterator i = codeBuffer.begin() ; i != codeBuffer.end() ; ++i, ++j) {
-    cout << "\t\t" << j << ": " << *i << endl;  
-  }
-  cout << "\tFunctions table:" << funcSymbols.size() << endl;
-  for(std::map<string, Function>::iterator f = funcSymbols.begin() ; f != funcSymbols.end() ; ++f) {
-    cout << "\targumants and variables of "<< f->first << " at " << to_string((f->second).address) <<": " << endl;
-    for(std::map<string, Variable>::iterator j = (f->second).symbolTable.begin(); j != (f->second).symbolTable.end(); ++j) {
-      cout << "\t\t" << j->first << " : " << (j->second).getType() << "(" << (j->second).getOffset() << ")" << endl;
-    }
-  }
 }
 
 // replace first occurance of 'from' sub string in 'str' by 'to'
@@ -243,18 +230,50 @@ void buildLinkerHeader() {
 }
 
 void addToStructTypeTable(string structName, map<string, Type> typeFields){
-  cout << "\tcreating struct : " << structName << endl;
-  std::map<string, Type>::iterator i;
+  cout << "\tcreating struct (num of fields = " << typeFields.size() << ") : " << structName << endl;
+  for(std::map<string, Type>::iterator i = typeFields.begin() ; i != typeFields.end() ; ++i) {
+    cout << i->first << endl;
+  }
+  std::map<string, StructType>::iterator i;
   if((i = structTypeTable.find(structName)) != structTypeTable.end())
     structTypeTable.erase(i);
   StructType* st = new StructType(structName, typeFields);
-  structTypeTable.insert(std::pair<string, Type>(structName, *st));
+  structTypeTable.insert(std::pair<string, StructType>(structName, *st));
 }
 
 
 /**************************************************************************/
 /*                           Main of parser                               */
 /**************************************************************************/
+
+void printState() {
+  // ---------------------------------
+  cout << "\tCodeBuffer: " << endl;
+  int j = 0;
+  for(std::vector<string>::iterator i = codeBuffer.begin() ; i != codeBuffer.end() ; ++i, ++j) {
+    cout << "\t\t" << j << ": " << *i << endl;  
+  }
+  // ---------------------------------
+  cout << "\tFunctions table:" << funcSymbols.size() << endl;
+  for(std::map<string, Function>::iterator f = funcSymbols.begin() ; f != funcSymbols.end() ; ++f) {
+    cout << "\targumants and variables of "<< f->first << " at " << to_string((f->second).address) <<": " << endl;
+    for(std::map<string, Variable>::iterator j = (f->second).symbolTable.begin(); j != (f->second).symbolTable.end(); ++j) {
+      cout << "\t\t" << j->first << " : " << (j->second).getType() << "(" << (j->second).getOffset() << ")" << endl;
+    }
+  }
+  // ---------------------------------
+  cout << "\tDeftructs: " << endl;
+  for(std::map<string, StructType>::iterator t = structTypeTable.begin() ; t != structTypeTable.end() ; ++t) {
+    cout << "Defstruct " << t->second.getTypeName() << ":" << endl;
+    int i = 0;
+    StructType& st = t->second;
+    cout << "\tsize : " << st.fieldTypes.size() << endl;
+    for(std::map<string, Type>::iterator t1 = st.fieldTypes.begin() ;	t1 != st.fieldTypes.end() ; ++t1, ++i) {
+      cout << "\t" << i << ": " << t1->first << endl;
+    }
+  }
+}
+
 
 int main(void)
 {

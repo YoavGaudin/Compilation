@@ -137,7 +137,8 @@ DECLARLIST:
 		  createVariablesFromDCL(&$2, &$1);
 		  $$.declarationList = $1.declarationList;
 		  // for DECLARLIST inside TDEFS - create Types and insert to structTypeTable
-		  createTypeFromDCL(&$2, &$1);
+		  if(createTypeFromDCL(&$2, &$1) == -1)
+		    semanticError((string)"undefined field type detected: " + $2.dcl_type);
 		  $$.typedefList = $1.typedefList;
 		  cout << "<\\DECLARELIST 1>" << endl;
 		}
@@ -145,7 +146,10 @@ DECLARLIST:
 		DCL ';' {
 		  cout << "<DECLARELIST 2>" << endl;
 		  cout << "\t" << $1.dcl_type << endl;
+		  // for DECLARLIST inside BLK - create variables and struct instances
 		  createVariablesFromDCL(&$1, &$$);
+		  // for DECLARLIST inside TDEFS - create Types and insert to structTypeTable
+		  createTypeFromDCL(&$1, &$$);
 		  cout << "<\\DECLARELIST 2>" << endl;
 		}
 ;		

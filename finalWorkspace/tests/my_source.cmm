@@ -1,9 +1,17 @@
 defstruct {
-	a:integer;
+	  a:integer;
 } MyStruct1;
 defstruct {
-	b:real;
+	  b:real;
+	  c:integer;
 } MyStruct2;
+defstruct {
+	  b:real;
+	  c:integer;
+	  s1:MyStruct1;
+	  s2:MyStruct2;
+} MyStruct3;
+
 integer foo1() 
 var abc:real;
 { }
@@ -14,5 +22,5 @@ var funcvar:integer;
 main
 var a,b:integer;
 	c,d:real;
-	st:MyStruct2;
+	//st:MyStruct2;
 { }
