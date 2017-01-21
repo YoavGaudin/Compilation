@@ -10,10 +10,10 @@ map<string, Function> funcSymbols;
 stack<string> funcStack;
 Function* currFunction;
 Block* currBlock;
-map<string, Variable> globalSymbolTable;
+map<string, map<string, string> > structTypeTable;
 map<string, Defstruct> typedefsTable;
 vector<string> codeBuffer;
-array<Type, 1000> memMap;
+array<TypeEnum, 1000> memMap;
 
 set <string> usedIntRegs;
 set <string> usedRealRegs;
@@ -185,7 +185,7 @@ bool isPrimitive(string type) {
 void copyStruct(Defstruct* lvalVar, string reg) {
   string intTempReg = getIntReg();
   string realTempReg = getRealReg();
-  for(int i = 0; i < lvalVar->sizeInMemory; ++i) {
+  for(int i = 0; i < lvalVar->getSizeInMemory(); ++i) {
     string STOR = "";
     string LOAD = "";
     string tempReg = "";

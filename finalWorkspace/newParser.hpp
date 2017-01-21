@@ -19,8 +19,10 @@ extern int yydebug;
 
 // ---------------------------- Classes definitions ------------------------------
 
-enum Type {INTEGER, REAL, DEFSTRUCT};
+enum TypeEnum {INTEGER, REAL, DEFSTRUCT};
 
+
+// -------- Instances ---------
 
 class Variable {
 
@@ -31,7 +33,7 @@ class Variable {
 public:
   Variable(const string name_, string type_, int offset_) : name(name_), type(type_), offset(offset_) {}
   
-  Variable(const string name_, Type t) : name(name_){
+  Variable(const string name_, TypeEnum t) : name(name_){
     if(t == INTEGER) {
       type = "integer";
     } else if(t == REAL) {
@@ -56,18 +58,15 @@ bool isPrimitive(Variable* var);
 bool isPrimitive(string type);
 
 class Defstruct : public Variable {
+
+  int sizeInMemory;
+
 public:
   map<string, Variable> fields;
-  int sizeInMemory;
   
   Defstruct(string name_, map<string, Variable> fields_) : Variable(name_, DEFSTRUCT), fields(fields_) {
+    // TODO: get the struct type size from the structType global table
     sizeInMemory = 0;
-    for(std::map<string, Variable>::iterator i = fields_.begin(); i != fields_.end(); ++i) {
-      if(isPrimitive(&(i->second)))
-	++sizeInMemory;
-      else // field is struct
-        sizeInMemory += dynamic_cast<Defstruct&>(i->second).sizeInMemory;
-    }
   }
 
   Variable getField(string name) {
@@ -77,8 +76,54 @@ public:
       return i->second;
     assert(0);
   }
+
+  int getSizeInMemory() { return sizeInMemory; }
 };
 
+// -------- Types ---------
+
+/* Primitive types are of size 1. The first non-primitive type declared consists of primitives only, so the first StructType will get in the constructor a map with only primitives (all of initialized size 1). Then the next StructType can contain this StructType (which's size is already valid and calculated) and so on.
+*/
+
+class Type {
+
+  string typeName;
+  int typeSizeInMemory;
+
+public:
+
+  Type(string typeName_) : typeName(typeName_), typeSizeInMemory(1) {
+    if(typeName != "integer" && typeName != "real")
+      assert(0);
+  }
+
+  virtual ~Type() {}
+  
+  string getTypeName() { return typeName; }
+
+  int getTypeSizeInMemory() { return typeSizeInMemory; }
+
+  void setTypeSizeInMemory(int size) { typeSizeInMemory = size; }
+
+  void increaseTypeSizeInMemoryBy(int size) { typeSizeInMemory += size; }
+};
+
+
+class StructType : public Type {
+
+public:
+  map<string, Type> fieldTypes; // [field name, field type]
+  
+  StructType(string typeName_, map<string, Type> fieldTypes_) : Type(typeName_), fieldTypes(fieldTypes_) {
+    setTypeSizeInMemory(0);
+    for(std::map<string, Type>::iterator i = fieldTypes_.begin(); i != fieldTypes_.end(); ++i) {
+      increaseTypeSizeInMemoryBy(i->second.getTypeSizeInMemory());
+    }
+  }
+};
+
+
+// -------- Blocks ---------
 
 class Block {
 private:
@@ -208,21 +253,21 @@ struct Stype {
 \___________________\___________________\
 
 
-                       globalSymbolTable
-                     _____________________
-                    \       varName      \
-                    \____________________\
-                    \         .          \
-                    \         .          \
-                    \         .          \
-                    \                    \
-                    \____________________\
+             structTypeTable
+ _______________________________________
+\   defstructName    \    fieldTypes    \
+\____________________\__________________\
+\         .          \         .        \
+\         .          \         .        \
+\         .          \         .        \
+\                    \                  \  
+\____________________\__________________\
 
 'funcSymbols'       --- Map from function name to it's symbol table and arguments. 
 
 'funcStack'         --- Stack which holds on it's top the currently running function (by currently we mean the function which's call was the last in the parsed code). This stack contains only strings! by this string we can find the relevant symbol table with the environment variables in the 'funcSymbols' map.
 
-'globalSymbolTable' --- Symbol table for the global variables which are included in each function's environment.
+'structTypeTable' --- Map from global defstruct type to it's fields. Each 'fieldTypes' (second value) is Map from field name to field type (which can also be a defstruct).
 
 *** each symbol table is a Map of [var name (string), var info class(Variable)]***
 
@@ -254,9 +299,9 @@ extern map<string, Function> funcSymbols;
 extern stack<string> funcStack;
 extern Function* currFunction;
 extern Block* currBlock;
-extern map<string, Variable> globalSymbolTable;
+extern map<string, map<string, string> > structTypeTable;
 extern vector<string> codeBuffer;
-extern array<Type, 1000> memMap;
+extern array<TypeEnum, 1000> memMap;
 extern map<string, Defstruct> typdefsTable;
 
 
