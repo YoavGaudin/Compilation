@@ -229,7 +229,7 @@ struct Function : public Block {
 	    STOR = "STORR ";
 	  }
 	  emit(STOR + *i + " I1 0");
-	  emit("ADD2I I1 I1 1");
+	  emit("ADD2I I1 I1 -1");
     }  
   }
   
@@ -394,6 +394,8 @@ void addToStructTypeTable(string structName, map<string, Type>typeFields);
 
 Function* getFunction(string name);
 void saveUsedRegisters();
+void restoreUsedRegisters();
+
 void buildLinkerHeader();
 
 /* ----------------- Run Time Memory layout: -------------------
