@@ -457,12 +457,12 @@ static const yytype_uint16 yyrline[] =
 {
        0,    37,    37,    43,    47,    51,    50,    66,    73,    76,
       80,    83,    88,    93,    93,   103,   106,   106,   116,   124,
-     129,   137,   145,   153,   164,   173,   176,   180,   186,   189,
-     193,   199,   203,   207,   211,   218,   222,   225,   229,   233,
-     268,   274,   281,   292,   300,   310,   319,   328,   383,   389,
-     397,   403,   411,   430,   448,   455,   477,   512,   518,   533,
-     540,   555,   559,   563,   567,   570,   573,   577,   578,   579,
-     580
+     129,   137,   145,   153,   163,   172,   175,   179,   185,   188,
+     192,   198,   202,   206,   210,   217,   221,   224,   228,   232,
+     267,   273,   280,   291,   299,   309,   318,   327,   382,   388,
+     396,   402,   410,   429,   447,   454,   476,   511,   517,   532,
+     539,   554,   558,   562,   566,   569,   572,   576,   577,   578,
+     579
 };
 #endif
 
@@ -1346,7 +1346,7 @@ yyreduce:
   case 3:
 #line 43 "parser.ypp" /* yacc.c:1646  */
     {
-		  addStructToSymbolTable((yyvsp[-1]).tokenValue, (yyvsp[-3]).declarationList);
+		  //addToStructTypeTable($6.tokenValue, $4.declarationList);
 		}
 #line 1352 "parser.tab.cpp" /* yacc.c:1646  */
     break;
@@ -1535,18 +1535,17 @@ yyreduce:
     {
 		  cout << "<DCL 2>" << endl;
 		  if(validateStructName((yyvsp[0]).tokenValue) == false){
-		    semanticError("illegal type name");
+		    semanticError("did not find declaration of type name: " + (yyvsp[0]).tokenValue);
 		  }
 		  (yyval).dcl_type = (yyvsp[0]).tokenValue;
 		  (yyval).dcl_ids.push_front((yyvsp[-2]).tokenValue);
-		  //The 2nd ID might be the name of a custom typedef
 		  cout << "<\\DCL 2>" << endl;
 		}
-#line 1546 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1545 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 164 "parser.ypp" /* yacc.c:1646  */
+#line 163 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<DCL 3>" << endl;
 		  ((yyvsp[0]).dcl_ids).push_front((yyvsp[-2]).tokenValue);
@@ -1554,121 +1553,121 @@ yyreduce:
 		  (yyval).dcl_type = (yyvsp[0]).dcl_type;
 		  cout << "<\\DCL 3>" << endl;
 		}
-#line 1558 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1557 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 173 "parser.ypp" /* yacc.c:1646  */
+#line 172 "parser.ypp" /* yacc.c:1646  */
     { 
 		}
-#line 1565 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1564 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 176 "parser.ypp" /* yacc.c:1646  */
+#line 175 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 1572 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1571 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 180 "parser.ypp" /* yacc.c:1646  */
+#line 179 "parser.ypp" /* yacc.c:1646  */
     {  
 		  (yyval).nextList = (yyvsp[0]).nextList;
 		  backpatch((yyvsp[-2]).nextList, (yyvsp[-1]).quad);
 		  cout << "<\\LIST>" << endl;
 		}
-#line 1582 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1581 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 186 "parser.ypp" /* yacc.c:1646  */
+#line 185 "parser.ypp" /* yacc.c:1646  */
     {}
-#line 1588 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1587 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 189 "parser.ypp" /* yacc.c:1646  */
+#line 188 "parser.ypp" /* yacc.c:1646  */
     {
 		  (yyval).nextList.push_back(nextquad());
 		}
-#line 1596 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1595 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 193 "parser.ypp" /* yacc.c:1646  */
+#line 192 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<STMT 2>" << endl;
 		  (yyval).nextList = (yyvsp[0]).nextList;
 		  cout << "<\\STMT 2>" << endl;
 		}
-#line 1606 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1605 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 199 "parser.ypp" /* yacc.c:1646  */
+#line 198 "parser.ypp" /* yacc.c:1646  */
     {
 		  (yyval).nextList.push_back(nextquad());
 		}
-#line 1614 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1613 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 203 "parser.ypp" /* yacc.c:1646  */
+#line 202 "parser.ypp" /* yacc.c:1646  */
     {
 		  (yyval).nextList.push_back(nextquad());
 		}
-#line 1622 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1621 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 207 "parser.ypp" /* yacc.c:1646  */
+#line 206 "parser.ypp" /* yacc.c:1646  */
     {
 		  //TODO???
 		}
-#line 1630 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1629 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 211 "parser.ypp" /* yacc.c:1646  */
+#line 210 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<STMT 6>" << endl;
 		  (yyval).nextList = (yyvsp[0]).nextList;
 		  cout << "<\\STMT 6>" << endl;
 		}
-#line 1640 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1639 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 218 "parser.ypp" /* yacc.c:1646  */
+#line 217 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 1647 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1646 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 222 "parser.ypp" /* yacc.c:1646  */
+#line 221 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 1654 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1653 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 225 "parser.ypp" /* yacc.c:1646  */
+#line 224 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 1661 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1660 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 229 "parser.ypp" /* yacc.c:1646  */
+#line 228 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 1668 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1667 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 233 "parser.ypp" /* yacc.c:1646  */
+#line 232 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<ASSN>" << endl;
 		  // get LVAL's variable and check it was declared
@@ -1702,31 +1701,31 @@ yyreduce:
 
 		  cout << "<\\ASSN>" << endl;
 		}
-#line 1706 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1705 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 268 "parser.ypp" /* yacc.c:1646  */
+#line 267 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<LVAL 1>" << endl;
 		  (yyval).variableName = (yyvsp[0]).tokenValue;
 		  cout << "<\\LVAL 1>" << endl;
 		}
-#line 1716 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1715 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 274 "parser.ypp" /* yacc.c:1646  */
+#line 273 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<LVAL 2>" << endl;
 		  (yyval).variableName = (yyvsp[0]).tokenValue;
 		  cout << "<\\LVAL 2>" << endl;
 		}
-#line 1726 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1725 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 281 "parser.ypp" /* yacc.c:1646  */
+#line 280 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<CNTRL 1>" << endl;
 		  cout << yylineno << endl;
@@ -1737,11 +1736,11 @@ yyreduce:
 		  (yyval).nextList.insert((yyval).nextList.end(), (yyvsp[0]).nextList.begin(), (yyvsp[0]).nextList.end());
 		  cout << "<\\CNTRL 1>" << endl;
 		}
-#line 1741 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1740 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 292 "parser.ypp" /* yacc.c:1646  */
+#line 291 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<CNTRL 2>" << endl;
 		  backpatch((yyvsp[-4]).trueList, (yyvsp[-2]).quad);
@@ -1749,11 +1748,11 @@ yyreduce:
 		  (yyval).nextList.insert((yyval).nextList.end(), (yyvsp[-1]).nextList.begin(), (yyvsp[-1]).nextList.end());
 		  cout << "<\\CNTRL 2>" << endl;
 		}
-#line 1753 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1752 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 300 "parser.ypp" /* yacc.c:1646  */
+#line 299 "parser.ypp" /* yacc.c:1646  */
     {
 		  //cout << "<CNTRL 3>" << endl;
 		  backpatch((yyvsp[-3]).trueList, (yyvsp[-1]).quad);
@@ -1762,11 +1761,11 @@ yyreduce:
 		  emit((string)"UJUMP " + to_string((yyvsp[-5]).quad));
 		  cout << "<\\CNTRL 3>" << endl;
 		}
-#line 1766 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1765 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 310 "parser.ypp" /* yacc.c:1646  */
+#line 309 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<BEXP 1>" << endl;
 		  backpatch((yyvsp[-3]).falseList, (yyvsp[-1]).quad);
@@ -1775,11 +1774,11 @@ yyreduce:
 		  (yyval).falseList.insert((yyval).falseList.end(), (yyvsp[0]).falseList.begin(), (yyvsp[0]).falseList.end());
 		  cout << "<\\BEXP 1>" << endl;
 		}
-#line 1779 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1778 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 319 "parser.ypp" /* yacc.c:1646  */
+#line 318 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<BEXP 2>" << endl;
 		  backpatch((yyvsp[-3]).trueList, (yyvsp[-1]).quad);
@@ -1788,11 +1787,11 @@ yyreduce:
 		  (yyval).trueList.insert((yyval).trueList.end(), (yyvsp[0]).trueList.begin(), (yyvsp[0]).trueList.end());
 		  cout << "<\\BEXP 2>" << endl;
 		}
-#line 1792 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1791 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 328 "parser.ypp" /* yacc.c:1646  */
+#line 327 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<BEXP 3>" << endl;
 		  string tempReg = getIntReg();
@@ -1846,51 +1845,51 @@ yyreduce:
 		  emit((string)"UJUMP " + "___");
 		  cout << "<\\BEXP 3>" << endl;
 		}
-#line 1850 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1849 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 383 "parser.ypp" /* yacc.c:1646  */
+#line 382 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<BEXP 4>" << endl;
 		  (yyval).trueList.swap((yyval).falseList);
 		  cout << "<\\BEXP 4>" << endl;
 		}
-#line 1860 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1859 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 389 "parser.ypp" /* yacc.c:1646  */
+#line 388 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<BEXP 5>" << endl;
 		  (yyval).trueList = (yyvsp[-1]).trueList;
 		  (yyval).falseList = (yyvsp[-1]).falseList;
 		  cout << "<\\BEXP 5>" << endl;
 		}
-#line 1871 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1870 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 397 "parser.ypp" /* yacc.c:1646  */
+#line 396 "parser.ypp" /* yacc.c:1646  */
     {
                   (yyval).quad = nextquad();
 				  cout << "<M>" << "quad=" << (yyval).quad << endl;
                 }
-#line 1880 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1879 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 403 "parser.ypp" /* yacc.c:1646  */
+#line 402 "parser.ypp" /* yacc.c:1646  */
     {
   		  cout << "<N>" << endl;
           (yyval).nextList.push_back(nextquad());
 		  emit((string)"UJUMP" + " ___");
                 }
-#line 1890 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1889 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 411 "parser.ypp" /* yacc.c:1646  */
+#line 410 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<EXP 1>" << endl;
 		  if(!isPrimitive((yyvsp[-2]).type) || !isPrimitive((yyvsp[0]).type)) {
@@ -1909,11 +1908,11 @@ yyreduce:
 		  }
 		  cout << "<\\EXP 1>" << endl;
 		}
-#line 1913 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1912 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 430 "parser.ypp" /* yacc.c:1646  */
+#line 429 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<EXP 2>" << endl;
 		  if(!isPrimitive((yyvsp[-2]).type) || !isPrimitive((yyvsp[0]).type)) {
@@ -1931,22 +1930,22 @@ yyreduce:
 		  }
 		  cout << "<\\EXP 2>" << endl;
 		}
-#line 1935 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1934 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 448 "parser.ypp" /* yacc.c:1646  */
+#line 447 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<EXP 3>" << endl;
 		  (yyval).place = (yyvsp[-1]).place;
 		  (yyval).type = (yyvsp[-1]).type;
 		  cout << "<\\EXP 3>" << endl;
 		}
-#line 1946 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1945 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 455 "parser.ypp" /* yacc.c:1646  */
+#line 454 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<EXP 4>" << endl;
 		  if((yyvsp[-2]).tokenValue == "Integer") {
@@ -1968,11 +1967,11 @@ yyreduce:
 		  }
 		  cout << "<\\EXP 4>" << endl;
 		}
-#line 1972 "parser.tab.cpp" /* yacc.c:1646  */
+#line 1971 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 477 "parser.ypp" /* yacc.c:1646  */
+#line 476 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<EXP 5>" << endl;
 		  // make sure ID is a variable in current scope
@@ -2007,21 +2006,21 @@ yyreduce:
 		  }
 		  cout << "<\\EXP 5>" << endl;
 		}
-#line 2011 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2010 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 512 "parser.ypp" /* yacc.c:1646  */
+#line 511 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<EXP 6>" << endl;
 		  
 		  cout << "<\\EXP 6>" << endl;
 		}
-#line 2021 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2020 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 518 "parser.ypp" /* yacc.c:1646  */
+#line 517 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<EXP 7>" << endl;
 		  if(isInteger((yyvsp[0]).tokenValue)) {
@@ -2036,21 +2035,21 @@ yyreduce:
 		  }
 		  cout << "<\\EXP 7>" << endl;
 		}
-#line 2040 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2039 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 533 "parser.ypp" /* yacc.c:1646  */
+#line 532 "parser.ypp" /* yacc.c:1646  */
     {
 		  cout << "<EXP 8>" << endl;
 		  (yyval).place = (yyvsp[0]).place;
 		  cout << "<\\EXP 8>" << endl;
 		}
-#line 2050 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2049 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 540 "parser.ypp" /* yacc.c:1646  */
+#line 539 "parser.ypp" /* yacc.c:1646  */
     {
 		  // check if $1 is a variable of type defstruct
 		  Variable* var = currBlock->getScopeVariable((yyvsp[-3]).tokenValue);
@@ -2065,76 +2064,76 @@ yyreduce:
 		    semanticError((yyvsp[-3]).tokenValue + " of type " + var->getType() + " is not subscriptable");
 		  }
 		}
-#line 2069 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2068 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 555 "parser.ypp" /* yacc.c:1646  */
+#line 554 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 2076 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2075 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 559 "parser.ypp" /* yacc.c:1646  */
+#line 558 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 2083 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2082 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 563 "parser.ypp" /* yacc.c:1646  */
+#line 562 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 2090 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2089 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 567 "parser.ypp" /* yacc.c:1646  */
+#line 566 "parser.ypp" /* yacc.c:1646  */
     {}
-#line 2096 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2095 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 570 "parser.ypp" /* yacc.c:1646  */
+#line 569 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 2103 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2102 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 573 "parser.ypp" /* yacc.c:1646  */
+#line 572 "parser.ypp" /* yacc.c:1646  */
     {
 		}
-#line 2110 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2109 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 577 "parser.ypp" /* yacc.c:1646  */
+#line 576 "parser.ypp" /* yacc.c:1646  */
     {cout << "<PROGRAM>" << endl;}
-#line 2116 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2115 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 578 "parser.ypp" /* yacc.c:1646  */
+#line 577 "parser.ypp" /* yacc.c:1646  */
     {cout << "<MAIN_FUNCTION>" << endl;}
-#line 2122 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2121 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 69:
-#line 579 "parser.ypp" /* yacc.c:1646  */
+#line 578 "parser.ypp" /* yacc.c:1646  */
     {cout << "<BLK>" << endl;}
-#line 2128 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2127 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 70:
-#line 580 "parser.ypp" /* yacc.c:1646  */
+#line 579 "parser.ypp" /* yacc.c:1646  */
     {cout << "<CNTRL 3>" << endl;}
-#line 2134 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2133 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 2138 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2137 "parser.tab.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2362,7 +2361,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 582 "parser.ypp" /* yacc.c:1906  */
+#line 581 "parser.ypp" /* yacc.c:1906  */
 
 
 void yyerror (char const *err){

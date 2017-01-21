@@ -255,7 +255,7 @@ struct Stype {
 
              structTypeTable
  _______________________________________
-\   defstructName    \    fieldTypes    \
+\   defstruct name   \    field types   \
 \____________________\__________________\
 \         .          \         .        \
 \         .          \         .        \
@@ -267,7 +267,7 @@ struct Stype {
 
 'funcStack'         --- Stack which holds on it's top the currently running function (by currently we mean the function which's call was the last in the parsed code). This stack contains only strings! by this string we can find the relevant symbol table with the environment variables in the 'funcSymbols' map.
 
-'structTypeTable' --- Map from global defstruct type to it's fields. Each 'fieldTypes' (second value) is Map from field name to field type (which can also be a defstruct).
+'structTypeTable' --- Map from defstruct type to it's fields. Each 'field types' (second value) is Map from field name to field type (which can also be a defstruct).
 
 *** each symbol table is a Map of [var name (string), var info class(Variable)]***
 
@@ -337,6 +337,7 @@ void backpatch(list<int> toFill, int address);
 //bool isPrimitive(Variable* var);
 //bool isPrimitive(string type);
 void copyStruct(Defstruct* lvalVar, string reg);
+void addToStructTypeTable(string structName, map<string, Type>typeFields);
 
 /* ----------------- Run Time Memory layout: -------------------
 

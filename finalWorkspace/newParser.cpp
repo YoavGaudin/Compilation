@@ -102,8 +102,9 @@ bool isReal(string& in) {
 void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
   for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != (DCL->dcl_ids).end(); ++i) {
     Variable* v = new Variable(*i, DCL->dcl_type);
-	DECLARLIST->declarationList.insert(std::pair<string,Variable>(*i, *v));
+    DECLARLIST->declarationList.insert(std::pair<string,Variable>(*i, *v));
   }
+  //TODO: it is not good that variables are created even on type definition of struct - should fix that
 }
 
 // 
@@ -114,15 +115,9 @@ void createArgumentsFromDCL(Stype* DCL, Stype* FUNC_ARGLIST) {
   }
 }
 
-// adds a Defstruct object into the global symbols table
-void addStructToSymbolTable(string name, map<string, Variable> fields) {
-  Defstruct* st = new Defstruct(name, fields);
-  typedefsTable.insert(std::pair<string, Defstruct>(name, *st));
-}
-
 // retutns true iff name is the name of a defined struct
 bool validateStructName(string name) {
-  if(typedefsTable.find(name) == typedefsTable.end()){
+  if(structTypeTable.find(name) == structTypeTable.end()){
     return false;
   }
   return true;
@@ -203,7 +198,14 @@ void copyStruct(Defstruct* lvalVar, string reg) {
     emit(STOR + " " + tempReg + " I1 " + to_string(lvalVar->getOffset() + i));
   }
 }
-
+/*
+void addToStructTypeTable(string structName, map<string, Type>& typeFields){
+  std::map<string, map<string, Type> >::iterator i;
+  if((i = structTypeTable.find(structName)) != structTypeTable.end())
+    structTypeTable.erase(i);
+  structTypeTable.insert(std::pair<string, map<string, Type> >(structName, typeFields));
+}
+*/
 
 /**************************************************************************/
 /*                           Main of parser                               */

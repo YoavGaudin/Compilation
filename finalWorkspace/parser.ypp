@@ -41,7 +41,7 @@ PROGRAM:
 ;
 TDEFS: 
 		TDEFS Defstruct '{' DECLARLIST '}' ID ';' {
-		  addStructToSymbolTable($6.tokenValue, $4.declarationList);
+		  //addToStructTypeTable($6.tokenValue, $4.declarationList);
 		}		
 	|
 		/*epsilon*/ { cout << "TDEFS to epsilon" << endl; }
@@ -153,11 +153,10 @@ DCL:
 		ID ':' ID {
 		  cout << "<DCL 2>" << endl;
 		  if(validateStructName($3.tokenValue) == false){
-		    semanticError("illegal type name");
+		    semanticError("did not find declaration of type name: " + $3.tokenValue);
 		  }
 		  $$.dcl_type = $3.tokenValue;
 		  $$.dcl_ids.push_front($1.tokenValue);
-		  //The 2nd ID might be the name of a custom typedef
 		  cout << "<\\DCL 2>" << endl;
 		}
 	|
