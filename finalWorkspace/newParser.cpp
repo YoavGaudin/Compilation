@@ -19,9 +19,6 @@ array<TypeEnum, 1000> memMap;
 set <string> usedIntRegs;
 set <string> usedRealRegs;
 
-string unimplemented;
-string implemented;
-
 // ------------------------------------ initialization functions ---------------------------------
 void currFunctionInit(string name) {
   currFunction = new Function(name);
@@ -177,7 +174,6 @@ bool isPrimitive(Variable* var) {
 }
 
 bool isPrimitive(string type) {
-  cout << type << endl;
   return type == "integer" || type == "real";
 }
 
@@ -237,7 +233,20 @@ void restoreUsedRegisters() {
 }
 
 void buildLinkerHeader() {
-  	
+  	vector<string> lines;
+	lines.push_back("<header>");
+	if(funcSymbols.find("main") == funcSymbols.end()) {
+	  lines.push_back("<main>");	
+	} else {
+	  lines.push_back("<empty>");
+	}
+	string unimplemented = "<unimplemented> ";
+	string implemented = "<implemented> ";
+	for(std::map<string, Function>::iterator f = funcSymbols.begin() ; f != funcSymbols.end() ; ++f) {
+	  if(f->second.isImplemented) {
+	    implemented += f->first + "," + to_string(f->second.address);
+	  }
+	}
 }
 
 void addToStructTypeTable(string structName, map<string, Type> typeFields){
@@ -250,8 +259,16 @@ void addToStructTypeTable(string structName, map<string, Type> typeFields){
     structTypeTable.erase(i);
   StructType* st = new StructType(structName, typeFields);
   structTypeTable.insert(std::pair<string, StructType>(structName, *st));
-}
 
+/*
+void addToStructTypeTable(string structName, map<string, Type>& typeFields){
+  std::map<string, map<string, Type> >::iterator i;
+  if((i = structTypeTable.find(structName)) != structTypeTable.end())
+    structTypeTable.erase(i);
+  structTypeTable.insert(std::pair<string, map<string, Type> >(structName, typeFields));
+>>>>>>> Stashed changes
+}
+*/
 
 /**************************************************************************/
 /*                           Main of parser                               */
@@ -296,6 +313,7 @@ int main(void)
   rc = yyparse();
   if (rc == 0) { // Parsed successfully
     cout << "---------------- OK!!! ----------------" << endl;
+	buildLinkerHeader();
     printState();
     cout << "typedefs:" << endl;
     for(std::map<string, Defstruct>::iterator i = typedefsTable.begin() ; i != typedefsTable.end() ; ++i) {
