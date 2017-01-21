@@ -259,7 +259,7 @@ void addToStructTypeTable(string structName, map<string, Type> typeFields){
 
 void printState() {
   // ---------------------------------
-  cout << "\tCodeBuffer: " << endl;
+  cout << "\tCodeBuffer (size = " << codeBuffer.size() << ") : " << endl;
   int j = 0;
   for(std::vector<string>::iterator i = codeBuffer.begin() ; i != codeBuffer.end() ; ++i, ++j) {
     cout << "\t\t" << j << ": " << *i << endl;  
