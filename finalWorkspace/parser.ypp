@@ -95,12 +95,8 @@ MAIN_FUNCTION:
 		  currFunction = new Function("main");
 		  currBlock = currFunction;
 		} BLK {
-		  Function* mainFunc = currFunction;
-		  mainFunc->insertSymbolTable($4.declarationList);
-		  funcSymbols.insert(std::pair<string, Function>("main", *mainFunc));
-
+		  funcSymbols.insert(std::pair<string, Function>("main", *currFunction));
 		  backpatch($4.nextList, nextquad());
-		  
 		  cout << "<\\MAIN_FUNCTION>" <<endl;
 		} 
 	|
@@ -109,6 +105,7 @@ MAIN_FUNCTION:
 BLK: 
                 M_blk DECLARATIONS {
 		  $$.declarationList = $2.declarationList;
+		  currFunction->insertSymbolTable($2.declarationList);
 		} '{' LIST '}' {
 		  $$.nextList = $5.nextList;
 		  $5.declarationList = $2.declarationList;
@@ -180,9 +177,9 @@ TYPE:
 		} // $$->tokenValue is already assigned in .lex file
 ;	
 LIST: 
-		M_list LIST M STMT{  
-		  $$.nextList = $4.nextList;
-		  backpatch($2.nextList, $3.quad);
+		LIST M STMT{  
+		  $$.nextList = $3.nextList;
+		  backpatch($1.nextList, $2.quad);
 		  cout << "<\\LIST>" << endl;
 		}
 	|
@@ -280,22 +277,22 @@ LVAL:
 		}
 ;
 CNTRL: 
-		M_if_1 If BEXP Then M STMT N Else M STMT {
-		  //cout << "<CNTRL 1>" << endl;
+		If BEXP Then M STMT N Else M STMT {
+		  cout << "<CNTRL 1>" << endl;
 		  cout << yylineno << endl;
-		  backpatch($3.trueList, $5.quad);
-		  backpatch($3.falseList, $9.quad);
+		  backpatch($2.trueList, $4.quad);
+		  backpatch($2.falseList, $8.quad);
+		  $$.nextList.insert($$.nextList.end(), $5.nextList.begin(), $5.nextList.end());
 		  $$.nextList.insert($$.nextList.end(), $6.nextList.begin(), $6.nextList.end());
-		  $$.nextList.insert($$.nextList.end(), $7.nextList.begin(), $7.nextList.end());
-		  $$.nextList.insert($$.nextList.end(), $10.nextList.begin(), $10.nextList.end());
+		  $$.nextList.insert($$.nextList.end(), $9.nextList.begin(), $9.nextList.end());
 		  cout << "<\\CNTRL 1>" << endl;
 		}
 	|
-		M_if_2 If BEXP Then M STMT N{
-		  //cout << "<CNTRL 2>" << endl;
-		  backpatch($3.trueList, $5.quad);
-		  $$.nextList.insert($$.nextList.end(), $3.falseList.begin(), $3.falseList.end());
-		  $$.nextList.insert($$.nextList.end(), $6.nextList.begin(), $6.nextList.end());
+		If BEXP Then M STMT N{
+		  cout << "<CNTRL 2>" << endl;
+		  backpatch($2.trueList, $4.quad);
+		  $$.nextList.insert($$.nextList.end(), $2.falseList.begin(), $2.falseList.end());
+		  $$.nextList.insert($$.nextList.end(), $5.nextList.begin(), $5.nextList.end());
 		  cout << "<\\CNTRL 2>" << endl;
 		}
 	|
@@ -579,10 +576,7 @@ CALL_ARGS:
 M_program:      /*epsilon*/ {cout << "<PROGRAM>" << endl;};
 M_main:         /*epsilon*/ {cout << "<MAIN_FUNCTION>" << endl;};
 M_blk:          /*epsilon*/ {cout << "<BLK>" << endl;};
-M_if_1:         /*epsilon*/ {cout << "<CNTRL 2>" << endl;};
-M_if_2:         /*epsilon*/ {cout << "<CNTRL 1>" << endl;};
 M_while:        /*epsilon*/ {cout << "<CNTRL 3>" << endl;};
-M_list:         /*epsilon*/ {cout << "<LIST>" << endl;};
 
 %%
 
