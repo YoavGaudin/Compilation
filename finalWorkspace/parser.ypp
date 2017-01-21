@@ -49,8 +49,9 @@ TDEFS:
 FDEFS: 
 		FDEFS TYPE ID '(' FUNC_ARGLIST_FULL ')'
 		{
-		  currFunction = new Function($3.tokenValue, $5.argsList);
+		  currFunction = new Function($3.tokenValue, $2.tokenValue, true,$5.argsList);
 		  currBlock = currFunction;
+		  currFunction->address = nextquad();
 		} BLK {
 		  cout << "<FDEFS 1>" << endl;
 		  cout << "\t" << $3.tokenValue << endl;
@@ -65,7 +66,8 @@ FDEFS:
 	|
 		FDEFS Extern TYPE ID '(' FUNC_ARGLIST_FULL ')' ';' {
 		  cout << "<FDEFS 2>" << endl;
-		  Function* func = new Function($4.tokenValue, $6.argsList);
+		  Function* func = new Function($4.tokenValue, $3.tokenValue, false, $6.argsList);
+		  func->address = -1; // illeagal address for unimplemeted functions
 		  funcSymbols.insert(std::pair<string, Function>($4.tokenValue, *func));
 		  cout << "<\\FDEFS 2>" << endl;
 		}		
@@ -531,7 +533,7 @@ EXP:
 	|
 		CALL {
 		  cout << "<EXP 8>" << endl;
-		  $$.place = $1.place;
+		  $$.type = $1.type;
 		  cout << "<\\EXP 8>" << endl;
 		}
 ;	
@@ -556,17 +558,42 @@ STREF:
 ;	
 CALL: 
 		Call ID '(' CALL_ARGS_FULL ')' {
+		  Function* func = getFunction($2.tokenValue);
+		  if(!func) {
+		    semanticError($2.tokenValue + " is not callable");
+		  }
+		  saveUsedRegisters();
+		  // save I0 and I2, return address and Frame Pointer
+		  emit("STORI I0 I1 0"); // MEM[SP+0] = I0
+		  emit("STORI I2 I1 1"); // MEM[SP+1] = I2
+		  emit("ADD2I I1 I1 2"); // SP += 2
+		  // TODO:put call parameters on the stack
+		  
+		  emit("JLINK " + func->address);
+		  // after return (SP points to return value)
+		  string LOAD = "";
+		  if(func->returnType == "integer") {
+		    $$.place = getIntReg();
+			$$.type = "integer";
+			LOAD = "LOADI";
+	      } else if(func->returnType == "real") {
+		    $$.place = getRealReg();
+			$$.type = "real";
+			LOAD = "LOADR";
+		  }
+		  emit(LOAD + " " + $$.place + " I1 0");
+		  
 		}
 ;	
 CALL_ARGS_FULL: 
 		CALL_ARGS {
 		}
 	|
-		/*epsilon*/
 		/*epsilon*/ {}
 ;	
 CALL_ARGS:
 		EXP {
+		  // TODO: make sure CALL_ARGS.place is register with expression value
 		}
 	|
 		CALL_ARGS ',' EXP {
