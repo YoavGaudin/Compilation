@@ -245,9 +245,9 @@ STMT_RETURN:
 		  emit("COPYI I1 I2");
 		  
 		  if($3.type == "integer") {
-		    emit("STORI " + $$.place + " I1 0");
+		    emit("STORI " + $3.place + " I1 0");
 		  } else {
-		    emit("STORR " + $$.place + " I1 0");
+		    emit("STORR " + $3.place + " I1 0");
 		  }
 		  emit("RETRN");
 		}
@@ -458,7 +458,7 @@ EXP:
 		  // EXP->place is always in register!
 		  if(isUsedIntReg($1.place) && isUsedIntReg($3.place)) {
 		    $$.place = getIntReg();
-		    emit("ADD2I " + $$.place + " " + $1.place + " " + $2.place);
+		    emit("ADD2I " + $$.place + " " + $1.place + " " + $3.place);
 		  } else if(isUsedRealReg($1.place) && isUsedRealReg($3.place)) {
 		    $$.place = getRealReg();
 		    emit("ADD2R " + $$.place + " " + $1.place + " " + $2.place);
@@ -614,7 +614,7 @@ CALL:
 		  
 		  emit("COPYI I2 I1"); // FP = SP
 		  // TODO:put call parameters on the stack
-		  func->putArgumentsOnStack($3.callArgsList);
+		  func->putArgumentsOnStack($4.callArgsList);
 		  emit("JLINK " + to_string(func->address));
 		  // after return (SP points to return value)
 		  string LOAD = "";
@@ -648,6 +648,7 @@ CALL_ARGS:
 		  if($1.type == "deftruct") {
 		    semanticError("Can't pass 'defstruct' as function parameter");
 		  }
+		  cout << "argument type " << $1.type << endl;
 		  $$.callArgsList.push_back($1.place);
 		}
 	|

@@ -286,14 +286,14 @@ void addToStructTypeTable(string structName, map<string, Type>& typeFields){
 /**************************************************************************/
 
 void printState() {
-  //ofstream filebuf;
-  //filebuf.open("a.rsk", ios::out);
+  ofstream filebuf;
+  filebuf.open("a.rsk", ios::out);
   // ---------------------------------
   cout << "\tCodeBuffer: " << endl;
   int j = 0;
   for(std::vector<string>::iterator i = codeBuffer.begin() ; i != codeBuffer.end() ; ++i, ++j) {
     cout << "\t\t" << j-4 << ": " << *i << endl;  
-	//filebuf << *i << endl;
+	filebuf << *i << endl;
   }
   // ---------------------------------
   cout << "\tFunctions table:" << funcSymbols.size() << endl;

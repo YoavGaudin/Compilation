@@ -215,7 +215,8 @@ struct Function : public Block {
 	  err = "wrong number of arguments: got " + to_string(size1) + " but requierd " + to_string(size2);
     }
 	for(int i = 0 ; i < size1 ; ++i) {
-	  if(arguments[i] != callArgsList[i]) {
+	  if((arguments[i] == "integer" && callArgsList[i].front() == 'R')
+          || (arguments[i] == "real" && callArgsList[i].front() == 'I')){
 		err = "wrong type of argument at " + to_string(i) + ", should be " + arguments[i]; 
 		break;
 	  }
