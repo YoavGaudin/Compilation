@@ -218,6 +218,17 @@ void saveUsedRegisters() {
   for(std::set<string>::iterator i = usedRealRegs.begin() ; i != usedRealRegs.end() ; ++i, ++j) {
 	emit("STORR " + *i + " I1 " + to_string(j));
   }
+  emit("ADD2I I1 I1 " + to_string(-j));
+}
+
+void restoreUsedRegisters() {
+  	int j = 0;
+  for(std::set<string>::iterator i = usedIntRegs.begin() ; i != usedIntRegs.end() ; ++i, ++j) {
+	emit("LOADI " + *i + " I1 " + to_string(j));
+  }
+  for(std::set<string>::iterator i = usedRealRegs.begin() ; i != usedRealRegs.end() ; ++i, ++j) {
+	emit("LOADI " + *i + " I1 " + to_string(j));
+  }
   emit("ADD2I I1 I1 " + to_string(j));
 }
 
