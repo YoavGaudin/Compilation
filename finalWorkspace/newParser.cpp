@@ -18,6 +18,9 @@ array<TypeEnum, 1000> memMap;
 set <string> usedIntRegs;
 set <string> usedRealRegs;
 
+string unimplemented;
+string implemented;
+
 // ------------------------------------ initialization functions ---------------------------------
 void currFunctionInit(string name) {
   currFunction = new Function(name);
@@ -197,6 +200,29 @@ void copyStruct(Defstruct* lvalVar, string reg) {
     emit(LOAD + " " + tempReg + " I1 " + to_string(atoi(reg.c_str()) + i));
     emit(STOR + " " + tempReg + " I1 " + to_string(lvalVar->getOffset() + i));
   }
+}
+
+Function* getFunction(string name) {
+  std::map<string, Function>::iterator i = funcSymbols.find(name);
+  if(i == funcSymbols.end()) {
+    return NULL;
+  }
+  return &(i->second);
+}
+
+void saveUsedRegisters() {
+  int j = 0;
+  for(std::set<string>::iterator i = usedIntRegs.begin() ; i != usedIntRegs.end() ; ++i, ++j) {
+	emit("STORI " + *i + " I1 " + to_string(j));
+  }
+  for(std::set<string>::iterator i = usedRealRegs.begin() ; i != usedRealRegs.end() ; ++i, ++j) {
+	emit("STORR " + *i + " I1 " + to_string(j));
+  }
+  emit("ADD2I I1 I1 " + to_string(j));
+}
+
+void buildLinkerHeader() {
+  	
 }
 /*
 void addToStructTypeTable(string structName, map<string, Type>& typeFields){

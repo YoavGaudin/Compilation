@@ -13,7 +13,7 @@
 
 using namespace std;
 
-//#define YYDEBUG 1
+#define YYDEBUG 1
 extern int yydebug;
 
 
@@ -175,11 +175,19 @@ public:
 struct Function : public Block {
 
   string name;
+  string returnType;
+  bool isImplemented;
+  // for unimplemented functions
+  vector<int> functionCalls; // an array of line numbers indicating where this function is called
+  
+  // for implemented functions
+  int address;
+  
   // the argumants are inserted straight into the symbol table in the constructor.
-  //int number_of_variables; // for this we use std data structures... they have size().
 
   // function with arguments
-  Function(string name_, vector<Variable> arguments_) : name(name_) {
+  Function(string name_, string return_type_, bool implemented_ ,vector<Variable> arguments_) :
+    name(name_), returnType(return_type_), isImplemented(implemented_) {
     insertSymbolTable(arguments_);
   }
 
@@ -304,6 +312,10 @@ extern vector<string> codeBuffer;
 extern array<TypeEnum, 1000> memMap;
 extern map<string, Defstruct> typdefsTable;
 
+// globals for the linker header
+extern string unimplemented;
+extern string implemented;
+
 
 // ----------------- Registers: ------------------
 extern set<string> usedIntRegs;
@@ -338,6 +350,10 @@ void backpatch(list<int> toFill, int address);
 //bool isPrimitive(string type);
 void copyStruct(Defstruct* lvalVar, string reg);
 void addToStructTypeTable(string structName, map<string, Type>typeFields);
+
+Function* getFunction(string name);
+void saveUsedRegisters();
+void buildLinkerHeader();
 
 /* ----------------- Run Time Memory layout: -------------------
 
