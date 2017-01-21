@@ -90,6 +90,10 @@ class Type {
   string typeName;
   int typeSizeInMemory;
 
+protected:
+
+  Type(string typeName_, int initSize) : typeName(typeName_), typeSizeInMemory(initSize) {}
+
 public:
 
   Type(string typeName_) : typeName(typeName_), typeSizeInMemory(1) {
@@ -114,7 +118,7 @@ class StructType : public Type {
 public:
   map<string, Type> fieldTypes; // [field name, field type]
   
-  StructType(string typeName_, map<string, Type> fieldTypes_) : Type(typeName_), fieldTypes(fieldTypes_) {
+  StructType(string typeName_, map<string, Type> fieldTypes_) : Type(typeName_, 0), fieldTypes(fieldTypes_) {
     setTypeSizeInMemory(0);
     for(std::map<string, Type>::iterator i = fieldTypes_.begin(); i != fieldTypes_.end(); ++i) {
       increaseTypeSizeInMemoryBy(i->second.getTypeSizeInMemory());

@@ -119,10 +119,10 @@ void createTypeFromDCL(Stype* DCL, Stype* DECLARLIST) {
       DECLARLIST->typedefList.insert(std::pair<string, Type>(*i, *t));
     } else { // DCL->type is a name of some previously typedefined struct!
       assert(validateStructName(DCL->dcl_type));
+      cout << "TTTTTTTTTTTTTTTTTTT : " << *i << endl;
       StructType& st = dynamic_cast<StructType&>(structTypeTable.find(*i)->second);
       DECLARLIST->typedefList.insert(std::pair<string, Type>(*i, st));
     }
-    
   }
 }
 
@@ -243,6 +243,7 @@ void buildLinkerHeader() {
 }
 
 void addToStructTypeTable(string structName, map<string, Type> typeFields){
+  cout << "\tcreating struct : " << structName << endl;
   std::map<string, Type>::iterator i;
   if((i = structTypeTable.find(structName)) != structTypeTable.end())
     structTypeTable.erase(i);
