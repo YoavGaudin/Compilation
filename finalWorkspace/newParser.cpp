@@ -144,7 +144,7 @@ void printState() {
   }
   cout << "\tFunctions table:" << funcSymbols.size() << endl;
   for(std::map<string, Function>::iterator f = funcSymbols.begin() ; f != funcSymbols.end() ; ++f) {
-    cout << "\targumants and variables of "<< f->first << ": " << endl;
+    cout << "\targumants and variables of "<< f->first << " at " << to_string((f->second).address) <<": " << endl;
     for(std::map<string, Variable>::iterator j = (f->second).symbolTable.begin(); j != (f->second).symbolTable.end(); ++j) {
       cout << "\t\t" << j->first << " : " << (j->second).getType() << "(" << (j->second).getOffset() << ")" << endl;
     }
