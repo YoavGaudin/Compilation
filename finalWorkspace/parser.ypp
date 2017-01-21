@@ -257,7 +257,7 @@ ASSN:
 		    emit(STOR + " " + $3.place + " I1 " + to_string(lvalVar->getOffset()));
 		  } else { // EXP is defstruct
 		    //EXP->place is offset from FP
-		    copyStruct(lvalVar, $3.place);
+		    copyStruct(dynamic_cast<Defstruct>(lvalVar), $3.place);
 		  }
 
 		  cout << "<\\ASSN>" << endl;

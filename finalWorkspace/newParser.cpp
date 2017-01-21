@@ -182,8 +182,26 @@ bool isPrimitive(string type) {
 /* lvalVar - holds all LVAL's information and specifically offset from FP where to copy
    reg - holds the offset from FP from where to copy
 */
-void copyStruct(Variable* lvalVar, string reg) {
-  
+void copyStruct(Defstruct* lvalVar, string reg) {
+  string intTempReg = getIntReg();
+  string realTempReg = getRealReg();
+  for(int i = 0; i < lvalVar.sizeInMemory; ++i) {
+    string STOR = "";
+    string LOAD = "";
+    string tempReg = "";
+    if(lvalVar->getType() == "integer") {
+      STOR = "STORI";
+      LOAD = "LOADI";
+      tempReg = intTempReg;
+    } else if (lvalVar->getType() == "real") {
+      STOR = "STORR";
+      LOAD = "LOADR";
+      tempReg = realTempReg;
+    } else assert(0);
+
+    emit(LOAD + " " + tempReg + " I1 " + to_string(STR2INT(reg) + i));
+    emit(STOR + " " + tempReg + " I1 " + to_string(STR2INT(lvalVar) + i));
+  }
 }
 
 

@@ -56,7 +56,17 @@ public:
 class Defstruct : Variable {
 public:
   map<string, Variable> fields;
-  Defstruct(string name_, map<string, Variable> fields_) : Variable(name_, DEFSTRUCT), fields(fields_) {}
+  int sizeInMemory;
+  
+  Defstruct(string name_, map<string, Variable> fields_) : Variable(name_, DEFSTRUCT), fields(fields_) {
+    sizeInMemory = 0;
+    for(std::map<string, Variable>::iterator i = fields_.begin(); i != fields_.end(); ++i) {
+      if(isPrimitive(&(i->second)))
+	++sizeInMemory;
+      else // field is struct
+        sizeInMemory += dynamic_cast<Defstruct>(i->second).sizeInMemory;
+    }
+  }
 
   Variable getField(string name) {
     std::map<string, Variable>::iterator i;
@@ -279,7 +289,7 @@ void printState();
 void backpatch(list<int> toFill, int address);
 bool isPrimitive(Variable* var);
 bool isPrimitive(string type);
-void copyStruct(Variable* lvalVar, string reg);
+void copyStruct(Defstruct* lvalVar, string reg);
 
 /* ----------------- Run Time Memory layout: -------------------
 
