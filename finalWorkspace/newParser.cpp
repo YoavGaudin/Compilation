@@ -10,7 +10,8 @@ map<string, Function> funcSymbols;
 stack<string> funcStack;
 Function* currFunction;
 Block* currBlock;
-map<string, map<string, string> > structTypeTable;
+map<string, Type> structTypeTable;
+// TODO remove this
 map<string, Defstruct> typedefsTable;
 vector<string> codeBuffer;
 array<TypeEnum, 1000> memMap;
@@ -107,7 +108,22 @@ void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
     Variable* v = new Variable(*i, DCL->dcl_type);
     DECLARLIST->declarationList.insert(std::pair<string,Variable>(*i, *v));
   }
-  //TODO: it is not good that variables are created even on type definition of struct - should fix that
+}
+
+// iterate over the ids list and insert them with the relevant type to typedefList. Finally, typedefList will be used to create one new StructType and insert it into the structTypeTable!
+void createTypeFromDCL(Stype* DCL, Stype* DECLARLIST) {
+  for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != (DCL->dcl_ids).end(); ++i) {
+      cout << DCL->type << endl;
+    if(isPrimitive(DCL->type)) {
+      Type* t = new Type(*i);
+      DECLARLIST->typedefList.insert(std::pair<string, Type>(*i, *t));
+    } else { // DCL->type is a name of some previously typedefined struct!
+      assert(validateStructName(DCL->type));
+      StructType& st = dynamic_cast<StructType&>(structTypeTable.find(*i)->second);
+      DECLARLIST->typedefList.insert(std::pair<string, Type>(*i, st));
+    }
+    
+  }
 }
 
 // 
@@ -174,6 +190,7 @@ bool isPrimitive(Variable* var) {
 }
 
 bool isPrimitive(string type) {
+  cout << type << endl;
   return type == "integer" || type == "real";
 }
 
@@ -224,14 +241,15 @@ void saveUsedRegisters() {
 void buildLinkerHeader() {
   	
 }
-/*
-void addToStructTypeTable(string structName, map<string, Type>& typeFields){
-  std::map<string, map<string, Type> >::iterator i;
+
+void addToStructTypeTable(string structName, map<string, Type> typeFields){
+  std::map<string, Type>::iterator i;
   if((i = structTypeTable.find(structName)) != structTypeTable.end())
     structTypeTable.erase(i);
-  structTypeTable.insert(std::pair<string, map<string, Type> >(structName, typeFields));
+  StructType* st = new StructType(structName, typeFields);
+  structTypeTable.insert(std::pair<string, Type>(structName, *st));
 }
-*/
+
 
 /**************************************************************************/
 /*                           Main of parser                               */

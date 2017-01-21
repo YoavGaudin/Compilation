@@ -41,7 +41,9 @@ PROGRAM:
 ;
 TDEFS: 
 		TDEFS Defstruct '{' DECLARLIST '}' ID ';' {
-		  //addToStructTypeTable($6.tokenValue, $4.declarationList);
+		  cout << "<TDEFS>" << endl;
+		  addToStructTypeTable($6.tokenValue, $4.typedefList);
+		  cout << "<\\TDEFS>" << endl;
 		}		
 	|
 		/*epsilon*/ { cout << "TDEFS to epsilon" << endl; }
@@ -131,8 +133,12 @@ DECLARLIST:
 		DECLARLIST DCL ';' {
 		  cout << "<DECLARELIST 1>" << endl;
 		  cout << "\t" << $2.dcl_type << endl;
+		  // for DECLARLIST inside BLK - create variables and struct instances
 		  createVariablesFromDCL(&$2, &$1);
 		  $$.declarationList = $1.declarationList;
+		  // for DECLARLIST inside TDEFS - create Types and insert to structTypeTable
+		  //createTypeFromDCL(&$2, &$1);
+		  //$$.typedefList = $1.typedefList;
 		  cout << "<\\DECLARELIST 1>" << endl;
 		}
 	|
@@ -148,7 +154,7 @@ DCL:
 		  cout << "<DCL 1>" << endl;
 		  cout << "\tvariable "+ $1.tokenValue +" of type "+ $3.tokenValue +" declared" << endl;
 		  $$.dcl_type = $3.tokenValue;
-		  ($$.dcl_ids).push_front($1.tokenValue);
+		  $$.dcl_ids.push_front($1.tokenValue);
 		  cout << "<\\DCL 1>" << endl;
 		} 
 	|
@@ -164,8 +170,8 @@ DCL:
 	|
 		ID ',' DCL {
 		  cout << "<DCL 3>" << endl;
-		  ($3.dcl_ids).push_front($1.tokenValue);
-		  ($$.dcl_ids).merge($3.dcl_ids);
+		  $3.dcl_ids.push_front($1.tokenValue);
+		  $$.dcl_ids.merge($3.dcl_ids);
 		  $$.dcl_type = $3.dcl_type;
 		  cout << "<\\DCL 3>" << endl;
 		}

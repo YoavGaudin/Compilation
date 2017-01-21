@@ -13,7 +13,7 @@
 
 using namespace std;
 
-#define YYDEBUG 1
+//#define YYDEBUG 1
 extern int yydebug;
 
 
@@ -210,7 +210,8 @@ struct Stype {
   
   // for DECLARLIST and DECLARATIONS - contains the declared Variables 
   map<string, Variable> declarationList;
-
+  map<string, Type> typedefList;
+  
   // for DCL - the type for the last arguments
   string dcl_type;
   // for DCL - the variables names () ids of the currently declared type
@@ -263,7 +264,7 @@ struct Stype {
 
              structTypeTable
  _______________________________________
-\   defstruct name   \    field types   \
+\   defstruct name   \       Type       \
 \____________________\__________________\
 \         .          \         .        \
 \         .          \         .        \
@@ -275,7 +276,7 @@ struct Stype {
 
 'funcStack'         --- Stack which holds on it's top the currently running function (by currently we mean the function which's call was the last in the parsed code). This stack contains only strings! by this string we can find the relevant symbol table with the environment variables in the 'funcSymbols' map.
 
-'structTypeTable' --- Map from defstruct type to it's fields. Each 'field types' (second value) is Map from field name to field type (which can also be a defstruct).
+'structTypeTable' --- Map from defstruct type to the Type representing it's information. Each 'Type' (second value) is a class which contains a Map from field name to field type (which can also be a defstruct and so on).
 
 *** each symbol table is a Map of [var name (string), var info class(Variable)]***
 
@@ -307,7 +308,7 @@ extern map<string, Function> funcSymbols;
 extern stack<string> funcStack;
 extern Function* currFunction;
 extern Block* currBlock;
-extern map<string, map<string, string> > structTypeTable;
+extern map<string, Type> structTypeTable;
 extern vector<string> codeBuffer;
 extern array<TypeEnum, 1000> memMap;
 extern map<string, Defstruct> typdefsTable;
@@ -335,6 +336,7 @@ string getRealReg();
 bool isUsedIntReg(string& in);
 bool isUsedRealReg(string& in);
 void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST);
+void createTypeFromDCL(Stype* DCL, Stype* DECLARLIST);
 void createArgumentsFromDCL(Stype* DCL, Stype* FUNC_ARGLIST);
 void addStructToSymbolTable(string name, map<string, Variable> fields);
 bool validateStructName(string name);
