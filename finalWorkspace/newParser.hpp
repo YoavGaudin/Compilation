@@ -71,7 +71,7 @@ public:
 class Block {
 private:
   Block* parent;
-
+  int symbolTableSize = 0;
 public:
   map<string, Variable> symbolTable;
   
@@ -97,7 +97,12 @@ public:
     if((i = symbolTable.find(name)) != symbolTable.end())
       symbolTable.erase(i);
     symbolTable.insert(std::pair<string, Variable>(name, v));
-    v.setOffset(symbolTable.size());
+    v.setOffset(symbolTableSize);
+    if(validateStructName(v.getType()) {
+      symbolTableSize += dynamic_cast<Defstruct>(v).sizeInMemory;
+    } else {
+      symbolTableSize++;
+    }
   }
   
   void insertSymbolTable(map<string, Variable>& vars) {
