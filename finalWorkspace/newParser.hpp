@@ -102,14 +102,12 @@ public:
   
   void insertSymbolTable(map<string, Variable>& vars) {
     for(std::map<string, Variable>::iterator i = vars.begin(); i != vars.end(); ++i) {
-      cout << "\tinserting var " << i->first << " of type " << i->second.getType() << endl;
       this->addVariable(i->first, i->second);
     }
   }
 
   void insertSymbolTable(vector<Variable>& vars) {
     for(std::vector<Variable>::iterator i = vars.begin(); i != vars.end(); ++i) {
-      cout << "\tvar " << i->getName() << " is of type " << i->getType() << endl;
       addVariable(i->getName(), *i);
     }
   }

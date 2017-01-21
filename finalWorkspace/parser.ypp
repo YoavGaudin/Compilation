@@ -46,12 +46,16 @@ TDEFS:
 		/*epsilon*/ { cout << "TDEFS to epsilon" << endl; }
 ;		
 FDEFS: 
-		FDEFS TYPE ID '(' FUNC_ARGLIST_FULL ')' BLK {
+		FDEFS TYPE ID '(' FUNC_ARGLIST_FULL ')'
+		{
+		  currFunction = new Function($3.tokenValue, $5.argsList);
+		  currBlock = currFunction;
+		} BLK {
 		  cout << "<FDEFS 1>" << endl;
 		  cout << "\t" << $3.tokenValue << endl;
-		  Function* func = new Function($3.tokenValue, $5.argsList);
-		  func->insertSymbolTable($7.declarationList);
-		  funcSymbols.insert(std::pair<string, Function>($3.tokenValue, *func));
+		  
+		  currFunction->insertSymbolTable($7.declarationList);
+		  funcSymbols.insert(std::pair<string, Function>($3.tokenValue, *currFunction));
 		  cout << "<\\FDEFS 1>" << endl;
 		}
 	|
@@ -169,7 +173,9 @@ TYPE:
 		} // $$->tokenValue is already assigned in .lex file
 ;	
 LIST: 
-		M_list LIST STMT {
+		M_list LIST M STMT{  
+		  $$.nextList = $4.nextList;
+		  backpatch($2.nextList, $3.quad);
 		  cout << "<\\LIST>" << endl;
 		}
 	|
@@ -177,10 +183,12 @@ LIST:
 ;	
 STMT: 
 		ASSN {
+		  $$.nextList.push_back(nextquad());
 		}
 	|
 		CNTRL {
 		  cout << "<STMT 2>" << endl;
+		  $$.nextList = $1.nextList;
 		  cout << "<\\STMT 2>" << endl;
 		}
 	|
@@ -195,6 +203,7 @@ STMT:
 	|
 		BLK {
 		  cout << "<STMT 6>" << endl;
+		  $$.nextList = $1.nextList;
 		  cout << "<\\STMT 6>" << endl;
 		}
 ;	
@@ -374,14 +383,14 @@ BEXP:
 ;
 
 M:    		/*epsilon*/ {
-  		  cout << "<M>" << endl;
                   $$.quad = nextquad();
+				  cout << "<M>" << "quad=" << $$.quad << endl;
                 }
 ;
 
 N:    		/*epsilon*/ {
   		  cout << "<N>" << endl;
-                  $$.nextList.push_back(nextquad());
+          $$.nextList.push_back(nextquad());
 		  emit((string)"UJUMP" + " ___");
                 }
 ;
