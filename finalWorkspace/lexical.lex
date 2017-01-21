@@ -47,7 +47,7 @@ COMMENT		   (\/\/.*)
 integer		{yylval = *(new Stype(yytext)); return Integer;}
 real		{yylval = *(new Stype(yytext)); return Real;}
 return		{yylval = *(new Stype(yytext)); return Return;}
-defstruct	{yylval = *(new Stype(yytext)); printf("%s\n", yytext); return Defstruct;}
+defstruct	{yylval = *(new Stype(yytext)); return Defstruct;}
 while		{yylval = *(new Stype(yytext)); return While;}
 do		{yylval = *(new Stype(yytext)); return Do;}
 if		{yylval = *(new Stype(yytext)); return If;}

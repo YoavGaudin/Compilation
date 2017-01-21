@@ -46,12 +46,16 @@ TDEFS:
 		/*epsilon*/ { cout << "TDEFS to epsilon" << endl; }
 ;		
 FDEFS: 
-		FDEFS TYPE ID '(' FUNC_ARGLIST_FULL ')' BLK {
+		FDEFS TYPE ID '(' FUNC_ARGLIST_FULL ')'
+		{
+		  currFunction = new Function($3.tokenValue, $5.argsList);
+		  currBlock = currFunction;
+		} BLK {
 		  cout << "<FDEFS 1>" << endl;
 		  cout << "\t" << $3.tokenValue << endl;
-		  Function* func = new Function($3.tokenValue, $5.argsList);
-		  func->insertSymbolTable($7.declarationList);
-		  funcSymbols.insert(std::pair<string, Function>($3.tokenValue, *func));
+		  
+		  currFunction->insertSymbolTable($7.declarationList);
+		  funcSymbols.insert(std::pair<string, Function>($3.tokenValue, *currFunction));
 		  cout << "<\\FDEFS 1>" << endl;
 		}
 	|

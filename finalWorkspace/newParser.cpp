@@ -99,7 +99,6 @@ bool isReal(string& in) {
 
 // iterate over the ids list and for each id create Variable with the DCL type and this id.
 void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
-	cout << "\tcreateVariablesFromDCL: type- " + DCL->dcl_type << endl;
   for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != (DCL->dcl_ids).end(); ++i) {
     Variable* v = new Variable(*i, DCL->dcl_type);
 	DECLARLIST->declarationList.insert(std::pair<string,Variable>(*i, *v));
@@ -139,6 +138,10 @@ void Error(string s) {
 }
 
 void printState() {
+  cout << "\tCodeBuffer: " << endl;
+  for(std::vector<string>::iterator i = codeBuffer.begin() ; i != codeBuffer.end() ; ++i) {
+    cout << "\t\t" << *i << endl;  
+  }
   cout << "\tFunctions table:" << funcSymbols.size() << endl;
   for(std::map<string, Function>::iterator f = funcSymbols.begin() ; f != funcSymbols.end() ; ++f) {
     cout << "\targumants and variables:" << endl;
