@@ -22,5 +22,5 @@ var funcvar:integer;
 main
 var a,b:integer;
 	c,d:real;
-	//st:MyStruct2;
+	st:MyStruct2;
 { }
