@@ -13,7 +13,7 @@
 
 using namespace std;
 
-//#define YYDEBUG 1
+#define YYDEBUG 1
 extern int yydebug;
 
 void emit(string const& singleInstruction);
@@ -201,6 +201,9 @@ struct Function : public Block {
 
   // function without arguments
   Function(string name_) : name(name_) {
+	if(name == "main") {
+	  isImplemented = true;
+	}
     // std::* containers should be automatically dynamically allocated on decleration
   }
   
@@ -212,7 +215,8 @@ struct Function : public Block {
 	  err = "wrong number of arguments: got " + to_string(size1) + " but requierd " + to_string(size2);
     }
 	for(int i = 0 ; i < size1 ; ++i) {
-	  if(arguments[i] != callArgsList[i]) {
+	  if((arguments[i] == "integer" && callArgsList[i].front() == 'R')
+          || (arguments[i] == "real" && callArgsList[i].front() == 'I')){
 		err = "wrong type of argument at " + to_string(i) + ", should be " + arguments[i]; 
 		break;
 	  }

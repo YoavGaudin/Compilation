@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string> //redundant?
 #include "newParser.hpp"
 #include <algorithm>
@@ -18,9 +19,6 @@ array<TypeEnum, 1000> memMap;
 
 set <string> usedIntRegs;
 set <string> usedRealRegs;
-
-string unimplemented;
-string implemented;
 
 // ------------------------------------ initialization functions ---------------------------------
 void currFunctionInit(string name) {
@@ -146,7 +144,7 @@ bool validateStructName(string name) {
 
 // returns the line number of the instruction that will be emitted after the call to this function
 int nextquad() {
-  return codeBuffer.size();
+  return codeBuffer.size()+1;
 }
 
 void Error(string s) {
@@ -168,7 +166,7 @@ static bool subStrReplace(std::string& str, const std::string& from, const std::
  */
 void backpatch(list<int> toFill, int address) {
   for(std::list<int>::iterator i = toFill.begin(); i != toFill.end(); ++i) {
-    subStrReplace(codeBuffer[*i], "___", to_string(address));
+    subStrReplace(codeBuffer[*i-1], "___", to_string(address));
   }
 }
 
@@ -177,7 +175,6 @@ bool isPrimitive(Variable* var) {
 }
 
 bool isPrimitive(string type) {
-  cout << type << endl;
   return type == "integer" || type == "real";
 }
 
@@ -237,7 +234,30 @@ void restoreUsedRegisters() {
 }
 
 void buildLinkerHeader() {
-  	
+  	vector<string> lines;
+	lines.push_back("<header>");
+	if(funcSymbols.find("main") != funcSymbols.end()) {
+	  lines.push_back("<main>");	
+	} else {
+	  lines.push_back("<empty>");
+	}
+	string unimplemented = "<unimplemented> ";
+	string implemented = "<implemented> ";
+	for(std::map<string, Function>::iterator f = funcSymbols.begin() ; f != funcSymbols.end() ; ++f) {
+	  if(f->second.isImplemented) {
+	    implemented += " " + f->first + "," + to_string(f->second.address);
+	  } else {
+		unimplemented += " " + f->first;
+	    for(std::vector<int>::iterator i = f->second.functionCalls.begin() ; i != f->second.functionCalls.end() ; ++i) {
+		  unimplemented += "," + to_string(*i);
+		}
+	  }
+	}
+	lines.push_back(unimplemented);
+	lines.push_back(implemented);
+	lines.push_back("</header>");
+	lines.insert(lines.end(), codeBuffer.begin(), codeBuffer.end());
+	codeBuffer = lines;
 }
 
 void addToStructTypeTable(string structName, map<string, Type> typeFields){
@@ -251,18 +271,29 @@ void addToStructTypeTable(string structName, map<string, Type> typeFields){
   StructType* st = new StructType(structName, typeFields);
   structTypeTable.insert(std::pair<string, StructType>(structName, *st));
 }
-
+/*
+void addToStructTypeTable(string structName, map<string, Type>& typeFields){
+  std::map<string, map<string, Type> >::iterator i;
+  if((i = structTypeTable.find(structName)) != structTypeTable.end())
+    structTypeTable.erase(i);
+  structTypeTable.insert(std::pair<string, map<string, Type> >(structName, typeFields));
+>>>>>>> Stashed changes
+}
+*/
 
 /**************************************************************************/
 /*                           Main of parser                               */
 /**************************************************************************/
 
 void printState() {
+  ofstream filebuf;
+  filebuf.open("a.rsk", ios::out);
   // ---------------------------------
   cout << "\tCodeBuffer (size = " << codeBuffer.size() << ") : " << endl;
   int j = 0;
   for(std::vector<string>::iterator i = codeBuffer.begin() ; i != codeBuffer.end() ; ++i, ++j) {
-    cout << "\t\t" << j << ": " << *i << endl;  
+    cout << "\t\t" << j-4 << ": " << *i << endl;  
+	filebuf << *i << endl;
   }
   // ---------------------------------
   cout << "\tFunctions table:" << funcSymbols.size() << endl;
@@ -286,16 +317,17 @@ void printState() {
 }
 
 
-int main(void)
+int main(int argc, char *argv[])
 {
   int rc;
 #if YYDEBUG
   yydebug=1;
 #endif
-  cout << "START Compilation" << endl;
+  cout << "START Compilation of " << argv[0] << endl;
   rc = yyparse();
   if (rc == 0) { // Parsed successfully
     cout << "---------------- OK!!! ----------------" << endl;
+	buildLinkerHeader();
     printState();
     cout << "typedefs:" << endl;
     for(std::map<string, Defstruct>::iterator i = typedefsTable.begin() ; i != typedefsTable.end() ; ++i) {

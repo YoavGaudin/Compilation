@@ -8,7 +8,7 @@ char * getString(char * in);
 %}
 
 %option yylineno noyywrap
-%option   outfile="lexical.c" header-file="lexical.h"
+%option outfile="lexical.c" header-file="lexical.h"
 
 PRIMITIVE_TYPE     (integer|real)
 SEQUENSER          (return)
