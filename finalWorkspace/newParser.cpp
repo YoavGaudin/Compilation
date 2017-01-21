@@ -144,7 +144,7 @@ bool validateStructName(string name) {
 
 // returns the line number of the instruction that will be emitted after the call to this function
 int nextquad() {
-  return codeBuffer.size();
+  return codeBuffer.size()+1;
 }
 
 void Error(string s) {
@@ -166,7 +166,7 @@ static bool subStrReplace(std::string& str, const std::string& from, const std::
  */
 void backpatch(list<int> toFill, int address) {
   for(std::list<int>::iterator i = toFill.begin(); i != toFill.end(); ++i) {
-    subStrReplace(codeBuffer[*i], "___", to_string(address));
+    subStrReplace(codeBuffer[*i-1], "___", to_string(address));
   }
 }
 
@@ -286,14 +286,14 @@ void addToStructTypeTable(string structName, map<string, Type>& typeFields){
 /**************************************************************************/
 
 void printState() {
-  ofstream filebuf;
-  filebuf.open("a.rsk", ios::out);
+  //ofstream filebuf;
+  //filebuf.open("a.rsk", ios::out);
   // ---------------------------------
   cout << "\tCodeBuffer: " << endl;
   int j = 0;
   for(std::vector<string>::iterator i = codeBuffer.begin() ; i != codeBuffer.end() ; ++i, ++j) {
-    cout << "\t\t" << j << ": " << *i << endl;  
-	filebuf << *i << endl;
+    cout << "\t\t" << j-4 << ": " << *i << endl;  
+	//filebuf << *i << endl;
   }
   // ---------------------------------
   cout << "\tFunctions table:" << funcSymbols.size() << endl;
@@ -323,7 +323,7 @@ int main(int argc, char *argv[])
 #if YYDEBUG
   yydebug=1;
 #endif
-  cout << "START Compilation of " << argv[1] << endl;
+  cout << "START Compilation of " << argv[0] << endl;
   rc = yyparse();
   if (rc == 0) { // Parsed successfully
     cout << "---------------- OK!!! ----------------" << endl;

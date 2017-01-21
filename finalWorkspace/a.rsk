@@ -1,0 +1,17 @@
+<header>
+<main>
+<unimplemented> 
+<implemented>  main,2
+</header>
+UJUMP 2
+COPYI I3 7
+COPYI I4 77
+SLETI I5 I3 I4
+BNEQZ I5 ___
+UJUMP 7
+COPYI I6 1
+STORI I6 I1 1
+UJUMP ___
+COPYI I7 0
+STORI I7 I1 1
+HALT

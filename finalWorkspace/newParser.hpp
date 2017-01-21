@@ -13,7 +13,7 @@
 
 using namespace std;
 
-//#define YYDEBUG 1
+#define YYDEBUG 1
 extern int yydebug;
 
 void emit(string const& singleInstruction);
