@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string> //redundant?
 #include "newParser.hpp"
 #include <algorithm>
@@ -235,7 +236,7 @@ void restoreUsedRegisters() {
 void buildLinkerHeader() {
   	vector<string> lines;
 	lines.push_back("<header>");
-	if(funcSymbols.find("main") == funcSymbols.end()) {
+	if(funcSymbols.find("main") != funcSymbols.end()) {
 	  lines.push_back("<main>");	
 	} else {
 	  lines.push_back("<empty>");
@@ -244,9 +245,19 @@ void buildLinkerHeader() {
 	string implemented = "<implemented> ";
 	for(std::map<string, Function>::iterator f = funcSymbols.begin() ; f != funcSymbols.end() ; ++f) {
 	  if(f->second.isImplemented) {
-	    implemented += f->first + "," + to_string(f->second.address);
+	    implemented += " " + f->first + "," + to_string(f->second.address);
+	  } else {
+		unimplemented += " " + f->first;
+	    for(std::vector<int>::iterator i = f->second.functionCalls.begin() ; i != f->second.functionCalls.end() ; ++i) {
+		  unimplemented += "," + to_string(*i);
+		}
 	  }
 	}
+	lines.push_back(unimplemented);
+	lines.push_back(implemented);
+	lines.push_back("</header>");
+	lines.insert(lines.end(), codeBuffer.begin(), codeBuffer.end());
+	codeBuffer = lines;
 }
 
 void addToStructTypeTable(string structName, map<string, Type> typeFields){
@@ -259,7 +270,7 @@ void addToStructTypeTable(string structName, map<string, Type> typeFields){
     structTypeTable.erase(i);
   StructType* st = new StructType(structName, typeFields);
   structTypeTable.insert(std::pair<string, StructType>(structName, *st));
-
+}
 /*
 void addToStructTypeTable(string structName, map<string, Type>& typeFields){
   std::map<string, map<string, Type> >::iterator i;
@@ -275,11 +286,14 @@ void addToStructTypeTable(string structName, map<string, Type>& typeFields){
 /**************************************************************************/
 
 void printState() {
+  ofstream filebuf;
+  filebuf.open("a.rsk", ios::out);
   // ---------------------------------
   cout << "\tCodeBuffer: " << endl;
   int j = 0;
   for(std::vector<string>::iterator i = codeBuffer.begin() ; i != codeBuffer.end() ; ++i, ++j) {
     cout << "\t\t" << j << ": " << *i << endl;  
+	filebuf << *i << endl;
   }
   // ---------------------------------
   cout << "\tFunctions table:" << funcSymbols.size() << endl;
@@ -303,13 +317,13 @@ void printState() {
 }
 
 
-int main(void)
+int main(int argc, char *argv[])
 {
   int rc;
 #if YYDEBUG
   yydebug=1;
 #endif
-  cout << "START Compilation" << endl;
+  cout << "START Compilation of " << argv[1] << endl;
   rc = yyparse();
   if (rc == 0) { // Parsed successfully
     cout << "---------------- OK!!! ----------------" << endl;

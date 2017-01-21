@@ -201,6 +201,9 @@ struct Function : public Block {
 
   // function without arguments
   Function(string name_) : name(name_) {
+	if(name == "main") {
+	  isImplemented = true;
+	}
     // std::* containers should be automatically dynamically allocated on decleration
   }
   
