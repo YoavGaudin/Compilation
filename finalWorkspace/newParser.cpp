@@ -2,6 +2,7 @@
 #include <string> //redundant?
 #include "newParser.hpp"
 #include <algorithm>
+#include <iterator>
 
 extern int yyparse (void);
 
@@ -181,28 +182,35 @@ void copyStruct(Variable* lvalVar, string reg) {
   
 }
 
+static void printCodeBuffer() {
+  cout << " --- Output Code ---" << endl;
+  std::copy(codeBuffer.begin(), codeBuffer.end(), std::ostream_iterator<string>(cout, "\n"));
+}
+
 /**************************************************************************/
 /*                           Main of parser                               */
 /**************************************************************************/
 
 int main(void)
 {
-    int rc;
+  int rc;
 #if YYDEBUG
-    yydebug=1;
+  yydebug=1;
 #endif
-	cout << "START Compilation" << endl;
-    rc = yyparse();
-    if (rc == 0) { // Parsed successfully
-      cout << "---------------- OK!!! ----------------" << endl;
-	  printState();
-	  cout << "typedefs:" << endl;
-	  for(std::map<string, Defstruct>::iterator i = typedefsTable.begin() ; i != typedefsTable.end() ; ++i) {
-		cout << i->first << ": " << endl;
-		std::map<string, Variable> fields = (i->second).fields;
-		for(std::map<string, Variable>::iterator j = fields.begin(); j != fields.end(); ++j) {
-		  cout << "--" << j->first << " : " << (j->second).getType() << endl;
-	    }
-	  }
+  cout << "START Compilation" << endl;
+  rc = yyparse();
+  if (rc == 0) { // Parsed successfully
+    cout << "---------------- OK!!! ----------------" << endl;
+    printState();
+    cout << "typedefs:" << endl;
+    for(std::map<string, Defstruct>::iterator i = typedefsTable.begin() ; i != typedefsTable.end() ; ++i) {
+      cout << i->first << ": " << endl;
+      std::map<string, Variable> fields = (i->second).fields;
+      for(std::map<string, Variable>::iterator j = fields.begin(); j != fields.end(); ++j) {
+	cout << "--" << j->first << " : " << (j->second).getType() << endl;
+      }
     }
+    cout << endl;
+    printCodeBuffer();
+  }
 }
