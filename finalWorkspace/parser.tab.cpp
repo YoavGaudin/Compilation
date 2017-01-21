@@ -461,8 +461,8 @@ static const yytype_uint16 yyrline[] =
      200,   206,   210,   214,   218,   225,   229,   232,   236,   240,
      275,   281,   288,   299,   307,   317,   326,   335,   390,   396,
      404,   410,   418,   437,   455,   462,   484,   519,   525,   540,
-     547,   562,   566,   595,   598,   601,   605,   609,   610,   611,
-     612
+     547,   562,   566,   599,   603,   606,   614,   623,   624,   625,
+     626
 };
 #endif
 
@@ -1508,8 +1508,8 @@ yyreduce:
 		  createVariablesFromDCL(&(yyvsp[-1]), &(yyvsp[-2]));
 		  (yyval).declarationList = (yyvsp[-2]).declarationList;
 		  // for DECLARLIST inside TDEFS - create Types and insert to structTypeTable
-		  //createTypeFromDCL(&$2, &$1);
-		  //$$.typedefList = $1.typedefList;
+		  createTypeFromDCL(&(yyvsp[-1]), &(yyvsp[-2]));
+		  (yyval).typedefList = (yyvsp[-2]).typedefList;
 		  cout << "<\\DECLARELIST 1>" << endl;
 		}
 #line 1516 "parser.tab.cpp" /* yacc.c:1646  */
@@ -2089,14 +2089,18 @@ yyreduce:
 		  if(!func) {
 		    semanticError((yyvsp[-3]).tokenValue + " is not callable");
 		  }
+		  string err = func->validateCallArguments((yyvsp[-1]).callArgsList);
+		  if(err != "") {
+		    semanticError("Illeagal function call: " + err);
+		  }
 		  saveUsedRegisters();
 		  // save I0 and I2, return address and Frame Pointer
 		  emit("STORI I0 I1 0"); // MEM[SP+0] = I0
 		  emit("STORI I2 I1 1"); // MEM[SP+1] = I2
 		  emit("ADD2I I1 I1 2"); // SP += 2
 		  // TODO:put call parameters on the stack
-		  
-		  emit("JLINK " + func->address);
+		  func->putArgumentsOnStack((yyvsp[-2]).callArgsList);
+		  emit("JLINK " + to_string(func->address));
 		  // after return (SP points to return value)
 		  string LOAD = "";
 		  if(func->returnType == "integer") {
@@ -2111,63 +2115,73 @@ yyreduce:
 		  emit(LOAD + " " + (yyval).place + " I1 0");
 		  
 		}
-#line 2115 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2119 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 595 "parser.ypp" /* yacc.c:1646  */
+#line 599 "parser.ypp" /* yacc.c:1646  */
     {
+		  (yyval).callArgsList = (yyvsp[0]).callArgsList;
 		}
-#line 2122 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2127 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 598 "parser.ypp" /* yacc.c:1646  */
+#line 603 "parser.ypp" /* yacc.c:1646  */
     {}
-#line 2128 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2133 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 601 "parser.ypp" /* yacc.c:1646  */
+#line 606 "parser.ypp" /* yacc.c:1646  */
     {
 		  // TODO: make sure CALL_ARGS.place is register with expression value
+		  if((yyvsp[0]).type == "deftruct") {
+		    semanticError("Can't pass 'defstruct' as function parameter");
+		  }
+		  (yyval).callArgsList.push_back((yyvsp[0]).place);
 		}
-#line 2136 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2145 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 605 "parser.ypp" /* yacc.c:1646  */
+#line 614 "parser.ypp" /* yacc.c:1646  */
     {
+		  if((yyvsp[0]).type == "deftruct") {
+		    semanticError("Can't pass 'defstruct' as function parameter");
+		  }
+		  (yyvsp[-2]).callArgsList.push_back((yyvsp[0]).place);
+		  (yyval).callArgsList = (yyvsp[-2]).callArgsList;
 		}
-#line 2143 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2157 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 609 "parser.ypp" /* yacc.c:1646  */
+#line 623 "parser.ypp" /* yacc.c:1646  */
     {cout << "<PROGRAM>" << endl;}
-#line 2149 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2163 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 610 "parser.ypp" /* yacc.c:1646  */
+#line 624 "parser.ypp" /* yacc.c:1646  */
     {cout << "<MAIN_FUNCTION>" << endl;}
-#line 2155 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2169 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 69:
-#line 611 "parser.ypp" /* yacc.c:1646  */
+#line 625 "parser.ypp" /* yacc.c:1646  */
     {cout << "<BLK>" << endl;}
-#line 2161 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2175 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 70:
-#line 612 "parser.ypp" /* yacc.c:1646  */
+#line 626 "parser.ypp" /* yacc.c:1646  */
     {cout << "<CNTRL 3>" << endl;}
-#line 2167 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2181 "parser.tab.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 2171 "parser.tab.cpp" /* yacc.c:1646  */
+#line 2185 "parser.tab.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2395,7 +2409,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 614 "parser.ypp" /* yacc.c:1906  */
+#line 628 "parser.ypp" /* yacc.c:1906  */
 
 
 void yyerror (char const *err){

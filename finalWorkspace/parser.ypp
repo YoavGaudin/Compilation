@@ -137,8 +137,8 @@ DECLARLIST:
 		  createVariablesFromDCL(&$2, &$1);
 		  $$.declarationList = $1.declarationList;
 		  // for DECLARLIST inside TDEFS - create Types and insert to structTypeTable
-		  //createTypeFromDCL(&$2, &$1);
-		  //$$.typedefList = $1.typedefList;
+		  createTypeFromDCL(&$2, &$1);
+		  $$.typedefList = $1.typedefList;
 		  cout << "<\\DECLARELIST 1>" << endl;
 		}
 	|

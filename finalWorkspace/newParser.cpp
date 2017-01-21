@@ -113,12 +113,12 @@ void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
 // iterate over the ids list and insert them with the relevant type to typedefList. Finally, typedefList will be used to create one new StructType and insert it into the structTypeTable!
 void createTypeFromDCL(Stype* DCL, Stype* DECLARLIST) {
   for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != (DCL->dcl_ids).end(); ++i) {
-      cout << DCL->type << endl;
-    if(isPrimitive(DCL->type)) {
-      Type* t = new Type(*i);
+    cout << "DCL->dcl_type : " << DCL->dcl_type << endl;
+    if(isPrimitive(DCL->dcl_type)) {
+      Type* t = new Type(DCL->dcl_type);
       DECLARLIST->typedefList.insert(std::pair<string, Type>(*i, *t));
     } else { // DCL->type is a name of some previously typedefined struct!
-      assert(validateStructName(DCL->type));
+      assert(validateStructName(DCL->dcl_type));
       StructType& st = dynamic_cast<StructType&>(structTypeTable.find(*i)->second);
       DECLARLIST->typedefList.insert(std::pair<string, Type>(*i, st));
     }
