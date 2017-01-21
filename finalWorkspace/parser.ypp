@@ -173,7 +173,9 @@ TYPE:
 		} // $$->tokenValue is already assigned in .lex file
 ;	
 LIST: 
-		M_list LIST STMT {
+		M_list LIST M STMT{  
+		  $$.nextList = $4.nextList;
+		  backpatch($2.nextList, $3.quad);
 		  cout << "<\\LIST>" << endl;
 		}
 	|
@@ -181,10 +183,12 @@ LIST:
 ;	
 STMT: 
 		ASSN {
+		  $$.nextList.push_back(nextquad());
 		}
 	|
 		CNTRL {
 		  cout << "<STMT 2>" << endl;
+		  $$.nextList = $1.nextList;
 		  cout << "<\\STMT 2>" << endl;
 		}
 	|
@@ -199,6 +203,7 @@ STMT:
 	|
 		BLK {
 		  cout << "<STMT 6>" << endl;
+		  $$.nextList = $1.nextList;
 		  cout << "<\\STMT 6>" << endl;
 		}
 ;	
@@ -378,14 +383,14 @@ BEXP:
 ;
 
 M:    		/*epsilon*/ {
-  		  cout << "<M>" << endl;
                   $$.quad = nextquad();
+				  cout << "<M>" << "quad=" << $$.quad << endl;
                 }
 ;
 
 N:    		/*epsilon*/ {
   		  cout << "<N>" << endl;
-                  $$.nextList.push_back(nextquad());
+          $$.nextList.push_back(nextquad());
 		  emit((string)"UJUMP" + " ___");
                 }
 ;
