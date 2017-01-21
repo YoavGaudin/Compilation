@@ -161,7 +161,7 @@ struct Stype {
   // for M marker
   int quad;
 
-  // for N marker and STMT
+  // for N marker, STMT, LIST, BLK
   list<int> nextList;
 
   // for LVAL

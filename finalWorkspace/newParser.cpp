@@ -140,8 +140,9 @@ void Error(string s) {
 
 void printState() {
   cout << "\tCodeBuffer: " << endl;
-  for(std::vector<string>::iterator i = codeBuffer.begin() ; i != codeBuffer.end() ; ++i) {
-    cout << "\t\t" << *i << endl;  
+  int j = 0;
+  for(std::vector<string>::iterator i = codeBuffer.begin() ; i != codeBuffer.end() ; ++i, ++j) {
+    cout << "\t\t" << j << ": " << *i << endl;  
   }
   cout << "\tFunctions table:" << funcSymbols.size() << endl;
   for(std::map<string, Function>::iterator f = funcSymbols.begin() ; f != funcSymbols.end() ; ++f) {
@@ -185,10 +186,6 @@ void copyStruct(Variable* lvalVar, string reg) {
   
 }
 
-static void printCodeBuffer() {
-  cout << " --- Output Code ---" << endl;
-  std::copy(codeBuffer.begin(), codeBuffer.end(), std::ostream_iterator<string>(cout, "\n"));
-}
 
 /**************************************************************************/
 /*                           Main of parser                               */
@@ -213,7 +210,5 @@ int main(void)
 	cout << "--" << j->first << " : " << (j->second).getType() << endl;
       }
     }
-    cout << endl;
-    printCodeBuffer();
   }
 }

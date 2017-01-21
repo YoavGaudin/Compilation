@@ -35,6 +35,7 @@
 
 PROGRAM: 
 		M_program TDEFS FDEFS MAIN_FUNCTION {
+		  emit("HALT");
 		  cout << "<\\PROGRAM>" << endl;
 		}
 ;
@@ -56,6 +57,9 @@ FDEFS:
 		  
 		  currFunction->insertSymbolTable($7.declarationList);
 		  funcSymbols.insert(std::pair<string, Function>($3.tokenValue, *currFunction));
+
+		  backpatch($8.nextList, nextquad());
+		  
 		  cout << "<\\FDEFS 1>" << endl;
 		}
 	|
@@ -94,6 +98,9 @@ MAIN_FUNCTION:
 		  Function* mainFunc = currFunction;
 		  mainFunc->insertSymbolTable($4.declarationList);
 		  funcSymbols.insert(std::pair<string, Function>("main", *mainFunc));
+
+		  backpatch($4.nextList, nextquad());
+		  
 		  cout << "<\\MAIN_FUNCTION>" <<endl;
 		} 
 	|
@@ -102,9 +109,9 @@ MAIN_FUNCTION:
 BLK: 
                 M_blk DECLARATIONS {
 		  $$.declarationList = $2.declarationList;
-		} '{' {
-		} LIST '}' {
-		  $6.declarationList = $2.declarationList;
+		} '{' LIST '}' {
+		  $$.nextList = $5.nextList;
+		  $5.declarationList = $2.declarationList;
 		  cout << "<\\BLK>" << endl;
 		}
 ;	
@@ -193,12 +200,15 @@ STMT:
 		}
 	|
 		READ {
+		  $$.nextList.push_back(nextquad());
 		}
 	|
 		WRITE {
+		  $$.nextList.push_back(nextquad());
 		}
 	|
 		STMT_RETURN {
+		  //TODO???
 		}
 	|
 		BLK {
@@ -247,7 +257,7 @@ ASSN:
 		    } else {
 		      assert(0);
 		    }
-		    emit(STOR + " " + $3.place + " I1 " + $1.offset);
+		    emit(STOR + " " + $3.place + " I1 " + to_string(lvalVar->getOffset()));
 		  } else { // EXP is defstruct
 		    //EXP->place is offset from FP
 		    copyStruct(lvalVar, $3.place);
@@ -258,11 +268,15 @@ ASSN:
 ;
 LVAL: 
 		ID {
+		  cout << "<LVAL 1>" << endl;
 		  $$.variableName = $1.tokenValue;
+		  cout << "<\\LVAL 1>" << endl;
 		}
 	|
 		STREF {
+		  cout << "<LVAL 2>" << endl;
 		  $$.variableName = $1.tokenValue;
+		  cout << "<\\LVAL 2>" << endl;
 		}
 ;
 CNTRL: 
