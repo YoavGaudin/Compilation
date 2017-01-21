@@ -568,14 +568,18 @@ CALL:
 		  if(!func) {
 		    semanticError($2.tokenValue + " is not callable");
 		  }
+		  string err = func->validateCallArguments($4.callArgsList);
+		  if(err != "") {
+		    semanticError("Illeagal function call: " + err);
+		  }
 		  saveUsedRegisters();
 		  // save I0 and I2, return address and Frame Pointer
 		  emit("STORI I0 I1 0"); // MEM[SP+0] = I0
 		  emit("STORI I2 I1 1"); // MEM[SP+1] = I2
 		  emit("ADD2I I1 I1 2"); // SP += 2
 		  // TODO:put call parameters on the stack
-		  
-		  emit("JLINK " + func->address);
+		  func->putArgumentsOnStack($3.callArgsList);
+		  emit("JLINK " + to_string(func->address));
 		  // after return (SP points to return value)
 		  string LOAD = "";
 		  if(func->returnType == "integer") {
@@ -593,6 +597,7 @@ CALL:
 ;	
 CALL_ARGS_FULL: 
 		CALL_ARGS {
+		  $$.callArgsList = $1.callArgsList;
 		}
 	|
 		/*epsilon*/ {}
@@ -600,9 +605,18 @@ CALL_ARGS_FULL:
 CALL_ARGS:
 		EXP {
 		  // TODO: make sure CALL_ARGS.place is register with expression value
+		  if($1.type == "deftruct") {
+		    semanticError("Can't pass 'defstruct' as function parameter");
+		  }
+		  $$.callArgsList.push_back($1.place);
 		}
 	|
 		CALL_ARGS ',' EXP {
+		  if($3.type == "deftruct") {
+		    semanticError("Can't pass 'defstruct' as function parameter");
+		  }
+		  $1.callArgsList.push_back($3.place);
+		  $$.callArgsList = $1.callArgsList;
 		}
 ;
 

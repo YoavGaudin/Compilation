@@ -16,7 +16,7 @@ using namespace std;
 //#define YYDEBUG 1
 extern int yydebug;
 
-
+void emit(string const& singleInstruction);
 // ---------------------------- Classes definitions ------------------------------
 
 enum TypeEnum {INTEGER, REAL, DEFSTRUCT};
@@ -176,6 +176,7 @@ struct Function : public Block {
 
   string name;
   string returnType;
+  vector<string> arguments;
   bool isImplemented;
   // for unimplemented functions
   vector<int> functionCalls; // an array of line numbers indicating where this function is called
@@ -183,17 +184,49 @@ struct Function : public Block {
   // for implemented functions
   int address;
   
-  // the argumants are inserted straight into the symbol table in the constructor.
+  // the arguments are inserted straight into the symbol table in the constructor.
 
   // function with arguments
   Function(string name_, string return_type_, bool implemented_ ,vector<Variable> arguments_) :
     name(name_), returnType(return_type_), isImplemented(implemented_) {
     insertSymbolTable(arguments_);
+	for(vector<Variable>::iterator i = arguments_.begin() ; i != arguments_.end() ; ++i) {
+	  arguments.push_back(i->getType());
+	}
   }
 
   // function without arguments
   Function(string name_) : name(name_) {
     // std::* containers should be automatically dynamically allocated on decleration
+  }
+  
+  string validateCallArguments(vector<string> callArgsList) {
+	string err = "";
+	int size1 = callArgsList.size();
+	int size2 = arguments.size();
+	if(size1 != size2) {
+	  err = "wrong number of arguments: got " + to_string(size1) + " but requierd " + to_string(size2);
+    }
+	for(int i = 0 ; i < size1 ; ++i) {
+	  if(arguments[i] != callArgsList[i]) {
+		err = "wrong type of argument at " + to_string(i) + ", should be " + arguments[i]; 
+		break;
+	  }
+	}
+	return err;
+  }
+  
+  void putArgumentsOnStack(vector<string> args) {
+    for(vector<string>::iterator i = args.begin() ; i != args.end() ; ++i) {
+	  string STOR = "";
+      if(i->front() == 'I') {
+		STOR = "STORI ";
+	  } else {
+	    STOR = "STORR ";
+	  }
+	  emit(STOR + *i + " I1 0");
+	  emit("ADD2I I1 I1 1");
+    }  
   }
   
 };
@@ -224,6 +257,8 @@ struct Stype {
   // for FUNC_ARGLIST
   vector<Variable> argsList;
 
+  // for CALL_ARGS
+  vector<string> callArgsList;
   // for M marker
   int quad;
 
@@ -330,7 +365,7 @@ I2 - frame pointer
 */
 
 // ----------------- Helper functions: ------------------
-void emit(string const& singleInstruction);
+//void emit(string const& singleInstruction);
 string getIntReg();
 string getRealReg();
 bool isUsedIntReg(string& in);
