@@ -69,12 +69,29 @@ public:
     sizeInMemory = 0;
   }
 
-  Variable getField(string name) {
+  // gets only valid field names, if not valid field name passed, falls with assertion failure
+  Variable* getField(string name) {
     std::map<string, Variable>::iterator i;
     i = fields.find(name);
     if(i != fields.end())
-      return i->second;
+      return &(i->second);
     assert(0);
+  }
+
+  // get the inner Variable of the struct by the path to it
+  Variable* getStref(list<string> pathToRef) {
+    assert(pathToRef.size() > 0);
+    Variable* field = getField(pathToRef.front());
+    if(pathToRef.size() == 1)
+      return field;
+    // pathToRef.size() > 1
+    if(isPrimitive(field))
+      return NULL;
+    else { // field is not primitive => it is Defstruct
+      Defstruct* dsField = dynamic_cast<Defstruct*>(field);
+      pathToRef.pop_front();
+      return dsField->getStref(pathToRef); 
+    }
   }
 
   int getSizeInMemory() { return sizeInMemory; }
@@ -143,13 +160,27 @@ public:
     symbolTable = parent->symbolTable;
   }
 
-  // find variable in function's scope
+  // find variable in block's symbol table
   Variable* getScopeVariable(string name) {
     std::map<string, Variable>::iterator i;
     if((i = symbolTable.find(name)) != symbolTable.end()) {
       return &(i->second);
     }
     return NULL; 
+  }
+
+  // find struct stref in block's symbol table
+  Variable* getScopeDefstructStref(list<string> path) {
+    Variable* temp;
+    std::map<string, Variable>::iterator i;
+    if((i = symbolTable.find(path.front())) != symbolTable.end()) {
+      temp = &(i->second);
+    } else assert(0);
+    Defstruct* ds = dynamic_cast<Defstruct*>(temp);
+    assert(ds);
+    // getStref doesn't need the name of the struct
+    path.pop_front();
+    return ds->getStref(path);
   }
   
   // insert (name,v) to the symbol table
@@ -277,8 +308,11 @@ struct Stype {
   string offset;
   string variableName;
 
-  // for EXP
+  // for EXP and LVAL
   string type;
+
+  // for STREF and LVAL
+  list<string> path;
   
   Stype(string v) : tokenValue(v) {}
 

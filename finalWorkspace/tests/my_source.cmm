@@ -20,7 +20,17 @@ integer foo2(funcarg1,funcarg2:real)
 var funcvar:integer;
 { }
 main
-var a,b:integer;
-	c,d:real;
-	st:MyStruct2;
-{ }
+var
+   a,b : integer;
+   c,d : real;
+   st1 : MyStruct1;
+   st3 : MyStruct3;
+{
+st1[a]  = 100;
+
+st3[b] = 0.5;
+st3[c] = 7;
+st3[s1] = st1;
+st3[s2][c] = 100;
+st3[s2][c] = st1[a];
+}

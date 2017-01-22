@@ -273,17 +273,26 @@ READ:
 ASSN: 
 		LVAL ASSIGN EXP ';' {
 		  cout << "<ASSN>" << endl;
-		  // get LVAL's variable and check it was declared
-		  Variable* lvalVar = currBlock->getScopeVariable($1.variableName);
-		  //Defstruct* ds = new Defstruct();
+		  Variable* lvalVar;
+		  string errVar = "";
+		  // get LVAL's variable
+		  if($1.path.size() > 0) { // LVAL is STREF
+		    errVar = "struct reference (STREF)";
+		    lvalVar = currBlock->getScopeDefstructStref($1.path);
+		  } else  { // LVAL is ID (regular variable or struct)
+		    errVar = $1.variableName;
+		    lvalVar = currBlock->getScopeVariable($1.variableName);
+		  }
+		  // check LVAL was declared
 		  if(lvalVar == NULL) {
 		    cout << "currFunction: " << currFunction->name << endl;
 		    printState();
-		    semanticError($1.tokenValue + " was not declared in this scope");
+		    semanticError(errVar + " was not declared in this scope");
 		  }
 
 		  if(lvalVar->getType() != $3.type) {
-		    semanticError("type mismatch on assignment operation: trying to assign " + $3.type + " to " + lvalVar->getType());
+		    semanticError("type mismatch on assignment operation: trying to assign " +
+				  $3.type + " to " + lvalVar->getType());
 		  }
 		  
 		  if(isPrimitive($3.type)) {
@@ -296,6 +305,7 @@ ASSN:
 		    } else {
 		      assert(0);
 		    }
+		    // this STORE assumes that on declaration there was allocated memory on stack (SP was moved)
 		    emit(STOR + " " + $3.place + " I1 " + to_string(lvalVar->getOffset()));
 		  } else { // EXP is defstruct
 		    //EXP->place is offset from FP
@@ -314,7 +324,7 @@ LVAL:
 	|
 		STREF {
 		  cout << "<LVAL 2>" << endl;
-		  $$.variableName = $1.tokenValue;
+		  $$.path = $1.path;
 		  cout << "<\\LVAL 2>" << endl;
 		}
 ;
@@ -582,18 +592,21 @@ STREF:
 		  // check if $1 is a variable of type defstruct
 		  Variable* var = currBlock->getScopeVariable($1.tokenValue);
 		  if(!var) {
-		    semanticError("");
+		    semanticError($1.tokenValue + (string)" is undeclared in this scope");
 		  }
-		  if(var->getType() == "defstruct") {
-		    
-		    Variable* field;
-		    // get the value if var[field] from memory
-		  } else {
-		    semanticError($1.tokenValue + " of type " + var->getType() + " is not subscriptable");
+		  cout << "^^^^^^^^^^^^^^^^^^^^ var->getType() = " + var->getType() << endl;
+		  if(isPrimitive(var->getType())) {
+		    semanticError($1.tokenValue + " of type " + var->getType() + " is not subscriptable");		    	     } else {
+		    //Defstruct* structVar = dynamic_cast<Defstruct*>(var);
+		    //assert(structVar);
+		    //$$.path.insert($1.tokenValue);
+		    //$$.path.insert($3.tokenValue);
 		  }
 		}
-	|
+|
 		STREF '[' ID ']' {
+		  $$.path = $1.path;
+		  //$$.path.insert($3.tokenValue);
 		}
 ;	
 CALL: 
