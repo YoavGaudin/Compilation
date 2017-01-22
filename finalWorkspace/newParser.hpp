@@ -477,6 +477,7 @@ void addToStructTypeTable(string structName, map<string, Type*>typeFields);
 void printDeclarationList(map<string, Variable*> dl);
 //void printStructTypeTable();
 //void printStructTypeTableOnlyNames();
+void printString(string str);
 
 Function* getFunction(string name);
 void saveUsedRegisters();
