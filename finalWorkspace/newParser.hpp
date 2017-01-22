@@ -109,7 +109,10 @@ public:
     // TODO: get the struct type size from the structType global table
     sizeInMemory = 0;
     // build the Defstruct fields
-    StructType& thisStructType = dynamic_cast<StructType&>(structTypeTable[type_]);
+    std::map<string, StructType>::iterator i;
+    i = structTypeTable.find(type_);
+    assert(i != structTypeTable.end()); 
+    StructType& thisStructType = i->second;
     int sumOffset = 0;
     for(std::map<string, Type>::iterator i = thisStructType.fieldTypes.begin(); i != thisStructType.fieldTypes.end(); ++i) {
       assert(i->second.getTypeName() != this->getType());
@@ -199,6 +202,7 @@ public:
     if((i = symbolTable.find(name)) != symbolTable.end())
       symbolTable.erase(i);
     symbolTable.insert(std::pair<string, Variable>(name, v));
+    // TODO wrong calculation
     v.setOffset(symbolTable.size());
   }
   

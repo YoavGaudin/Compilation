@@ -105,10 +105,10 @@ void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
   for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != DCL->dcl_ids.end(); ++i) {
     Variable* v = NULL;
     if(isPrimitive(DCL->dcl_type)) {
-      v = new Variable(*i, DCL->dcl_type);
+      v = new Variable(*i, DCL->dcl_type, 0);
     } else {
       // this will create all inner Variables (new Variable()) of the struct
-      v = new Defstruct(*i, DCL->dcl_type);
+      v = new Defstruct(*i, DCL->dcl_type, 0);
     }
     DECLARLIST->declarationList.insert(std::pair<string,Variable>(*i, *v));
   }
@@ -135,7 +135,7 @@ int createTypeFromDCL(Stype* DCL, Stype* DECLARLIST) {
 // 
 void createArgumentsFromDCL(Stype* DCL, Stype* FUNC_ARGLIST) {
   for(std::list<string>::iterator i = (DCL->dcl_ids).begin() ; i != (DCL->dcl_ids).end() ; ++i) {
-    Variable* v = new Variable(*i, DCL->dcl_type);
+    Variable* v = new Variable(*i, DCL->dcl_type, 0);
     FUNC_ARGLIST->argsList.push_back(*v);
   }
 }
@@ -185,7 +185,7 @@ bool isPrimitive(Variable* var) {
 }
 
 bool isPrimitive(Type* type) {
-  return isPrimitive(type->typeName);
+  return isPrimitive(type->getTypeName());
 }
 
 bool isPrimitive(Variable& var) {
@@ -193,7 +193,7 @@ bool isPrimitive(Variable& var) {
 }
 
 bool isPrimitive(Type& type) {
-  return isPrimitive(type.typeName);
+  return isPrimitive(type.getTypeName());
 }
 
 /* lvalVar - holds all LVAL's information and specifically offset from FP where to copy
