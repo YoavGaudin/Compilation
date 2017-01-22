@@ -17,10 +17,13 @@ using namespace std;
 extern int yydebug;
 
 void emit(string const& singleInstruction);
+void printStructTypeTable();
+void printStructTypeTableOnlyNames();
+bool isPrimitive(string);
+
 // ---------------------------- Classes definitions ------------------------------
 
 enum TypeEnum {INTEGER, REAL, DEFSTRUCT};
-bool isPrimitive(string);
 
 // -------- Types ---------
 
@@ -57,12 +60,12 @@ public:
 class StructType : public Type {
 
 public:
-  map<string, Type> fieldTypes; // [field name, field type]
+  map<string, Type*> fieldTypes; // [field name, field type]
   
-  StructType(string typeName_, map<string, Type> fieldTypes_) : Type(typeName_, 0), fieldTypes(fieldTypes_) {
+  StructType(string typeName_, map<string, Type*> fieldTypes_) : Type(typeName_, 0), fieldTypes(fieldTypes_) {
     setTypeSizeInMemory(0);
-    for(std::map<string, Type>::iterator i = fieldTypes_.begin(); i != fieldTypes_.end(); ++i) {
-      increaseTypeSizeInMemoryBy(i->second.getTypeSizeInMemory());
+    for(std::map<string, Type*>::iterator i = fieldTypes_.begin(); i != fieldTypes_.end(); ++i) {
+      increaseTypeSizeInMemoryBy(i->second->getTypeSizeInMemory());
     }
   }
 };
@@ -101,7 +104,7 @@ class Defstruct : public Variable {
 
 public:
 
-  map<string, Variable> fields;
+  map<string, Variable*> fields;
   
   Defstruct(string name_, string type_, int offset_) : Variable(name_, type_, offset_) {
     // TODO: get the struct type size from the structType global table
@@ -112,27 +115,27 @@ public:
     assert(i != structTypeTable.end()); 
     StructType& thisStructType = i->second;
     int sumOffset = 0;
-    for(std::map<string, Type>::iterator i = thisStructType.fieldTypes.begin(); i != thisStructType.fieldTypes.end(); ++i) {
-      assert(i->second.getTypeName() != this->getType());
+    for(std::map<string, Type*>::iterator i = thisStructType.fieldTypes.begin(); i != thisStructType.fieldTypes.end(); ++i) {
+      assert(i->second->getTypeName() != this->getType());
       Variable* v = NULL;
       if(isPrimitive(i->second)) {
-	v = new Variable(i->first, i->second.getTypeName(), sumOffset++);
+	v = new Variable(i->first, i->second->getTypeName(), sumOffset++);
 	//cout << "\tcreated " << i->first << " which is field of " << name_ << " of type " << this->getType() <<endl;
       } else {
-	v = new Defstruct(i->first, i->second.getTypeName(), sumOffset);
-	sumOffset += i->second.getTypeSizeInMemory();
+	v = new Defstruct(i->first, i->second->getTypeName(), sumOffset);
+	sumOffset += i->second->getTypeSizeInMemory();
 	//cout << "\tcreated " << i->first << " which is field of " << name_ << " of type " << this->getType() <<endl;
       }
-      fields.insert(std::pair<string, Variable>(i->first, *v));
+      fields.insert(std::pair<string, Variable*>(i->first, v));
     }
   }
 
   // gets only valid field names, if not valid field name passed, falls with assertion failure
   Variable* getField(string name) {
-    std::map<string, Variable>::iterator i;
+    std::map<string, Variable*>::iterator i;
     i = fields.find(name);
     if(i != fields.end())
-      return &(i->second);
+      return i->second;
     assert(0);
   }
 
@@ -154,17 +157,19 @@ public:
 
   void printStructure() {
     cout << "***printing structure of " << getName() << endl;
-    for(std::map<string, Variable>::iterator i = fields.begin(); i != fields.end(); ++i) {
+    int j = 1;
+    for(std::map<string, Variable*>::iterator i = fields.begin(); i != fields.end(); ++i, ++j) {
       string name = i->first;
-      Variable* v = &(i->second);
+      Variable* v = i->second;
       string type = v->getType();
-      if(isPrimitive(type)) {
-	cout << name << endl;
-      } else {
-	cout << name << " is Defstruct:" << endl;
+      cout << j << "). " << name << " is " << v->getType() << endl;
+      if(!isPrimitive(type)) {
 	std::map<string, StructType>::iterator i;
 	i = structTypeTable.find(type);
-	assert(i != structTypeTable.end());
+	// this is for the declarations in the begining, they should not appear in the structTypeTable
+	if(i == structTypeTable.end()) {
+	  continue;
+	}
 	Defstruct* ds = dynamic_cast<Defstruct*>(v);
 	assert(ds);
 	ds->printStructure();
@@ -183,7 +188,7 @@ private:
   Block* parent;
 
 public:
-  map<string, Variable> symbolTable;
+  map<string, Variable*> symbolTable;
   
   Block() : parent(NULL) {}
 
@@ -194,9 +199,9 @@ public:
 
   // find variable in block's symbol table
   Variable* getScopeVariable(string name) {
-    std::map<string, Variable>::iterator i;
+    std::map<string, Variable*>::iterator i;
     if((i = symbolTable.find(name)) != symbolTable.end()) {
-      return &(i->second);
+      return i->second;
     }
     return NULL; 
   }
@@ -204,9 +209,9 @@ public:
   // find struct stref in block's symbol table
   Variable* getScopeDefstructStref(list<string> path) {
     Variable* temp;
-    std::map<string, Variable>::iterator i;
+    std::map<string, Variable*>::iterator i;
     if((i = symbolTable.find(path.front())) != symbolTable.end()) {
-      temp = &(i->second);
+      temp = i->second;
     } else assert(0);
     printSymbolTable();
     Defstruct* ds = dynamic_cast<Defstruct*>(temp);
@@ -217,30 +222,31 @@ public:
   }
   
   // insert (name,v) to the symbol table
-  void addVariable(string const& name, Variable& v) {
-    std::map<string, Variable>::iterator i;
+  void addVariable(string const& name, Variable* v) {
+    std::map<string, Variable*>::iterator i;
     if((i = symbolTable.find(name)) != symbolTable.end())
       symbolTable.erase(i);
-    symbolTable.insert(std::pair<string, Variable>(name, v));
+    symbolTable.insert(std::pair<string, Variable*>(name, v));
     // TODO wrong calculation
-    v.setOffset(symbolTable.size());
+    v->setOffset(symbolTable.size());
   }
   
-  void insertSymbolTable(map<string, Variable>& vars) {
-    for(std::map<string, Variable>::iterator i = vars.begin(); i != vars.end(); ++i) {
+  void insertSymbolTable(map<string, Variable*>& vars) {
+    for(std::map<string, Variable*>::iterator i = vars.begin(); i != vars.end(); ++i) {
       this->addVariable(i->first, i->second);
     }
   }
 
   void insertSymbolTable(vector<Variable>& vars) {
     for(std::vector<Variable>::iterator i = vars.begin(); i != vars.end(); ++i) {
-      addVariable(i->getName(), *i);
+      //Variable* v = *i;
+      addVariable(i->getName(), &(*i));
     }
   }
 
   void printSymbolTable() {
-    for(std::map<string, Variable>::iterator i = symbolTable.begin(); i != symbolTable.end(); ++i) {
-      cout << i->first  + " is of type " + i->second.getType() << endl;
+    for(std::map<string, Variable*>::iterator i = symbolTable.begin(); i != symbolTable.end(); ++i) {
+      cout << i->first  + " is of type " + i->second->getType() << endl;
     }
   }
 
@@ -321,8 +327,8 @@ struct Stype {
   string tokenValue;
   
   // for DECLARLIST and DECLARATIONS - contains the declared Variables 
-  map<string, Variable> declarationList;
-  map<string, Type> typedefList;
+  map<string, Variable*> declarationList;
+  map<string, Type*> typedefList;
   
   // for DCL - the type for the last arguments
   string dcl_type;
@@ -454,7 +460,7 @@ bool isUsedRealReg(string& in);
 void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST);
 int createTypeFromDCL(Stype* DCL, Stype* DECLARLIST);
 void createArgumentsFromDCL(Stype* DCL, Stype* FUNC_ARGLIST);
-void addStructToSymbolTable(string name, map<string, Variable> fields);
+void addStructToSymbolTable(string name, map<string, Variable*> fields);
 bool validateStructName(string name);
 int nextquad();
 bool isInteger(string& in);
@@ -467,8 +473,10 @@ void backpatch(list<int> toFill, int address);
 //bool isPrimitive(Variable* var);
 //bool isPrimitive(string type);
 void copyStruct(Defstruct* lvalVar, string reg);
-void addToStructTypeTable(string structName, map<string, Type>typeFields);
-void printDeclarationList(map<string, Variable> dl);
+void addToStructTypeTable(string structName, map<string, Type*>typeFields);
+void printDeclarationList(map<string, Variable*> dl);
+//void printStructTypeTable();
+//void printStructTypeTableOnlyNames();
 
 Function* getFunction(string name);
 void saveUsedRegisters();

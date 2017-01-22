@@ -6,10 +6,14 @@ defstruct {
 	  b:real;
 	  c:integer;
 	  s1:MyStruct1;
+	  d:integer;
+	  e:integer;
+	  s2:MyStruct1;
+	  
 } MyStruct2;
 
 defstruct {
-	  s2:MyStruct2;
+	  s3:MyStruct2;
 } MyStruct3;
 
 
