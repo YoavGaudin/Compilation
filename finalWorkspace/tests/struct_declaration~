@@ -1,0 +1,34 @@
+defstruct {
+	  a:integer;
+} MyStruct1;
+defstruct {
+	  b:real;
+	  c:integer;
+} MyStruct2;
+defstruct {
+	  b:real;
+	  c:integer;
+	  s1:MyStruct1;
+	  s2:MyStruct2;
+} MyStruct3;
+
+integer foo1() 
+var abc:real;
+{ }
+
+integer foo2(funcarg1,funcarg2:real) 
+var funcvar:integer;
+{ }
+main
+var
+   a,b : integer;
+   c,d : real;
+   st_inst : MyStruct3;
+{
+
+//st_inst[b] = 0.5;
+//st_inst[c] = 7;
+//st_inst[s2][c] = 200;
+//st_inst[s1] =
+//st_inst[s2][c] =
+}

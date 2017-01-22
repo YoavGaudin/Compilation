@@ -20,7 +20,7 @@ void emit(string const& singleInstruction);
 // ---------------------------- Classes definitions ------------------------------
 
 enum TypeEnum {INTEGER, REAL, DEFSTRUCT};
-
+bool isPrimitive(string);
 
 // -------- Types ---------
 
@@ -39,8 +39,7 @@ protected:
 public:
 
   Type(string typeName_) : typeName(typeName_), typeSizeInMemory(1) {
-    if(typeName != "integer" && typeName != "real")
-      assert(0);
+    assert(isPrimitive(typeName_));
   }
 
   virtual ~Type() {}
@@ -95,7 +94,6 @@ bool isPrimitive(Variable*);
 bool isPrimitive(Variable&);
 bool isPrimitive(Type*);
 bool isPrimitive(Type&);
-bool isPrimitive(string);
 
 class Defstruct : public Variable {
 
@@ -119,9 +117,11 @@ public:
       Variable* v = NULL;
       if(isPrimitive(i->second)) {
 	v = new Variable(i->first, i->second.getTypeName(), sumOffset++);
+	//cout << "\tcreated " << i->first << " which is field of " << name_ << " of type " << this->getType() <<endl;
       } else {
 	v = new Defstruct(i->first, i->second.getTypeName(), sumOffset);
 	sumOffset += i->second.getTypeSizeInMemory();
+	//cout << "\tcreated " << i->first << " which is field of " << name_ << " of type " << this->getType() <<endl;
       }
       fields.insert(std::pair<string, Variable>(i->first, *v));
     }
@@ -152,6 +152,26 @@ public:
     }
   }
 
+  void printStructure() {
+    cout << "***printing structure of " << getName() << endl;
+    for(std::map<string, Variable>::iterator i = fields.begin(); i != fields.end(); ++i) {
+      string name = i->first;
+      Variable* v = &(i->second);
+      string type = v->getType();
+      if(isPrimitive(type)) {
+	cout << name << endl;
+      } else {
+	cout << name << " is Defstruct:" << endl;
+	std::map<string, StructType>::iterator i;
+	i = structTypeTable.find(type);
+	assert(i != structTypeTable.end());
+	Defstruct* ds = dynamic_cast<Defstruct*>(v);
+	assert(ds);
+	ds->printStructure();
+      }
+    }
+  }
+  
   int getSizeInMemory() { return sizeInMemory; }
 };
 
@@ -408,7 +428,6 @@ extern Block* currBlock;
 //extern map<string, StructType> structTypeTable;
 extern vector<string> codeBuffer;
 extern array<TypeEnum, 1000> memMap;
-extern map<string, Defstruct> typdefsTable;
 
 // globals for the linker header
 extern string unimplemented;
@@ -449,12 +468,14 @@ void backpatch(list<int> toFill, int address);
 //bool isPrimitive(string type);
 void copyStruct(Defstruct* lvalVar, string reg);
 void addToStructTypeTable(string structName, map<string, Type>typeFields);
+void printDeclarationList(map<string, Variable> dl);
 
 Function* getFunction(string name);
 void saveUsedRegisters();
 void restoreUsedRegisters();
 
 void buildLinkerHeader();
+
 
 /* ----------------- Run Time Memory layout: -------------------
 

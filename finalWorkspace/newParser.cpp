@@ -12,8 +12,6 @@ stack<string> funcStack;
 Function* currFunction;
 Block* currBlock;
 map<string, StructType> structTypeTable;
-// TODO remove this
-map<string, Defstruct> typedefsTable;
 vector<string> codeBuffer;
 array<TypeEnum, 1000> memMap;
 
@@ -100,6 +98,17 @@ bool isReal(string& in) {
   return in.find('.') != std::string::npos;
 }
 
+void printDeclarationList(map<string, Variable> dl) {
+  for(std::map<string, Variable>::iterator v = dl.begin() ; v != dl.end() ; ++v) {
+    Variable* var = &(v->second);
+    cout << "Variable " << v->first << " of type " << var->getType() << endl;
+    Defstruct* ds = NULL;
+    if (ds = dynamic_cast<Defstruct*>(var)) {
+      ds->printStructure();
+    }
+  }
+}
+
 // iterate over the ids list and for each id create Variable with the DCL type and this id
 void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
   for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != DCL->dcl_ids.end(); ++i) {
@@ -109,6 +118,10 @@ void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
     } else {
       // this will create all inner Variables (new Variable()) of the struct
       v = new Defstruct(*i, DCL->dcl_type, 0);
+      Defstruct* ds = dynamic_cast<Defstruct*>(v);
+      cout << "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl;
+      ds->printStructure();
+      cout << "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl;
     }
     DECLARLIST->declarationList.insert(std::pair<string,Variable>(*i, *v));
   }
@@ -117,14 +130,14 @@ void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
 // iterate over the ids list and insert them with the relevant type to typedefList. Finally, typedefList will be used to create one new StructType and insert it into the structTypeTable!
 int createTypeFromDCL(Stype* DCL, Stype* DECLARLIST) {
   for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != DCL->dcl_ids.end(); ++i) {
-    cout << "DCL->dcl_type : " << DCL->dcl_type << endl;
+    //cout << "DCL->dcl_type : " << DCL->dcl_type << endl;
     if(isPrimitive(DCL->dcl_type)) {
       Type* t = new Type(DCL->dcl_type);
       DECLARLIST->typedefList.insert(std::pair<string, Type>(*i, *t));
     } else { // DCL->type is a name of some previously typedefined struct!
       if(!validateStructName(DCL->dcl_type))
 	return -1;
-      cout << "field id : " << *i << endl;
+      //cout << "field id : " << *i << endl;
       StructType& st = structTypeTable.find(DCL->dcl_type)->second;
       DECLARLIST->typedefList.insert(std::pair<string, Type>(*i, st));
     }
@@ -279,9 +292,9 @@ void buildLinkerHeader() {
 }
 
 void addToStructTypeTable(string structName, map<string, Type> typeFields){
-  cout << "\tcreating struct (num of fields = " << typeFields.size() << ") : " << structName << endl;
+  //cout << "\tcreating struct" << structName << "(num of fields = " << typeFields.size() << ") : " << endl;
   for(std::map<string, Type>::iterator i = typeFields.begin() ; i != typeFields.end() ; ++i) {
-    cout << i->first << endl;
+    //cout << i->first << endl;
   }
   std::map<string, StructType>::iterator i;
   if((i = structTypeTable.find(structName)) != structTypeTable.end())
@@ -289,15 +302,7 @@ void addToStructTypeTable(string structName, map<string, Type> typeFields){
   StructType* st = new StructType(structName, typeFields);
   structTypeTable.insert(std::pair<string, StructType>(structName, *st));
 }
-/*
-void addToStructTypeTable(string structName, map<string, Type>& typeFields){
-  std::map<string, map<string, Type> >::iterator i;
-  if((i = structTypeTable.find(structName)) != structTypeTable.end())
-    structTypeTable.erase(i);
-  structTypeTable.insert(std::pair<string, map<string, Type> >(structName, typeFields));
->>>>>>> Stashed changes
-}
-*/
+
 
 /**************************************************************************/
 /*                           Main of parser                               */
@@ -332,6 +337,25 @@ void printState() {
       cout << "\t" << i << ": " << t1->first << endl;
     }
   }
+  // ---------------------------------
+  cout << "\tBLK variables: " << endl;
+  for(std::map<string, Variable>::iterator v = currBlock->symbolTable.begin() ; v != currBlock->symbolTable.end() ; ++v) {
+    Variable* var = &(v->second);
+    cout << "Variable " << v->first << " of type " << var->getType() << endl;
+    Defstruct* ds = NULL;
+    if (ds = dynamic_cast<Defstruct*>(var)) {
+      ds->printStructure();
+    }
+  }
+  cout << "\tFUNCTION variables: " << endl;
+  for(std::map<string, Variable>::iterator v = currFunction->symbolTable.begin() ; v != currFunction->symbolTable.end() ; ++v) {
+    Variable* var = &(v->second);
+    cout << "Variable " << v->first << " of type " << var->getType() << endl;
+    Defstruct* ds = NULL;
+    if (ds = dynamic_cast<Defstruct*>(var)) {
+      ds->printStructure();
+    }
+  }
 }
 
 
@@ -345,15 +369,7 @@ int main(int argc, char *argv[])
   rc = yyparse();
   if (rc == 0) { // Parsed successfully
     cout << "---------------- OK!!! ----------------" << endl;
-	buildLinkerHeader();
-    printState();
-    cout << "typedefs:" << endl;
-    for(std::map<string, Defstruct>::iterator i = typedefsTable.begin() ; i != typedefsTable.end() ; ++i) {
-      cout << i->first << ": " << endl;
-      std::map<string, Variable> fields = (i->second).fields;
-      for(std::map<string, Variable>::iterator j = fields.begin(); j != fields.end(); ++j) {
-	cout << "--" << j->first << " : " << (j->second).getType() << endl;
-      }
-    }
+    buildLinkerHeader();
+    printState(); 
   }
 }

@@ -1,0 +1,25 @@
+defstruct {
+	  a:integer;
+} MyStruct1;
+
+defstruct {
+	  b:real;
+	  c:integer;
+	  s1:MyStruct1;
+} MyStruct2;
+
+defstruct {
+	  s2:MyStruct2;
+} MyStruct3;
+
+
+main
+var inst2 : MyStruct2;
+    inst3 : MyStruct3;
+{
+
+//inst2[b] = 0.5;
+//inst2[c] = 7;
+//inst2[s1][a] = 200;
+
+}
