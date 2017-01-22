@@ -100,10 +100,16 @@ bool isReal(string& in) {
   return in.find('.') != std::string::npos;
 }
 
-// iterate over the ids list and for each id create Variable with the DCL type and this id.
+// iterate over the ids list and for each id create Variable with the DCL type and this id
 void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
   for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != DCL->dcl_ids.end(); ++i) {
-    Variable* v = new Variable(*i, DCL->dcl_type);
+    Variable* v = NULL;
+    if(isPrimitive(DCL->dcl_type)) {
+      v = new Variable(*i, DCL->dcl_type);
+    } else {
+      // this will create all inner Variables (new Variable()) of the struct
+      v = new Defstruct(*i, DCL->dcl_type);
+    }
     DECLARLIST->declarationList.insert(std::pair<string,Variable>(*i, *v));
   }
 }
@@ -170,12 +176,24 @@ void backpatch(list<int> toFill, int address) {
   }
 }
 
-bool isPrimitive(Variable* var) {
-  return var->getType() == "integer" || var->getType() == "real";
-}
-
 bool isPrimitive(string type) {
   return type == "integer" || type == "real";
+}
+
+bool isPrimitive(Variable* var) {
+  return isPrimitive(var->getType());
+}
+
+bool isPrimitive(Type* type) {
+  return isPrimitive(type->typeName);
+}
+
+bool isPrimitive(Variable& var) {
+  return isPrimitive(var.getType());
+}
+
+bool isPrimitive(Type& type) {
+  return isPrimitive(type.typeName);
 }
 
 /* lvalVar - holds all LVAL's information and specifically offset from FP where to copy

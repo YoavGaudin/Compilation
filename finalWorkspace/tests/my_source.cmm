@@ -26,11 +26,15 @@ var
    st1 : MyStruct1;
    st3 : MyStruct3;
 {
-st1[a]  = 100;
+
+a = 18;
+c = 3.7;
+
+st1[a] = 100;
 
 st3[b] = 0.5;
 st3[c] = 7;
 st3[s1] = st1;
-st3[s2][c] = 100;
+st3[s2][c] = 200;
 st3[s2][c] = st1[a];
 }

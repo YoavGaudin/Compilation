@@ -13,7 +13,7 @@
 
 using namespace std;
 
-#define YYDEBUG 1
+//#define YYDEBUG 1
 extern int yydebug;
 
 void emit(string const& singleInstruction);
@@ -21,81 +21,6 @@ void emit(string const& singleInstruction);
 
 enum TypeEnum {INTEGER, REAL, DEFSTRUCT};
 
-
-// -------- Instances ---------
-
-class Variable {
-
-  string name;
-  string type;
-  int offset;
-  
-public:
-  Variable(const string name_, string type_, int offset_) : name(name_), type(type_), offset(offset_) {}
-  
-  Variable(const string name_, TypeEnum t) : name(name_){
-    if(t == INTEGER) {
-      type = "integer";
-    } else if(t == REAL) {
-      type = "real";
-    } else {
-      type = "defstruct";
-    }
-  }
-
-  Variable(const string name_, string type_) : name(name_), type(type_) {}
-
-  virtual ~Variable() {}
-
-  void setOffset(int offset) { this->offset = offset; }
-  int getOffset() { return this->offset; }
-  string const& getName() { return name; }
-  string const& getType() { return type; }
-};
-
-
-bool isPrimitive(Variable* var);
-bool isPrimitive(string type);
-
-class Defstruct : public Variable {
-
-  int sizeInMemory;
-
-public:
-  map<string, Variable> fields;
-  
-  Defstruct(string name_, map<string, Variable> fields_) : Variable(name_, DEFSTRUCT), fields(fields_) {
-    // TODO: get the struct type size from the structType global table
-    sizeInMemory = 0;
-  }
-
-  // gets only valid field names, if not valid field name passed, falls with assertion failure
-  Variable* getField(string name) {
-    std::map<string, Variable>::iterator i;
-    i = fields.find(name);
-    if(i != fields.end())
-      return &(i->second);
-    assert(0);
-  }
-
-  // get the inner Variable of the struct by the path to it
-  Variable* getStref(list<string> pathToRef) {
-    assert(pathToRef.size() > 0);
-    Variable* field = getField(pathToRef.front());
-    if(pathToRef.size() == 1)
-      return field;
-    // pathToRef.size() > 1
-    if(isPrimitive(field))
-      return NULL;
-    else { // field is not primitive => it is Defstruct
-      Defstruct* dsField = dynamic_cast<Defstruct*>(field);
-      pathToRef.pop_front();
-      return dsField->getStref(pathToRef); 
-    }
-  }
-
-  int getSizeInMemory() { return sizeInMemory; }
-};
 
 // -------- Types ---------
 
@@ -143,6 +68,90 @@ public:
   }
 };
 
+extern map<string, StructType> structTypeTable;
+
+// -------- Instances ---------
+
+class Variable {
+
+  string name;
+  string type;
+  int offset;
+  
+public:
+  
+  Variable(const string name_, string type_, int offset_) : name(name_), type(type_), offset(offset_) {}
+
+  virtual ~Variable() {}
+
+  void setOffset(int offset) { this->offset = offset; }
+  int getOffset() { return this->offset; }
+  string const& getName() { return name; }
+  string const& getType() { return type; }
+};
+
+
+bool isPrimitive(Variable*);
+bool isPrimitive(Variable&);
+bool isPrimitive(Type*);
+bool isPrimitive(Type&);
+bool isPrimitive(string);
+
+class Defstruct : public Variable {
+
+  int sizeInMemory;
+
+public:
+
+  map<string, Variable> fields;
+  
+  Defstruct(string name_, string type_, int offset_) : Variable(name_, type_, offset_) {
+    // TODO: get the struct type size from the structType global table
+    sizeInMemory = 0;
+    // build the Defstruct fields
+    StructType& thisStructType = dynamic_cast<StructType&>(structTypeTable[type_]);
+    int sumOffset = 0;
+    for(std::map<string, Type>::iterator i = thisStructType.fieldTypes.begin(); i != thisStructType.fieldTypes.end(); ++i) {
+      assert(i->second.getTypeName() != this->getType());
+      Variable* v = NULL;
+      if(isPrimitive(i->second)) {
+	v = new Variable(i->first, i->second.getTypeName(), sumOffset++);
+      } else {
+	v = new Defstruct(i->first, i->second.getTypeName(), sumOffset);
+	sumOffset += i->second.getTypeSizeInMemory();
+      }
+      fields.insert(std::pair<string, Variable>(i->first, *v));
+    }
+  }
+
+  // gets only valid field names, if not valid field name passed, falls with assertion failure
+  Variable* getField(string name) {
+    std::map<string, Variable>::iterator i;
+    i = fields.find(name);
+    if(i != fields.end())
+      return &(i->second);
+    assert(0);
+  }
+
+  // get the inner Variable of the struct by the path to it
+  Variable* getStref(list<string> pathToRef) {
+    assert(pathToRef.size() > 0);
+    Variable* field = getField(pathToRef.front());
+    if(pathToRef.size() == 1)
+      return field;
+    // pathToRef.size() > 1
+    if(isPrimitive(field))
+      return NULL;
+    else { // field is not primitive => it is Defstruct
+      Defstruct* dsField = dynamic_cast<Defstruct*>(field);
+      pathToRef.pop_front();
+      return dsField->getStref(pathToRef); 
+    }
+  }
+
+  int getSizeInMemory() { return sizeInMemory; }
+};
+
 
 // -------- Blocks ---------
 
@@ -176,6 +185,7 @@ public:
     if((i = symbolTable.find(path.front())) != symbolTable.end()) {
       temp = &(i->second);
     } else assert(0);
+    printSymbolTable();
     Defstruct* ds = dynamic_cast<Defstruct*>(temp);
     assert(ds);
     // getStref doesn't need the name of the struct
@@ -201,6 +211,12 @@ public:
   void insertSymbolTable(vector<Variable>& vars) {
     for(std::vector<Variable>::iterator i = vars.begin(); i != vars.end(); ++i) {
       addVariable(i->getName(), *i);
+    }
+  }
+
+  void printSymbolTable() {
+    for(std::map<string, Variable>::iterator i = symbolTable.begin(); i != symbolTable.end(); ++i) {
+      cout << i->first  + " is of type " + i->second.getType() << endl;
     }
   }
 
@@ -385,7 +401,7 @@ extern map<string, Function> funcSymbols;
 extern stack<string> funcStack;
 extern Function* currFunction;
 extern Block* currBlock;
-extern map<string, StructType> structTypeTable;
+//extern map<string, StructType> structTypeTable;
 extern vector<string> codeBuffer;
 extern array<TypeEnum, 1000> memMap;
 extern map<string, Defstruct> typdefsTable;

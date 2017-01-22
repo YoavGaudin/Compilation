@@ -155,6 +155,7 @@ DECLARLIST:
 	|
 		DCL ';' {
 		  cout << "<DECLARELIST 2>" << endl;
+		  // TODO: chack for struct self loop semantic error
 		  cout << "\t" << $1.dcl_type << endl;
 		  // for DECLARLIST inside BLK - create variables and struct instances
 		  createVariablesFromDCL(&$1, &$$);
@@ -596,17 +597,14 @@ STREF:
 		  }
 		  cout << "^^^^^^^^^^^^^^^^^^^^ var->getType() = " + var->getType() << endl;
 		  if(isPrimitive(var->getType())) {
-		    semanticError($1.tokenValue + " of type " + var->getType() + " is not subscriptable");		    	     } else {
-		    //Defstruct* structVar = dynamic_cast<Defstruct*>(var);
-		    //assert(structVar);
-		    //$$.path.insert($1.tokenValue);
-		    //$$.path.insert($3.tokenValue);
-		  }
+		    semanticError($1.tokenValue + " of type " + var->getType() + " is not subscriptable");		    	     }
+		  $$.path.push_back($1.tokenValue);
+		  $$.path.push_back($3.tokenValue);
 		}
 |
 		STREF '[' ID ']' {
 		  $$.path = $1.path;
-		  //$$.path.insert($3.tokenValue);
+		  $$.path.push_back($3.tokenValue);
 		}
 ;	
 CALL: 
