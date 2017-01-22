@@ -604,7 +604,7 @@ STREF:
 		  if(!var) {
 		    semanticError($1.tokenValue + (string)" is undeclared in this scope");
 		  }
-		  cout << "^^^^^^^^^^^^^^^^^^^^ var->getType() = " + var->getType() << endl;
+		  //cout << "^^^^^^^^^^^^^^^^^^^^ var->getType() = " + var->getType() << endl;
 		  if(isPrimitive(var->getType())) {
 		    semanticError($1.tokenValue + " of type " + var->getType() + " is not subscriptable");		    	     }
 		  $$.path.push_back($1.tokenValue);

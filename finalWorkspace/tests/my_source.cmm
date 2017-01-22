@@ -12,13 +12,6 @@ defstruct {
 	  s2:MyStruct2;
 } MyStruct3;
 
-integer foo1() 
-var abc:real;
-{ }
-
-integer foo2(funcarg1,funcarg2:real) 
-var funcvar:integer;
-{ }
 main
 var
    a,b : integer;
@@ -35,6 +28,6 @@ st1[a] = 100;
 st3[b] = 0.5;
 st3[c] = 7;
 st3[s1] = st1;
-st3[s2][c] = 200;
-st3[s2][c] = st1[a];
+//st3[s2][c] = 200;
+//st3[s2][c] = st1[a];
 }

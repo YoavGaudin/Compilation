@@ -141,10 +141,13 @@ public:
 
   // get the inner Variable of the struct by the path to it
   Variable* getStref(list<string> pathToRef) {
+    cout << "getStref() in " << this->getName() << " of type " << this->getType() << endl;
     assert(pathToRef.size() > 0);
     Variable* field = getField(pathToRef.front());
-    if(pathToRef.size() == 1)
+    if(pathToRef.size() == 1) {
+      cout << "FOUND THE WANTED STREFFFFFF it is of type " << field->getType() << endl;
       return field;
+    }
     // pathToRef.size() > 1
     if(isPrimitive(field))
       return NULL;
@@ -208,12 +211,12 @@ public:
 
   // find struct stref in block's symbol table
   Variable* getScopeDefstructStref(list<string> path) {
+    cout << "***getScopeDefstructStref()***" << endl;
     Variable* temp;
     std::map<string, Variable*>::iterator i;
     if((i = symbolTable.find(path.front())) != symbolTable.end()) {
       temp = i->second;
     } else assert(0);
-    printSymbolTable();
     Defstruct* ds = dynamic_cast<Defstruct*>(temp);
     assert(ds);
     // getStref doesn't need the name of the struct

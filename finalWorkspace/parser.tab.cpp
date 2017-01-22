@@ -2124,7 +2124,7 @@ yyreduce:
 		  if(!var) {
 		    semanticError((yyvsp[-3]).tokenValue + (string)" is undeclared in this scope");
 		  }
-		  cout << "^^^^^^^^^^^^^^^^^^^^ var->getType() = " + var->getType() << endl;
+		  //cout << "^^^^^^^^^^^^^^^^^^^^ var->getType() = " + var->getType() << endl;
 		  if(isPrimitive(var->getType())) {
 		    semanticError((yyvsp[-3]).tokenValue + " of type " + var->getType() + " is not subscriptable");		    	     }
 		  (yyval).path.push_back((yyvsp[-3]).tokenValue);
