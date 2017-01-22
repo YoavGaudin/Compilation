@@ -5,4 +5,5 @@ var a:integer;
       	a = 1;
    } else 
       	a = 0;
+   write (a);
 }

@@ -104,6 +104,9 @@ MAIN_FUNCTION:
 		  currFunction = new Function("main");
 		  currBlock = currFunction;
 		  currFunction->address =  nextquad();
+		  // initiate stack pointer and frame pointer
+		  emit("COPYI I1 999");
+		  emit("COPYI I2 999");
 		} BLK {
 		  funcSymbols.insert(std::pair<string, Function>("main", *currFunction));
 		  backpatch($4.nextList, nextquad());
@@ -243,7 +246,7 @@ STMT_RETURN:
 		    semanticError("Ileagal type of return expression");
 		  }
 		  // fold stack back to FP
-		  emit("COPYI I1 I2");
+		  emit("ADD2I I1 I2 -1");
 		  
 		  if($3.type == "integer") {
 		    emit("STORI " + $3.place + " I1 0");
@@ -307,7 +310,7 @@ ASSN:
 		      assert(0);
 		    }
 		    // this STORE assumes that on declaration there was allocated memory on stack (SP was moved)
-		    emit(STOR + " " + $3.place + " I1 " + to_string(lvalVar->getOffset()));
+		    emit(STOR + " " + $3.place + " I2 " + to_string(-lvalVar->getOffset()));
 		  } else { // EXP is defstruct
 		    //EXP->place is offset from FP
 		    //copyStruct(dynamic_cast<Defstruct*>(lvalVar), $3.place);
@@ -550,7 +553,7 @@ EXP:
 		    else {
 		      assert(0);
 		    }
-		    emit(LOAD + " " + $$.place + " I1 " + to_string(var->getOffset()));
+		    emit(LOAD + " " + $$.place + " I2 " + to_string(-var->getOffset()));
 		    $$.type = var->getType();
 		  }
 		  else { // var is struct
@@ -626,6 +629,9 @@ CALL:
 		  emit("COPYI I2 I1"); // FP = SP
 		  // TODO:put call parameters on the stack
 		  func->putArgumentsOnStack($4.callArgsList);
+		  if(!func->isImplemented) {
+		    func->functionCalls.push_back(nextquad());
+  		  }
 		  emit("JLINK " + to_string(func->address));
 		  // after return (SP points to return value)
 		  string LOAD = "";

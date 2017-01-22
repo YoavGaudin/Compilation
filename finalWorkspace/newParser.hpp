@@ -486,4 +486,40 @@ void buildLinkerHeader();
 
 */
 
+/* ---------------- Operation Record (for functions) -------------
+
+stack grows downwards, meaning the first operation record starts at the highest address- 999
+
+The address of a local variable (including arguments) is calculated with offset from FP (address = FP - offset)
+ ____________________________
+\
+\      Local Variables
+\            :			<-SP
+\            :
+\____________________________
+\
+\      calee arguments
+\            :
+\            :
+\____________________________   <-FP
+\     calee return value
+\____________________________
+\           I2
+\____________________________
+\           I0
+\____________________________
+\
+\     Caller saved register
+\            :
+\            :
+\____________________________
+\
+\      Local Variables
+\            :
+\            :
+\____________________________
+
+
+*/
+
 #endif //COMMON_HPP
