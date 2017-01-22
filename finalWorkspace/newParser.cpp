@@ -109,7 +109,8 @@ void printDeclarationList(map<string, Variable*> dl) {
   }
 }
 
-// iterate over the ids list and for each id create Variable with the DCL type and this id
+/* iterate over the ids list and for each id create Variable with the DCL type and this id. The offset has no meaning here. It will be defined later.
+ */
 void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
   for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != DCL->dcl_ids.end(); ++i) {
     Variable* v = NULL;
@@ -119,11 +120,9 @@ void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
       // this will create all inner Variables (new Variable()) of the struct
       v = new Defstruct(*i, DCL->dcl_type, 0);
       Defstruct* ds = dynamic_cast<Defstruct*>(v);
-      cout << "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl;
-      cout << v->getType() << endl;
       assert(ds);
-      ds->printStructure();
-      cout << "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl;
+      //cout << v->getType() << endl;
+      //ds->printStructure();
     }
     DECLARLIST->declarationList.insert(std::pair<string,Variable*>(*i, v));
   }
@@ -338,6 +337,16 @@ void printStructTypeTableOnlyNames() {
   }
 }
 
+void setSymbolTableOffsets(map<string, Variable*> symbolTable) {
+  int offset = 0;
+  for(std::map<string, Variable*>::iterator i = symbolTable.begin() ; i != symbolTable.end() ; ++i) {
+    Variable* v = i->second;
+    v->setOffset(offset);
+    cout << v->getSizeInMemory() << "*****************************************************" << endl;
+    offset += v->getSizeInMemory();
+  }  
+}
+
 /**************************************************************************/
 /*                           Main of parser                               */
 /**************************************************************************/
@@ -363,25 +372,6 @@ void printState() {
   // ---------------------------------
   cout << "\tDeftructs: " << endl;
   printStructTypeTable();
-  // ---------------------------------
-  /*cout << "\tBLK variables: " << endl;
-  for(std::map<string, Variable*>::iterator v = currBlock->symbolTable.begin() ; v != currBlock->symbolTable.end() ; ++v) {
-    Variable* var = v->second;
-    cout << "Variable " << v->first << " of type " << var->getType() << endl;
-    Defstruct* ds = NULL;
-    if (ds = dynamic_cast<Defstruct*>(var)) {
-      ds->printStructure();
-    }
-  }
-  cout << "\tFUNCTION variables: " << endl;
-  for(std::map<string, Variable*>::iterator v = currFunction->symbolTable.begin() ; v != currFunction->symbolTable.end() ; ++v) {
-    Variable* var = v->second;
-    cout << "Variable " << v->first << " of type " << var->getType() << endl;
-    Defstruct* ds = NULL;
-    if (ds = dynamic_cast<Defstruct*>(var)) {
-      ds->printStructure();
-    }
-    }*/
 }
 
 

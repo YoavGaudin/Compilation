@@ -79,17 +79,21 @@ class Variable {
   string name;
   string type;
   int offset;
+  int sizeInMemory;
   
 public:
   
-  Variable(const string name_, string type_, int offset_) : name(name_), type(type_), offset(offset_) {}
+  Variable(const string name_, string type_, int offset_) : name(name_), type(type_), offset(offset_), sizeInMemory(1) {}
 
   virtual ~Variable() {}
 
-  void setOffset(int offset) { this->offset = offset; }
-  int getOffset() { return this->offset; }
-  string const& getName() { return name; }
-  string const& getType() { return type; }
+  int getOffset()                 { return this->offset; }
+  string const& getName()         { return this->name; }
+  string const& getType()         { return this->type; }
+  int getSizeInMemory()          { return this->sizeInMemory; }
+
+  void setSizeInMemory(int size) { this->sizeInMemory = size; }
+  void setOffset(int offset)      { this->offset = offset; }
 };
 
 
@@ -98,23 +102,20 @@ bool isPrimitive(Variable&);
 bool isPrimitive(Type*);
 bool isPrimitive(Type&);
 
-class Defstruct : public Variable {
-
-  int sizeInMemory;
-
-public:
+struct Defstruct : public Variable {
 
   map<string, Variable*> fields;
   
   Defstruct(string name_, string type_, int offset_) : Variable(name_, type_, offset_) {
     // TODO: get the struct type size from the structType global table
-    sizeInMemory = 0;
+    StructType st = structTypeTable.find(type_)->second;
+    this->setSizeInMemory(st.getTypeSizeInMemory());
     // build the Defstruct fields
     std::map<string, StructType>::iterator i;
     i = structTypeTable.find(type_);
     assert(i != structTypeTable.end()); 
     StructType& thisStructType = i->second;
-    int sumOffset = 0;
+    int sumOffset = offset_;
     for(std::map<string, Type*>::iterator i = thisStructType.fieldTypes.begin(); i != thisStructType.fieldTypes.end(); ++i) {
       assert(i->second->getTypeName() != this->getType());
       Variable* v = NULL;
@@ -141,7 +142,7 @@ public:
 
   // get the inner Variable of the struct by the path to it
   Variable* getStref(list<string> pathToRef) {
-    cout << "getStref() in " << this->getName() << " of type " << this->getType() << endl;
+    //cout << "getStref() in " << this->getName() << " of type " << this->getType() << endl;
     assert(pathToRef.size() > 0);
     Variable* field = getField(pathToRef.front());
     if(pathToRef.size() == 1) {
@@ -159,13 +160,13 @@ public:
   }
 
   void printStructure() {
-    cout << "***printing structure of " << getName() << endl;
+    cout << "***printing structure of " << getName() << "(offset = " << this->getOffset() << ")" << endl;
     int j = 1;
     for(std::map<string, Variable*>::iterator i = fields.begin(); i != fields.end(); ++i, ++j) {
       string name = i->first;
       Variable* v = i->second;
       string type = v->getType();
-      cout << j << "). " << name << " is " << v->getType() << endl;
+      cout << j << "). " << name << " is " << v->getType() << "(offset = " << v->getOffset() << ")" << endl;
       if(!isPrimitive(type)) {
 	std::map<string, StructType>::iterator i;
 	i = structTypeTable.find(type);
@@ -179,8 +180,6 @@ public:
       }
     }
   }
-  
-  int getSizeInMemory() { return sizeInMemory; }
 };
 
 
@@ -211,7 +210,6 @@ public:
 
   // find struct stref in block's symbol table
   Variable* getScopeDefstructStref(list<string> path) {
-    cout << "***getScopeDefstructStref()***" << endl;
     Variable* temp;
     std::map<string, Variable*>::iterator i;
     if((i = symbolTable.find(path.front())) != symbolTable.end()) {
@@ -481,6 +479,7 @@ void printDeclarationList(map<string, Variable*> dl);
 //void printStructTypeTable();
 //void printStructTypeTableOnlyNames();
 void printString(string str);
+void setSymbolTableOffsets(map<string, Variable*> symbolTable);
 
 Function* getFunction(string name);
 void saveUsedRegisters();

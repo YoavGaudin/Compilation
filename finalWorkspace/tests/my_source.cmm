@@ -14,13 +14,14 @@ defstruct {
 
 main
 var
-   a,b : integer;
-   c,d : real;
-   st1 : MyStruct1;
-   st3 : MyStruct3;
+   b	  : integer;
+   c,d	  : real;
+   st1	  : MyStruct1;
+   st3	  : MyStruct3;
+   bigOFSSET,a : MyStruct3;
 {
 
-a = 18;
+b = 18;
 c = 3.7;
 
 st1[a] = 100;

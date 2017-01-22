@@ -123,6 +123,7 @@ BLK:
                 M_blk DECLARATIONS {
 		  $$.declarationList = $2.declarationList;
 		  currBlock->insertSymbolTable($2.declarationList);
+		  setSymbolTableOffsets(currBlock->symbolTable);
 		  // TODO: uncomment this and change *offset* with the size required for the block's variables
 		  // emit("SUBTI I1 I1 " + currBlock->*offset*);
 		} '{' LIST '}' {
@@ -318,8 +319,10 @@ ASSN:
 		    // this STORE assumes that on declaration there was allocated memory on stack (SP was moved)
 		    emit(STOR + " " + $3.place + " I2 " + to_string(-lvalVar->getOffset()));
 		  } else { // EXP is defstruct
-		    //EXP->place is offset from FP
-		    //copyStruct(dynamic_cast<Defstruct*>(lvalVar), $3.place);
+		    // EXP->place is offset from FP
+		    /*Defstruct* ds = dynamic_cast<Defstruct*>(lvalVar);
+		    assert(ds);
+		    copyStruct(ds, $3.place);*/
 		  }
 
 		  cout << "<\\ASSN>" << endl;
