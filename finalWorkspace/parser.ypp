@@ -122,8 +122,12 @@ MAIN_FUNCTION:
 BLK: 
                 M_blk DECLARATIONS {
 		  $$.declarationList = $2.declarationList;
-		  currFunction->insertSymbolTable($2.declarationList);
+		  currBlock->insertSymbolTable($2.declarationList);
+		  // TODO: uncomment this and change *offset* with the size required for the block's variables
+		  // emit("SUBTI I1 I1 " + currBlock->*offset*);
 		} '{' LIST '}' {
+		  // TODO: uncomment this and change *offset* with the size required for the block's variables
+		  // emit("ADD2I I1 I1 " + currBlock->*offset*);
 		  $$.nextList = $5.nextList;
 		  $5.declarationList = $2.declarationList;
 		  cout << "<\\BLK>" << endl;
@@ -267,6 +271,7 @@ WRITE:
 		}
 	|
 		Write '(' STRING ')' ';' {
+		  printString($3.tokenValue);
 		}
 ;	
 READ: 
@@ -275,6 +280,7 @@ READ:
 ;	
 ASSN: 
 		LVAL ASSIGN EXP ';' {
+		  // TODO: this code needs to be reused in READ, so a function might be in order
 		  cout << "<ASSN>" << endl;
 		  Variable* lvalVar;
 		  string errVar = "";

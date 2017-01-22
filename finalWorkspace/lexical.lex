@@ -4,7 +4,6 @@
 #include "newParser.hpp"
 #include "parser.tab.hpp"
 void printErr();
-char * getString(char * in);
 %}
 
 %option yylineno noyywrap
@@ -79,12 +78,4 @@ void printErr()
 {
   printf("\nLexical error: '%s' in line number %d\n", yytext, yylineno);
   exit(1);
-}
-
-char * getString(char * in) {
-  char * out = strdup(in);
-  ++out;
-  int len = strlen(out);
-  *(out+len-1) = '\0';
-  return out;
 }

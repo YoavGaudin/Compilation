@@ -6,14 +6,16 @@ integer foo2()
 integer foo(c: integer)
 var e:integer;
 {
+  write(c);
   e = call foo2 ();
   e = e + c;
+  write(e);
   return (e);
 }
 
 main
 var a:integer;
 {
-  a = call foo (1);
+  a = call foo (5);
   write(a);
 }

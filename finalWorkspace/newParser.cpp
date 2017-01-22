@@ -260,6 +260,21 @@ void buildLinkerHeader() {
 	codeBuffer = lines;
 }
 
+void printString(string str) {
+  char char_to_print;
+  char line_feed = 0xA;
+  char tab = 0x9;
+  cout << "printString: " << str << endl;
+  for(int i=1 ; i<str.length()-1 ; ++i) {
+    char_to_print = str.at(i);
+    if(char_to_print == '\\'){
+     char escaped = str.at(++i);
+      char_to_print = escaped == 'n' ? line_feed : tab;
+    }
+    emit("PRNTC " + to_string(char_to_print));
+  }
+}
+
 void addToStructTypeTable(string structName, map<string, Type> typeFields){
   cout << "\tcreating struct (num of fields = " << typeFields.size() << ") : " << structName << endl;
   for(std::map<string, Type>::iterator i = typeFields.begin() ; i != typeFields.end() ; ++i) {

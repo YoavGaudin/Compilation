@@ -13,7 +13,7 @@
 
 using namespace std;
 
-#define YYDEBUG 1
+//#define YYDEBUG 1
 extern int yydebug;
 
 void emit(string const& singleInstruction);
@@ -429,6 +429,7 @@ void backpatch(list<int> toFill, int address);
 //bool isPrimitive(string type);
 void copyStruct(Defstruct* lvalVar, string reg);
 void addToStructTypeTable(string structName, map<string, Type>typeFields);
+void printString(string str);
 
 Function* getFunction(string name);
 void saveUsedRegisters();
