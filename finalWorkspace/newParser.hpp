@@ -204,6 +204,8 @@ public:
 
   // find variable in block's symbol table
   Variable* getScopeVariable(string name) {
+    //cout << "55555555555555555555555555555555555 getScopeVariable() name = " << name << endl;
+    //this->printSymbolTable();
     std::map<string, Variable*>::iterator i;
     if((i = symbolTable.find(name)) != symbolTable.end()) {
       return i->second;
@@ -476,7 +478,7 @@ void printState();
 void backpatch(list<int> toFill, int address);
 //bool isPrimitive(Variable* var);
 //bool isPrimitive(string type);
-void copyStruct(Defstruct* lvalVar, string reg);
+void copyStruct(Variable* lvalVar, string reg);
 void addToStructTypeTable(string structName, map<string, Type*>typeFields);
 void printDeclarationList(map<string, Variable*> dl);
 //void printStructTypeTable();
@@ -484,6 +486,7 @@ void printDeclarationList(map<string, Variable*> dl);
 void printString(string str);
 void setSymbolTableOffsets(map<string, Variable*> symbolTable);
 void printCodeBuffer();
+void printFunctionsSymbolTable();
 
 Function* getFunction(string name);
 void saveUsedRegisters();

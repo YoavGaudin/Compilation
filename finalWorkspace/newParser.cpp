@@ -224,7 +224,7 @@ bool isPrimitive(Type& type) {
 /* lvalVar - holds all LVAL's information and specifically offset from FP where to copy
    reg - holds the offset from FP from where to copy
 */
-void copyStruct(Defstruct* lvalVar, string reg) {
+void copyStruct(Variable* lvalVar, string reg) {
   string intTempReg = getIntReg();
   string realTempReg = getRealReg();
   for(int i = 0; i < lvalVar->getSizeInMemory(); ++i) {
@@ -357,6 +357,16 @@ void setSymbolTableOffsets(map<string, Variable*> symbolTable) {
   }  
 }
 
+void printFunctionsSymbolTable() {
+  cout << "\tFunctions table:" << funcSymbols.size() << endl;
+  for(std::map<string, Function>::iterator f = funcSymbols.begin() ; f != funcSymbols.end() ; ++f) {
+    cout << "\targumants and variables of "<< f->first << " at " << to_string((f->second).address) <<": " << endl;
+    for(std::map<string, Variable*>::iterator j = (f->second).symbolTable.begin(); j != (f->second).symbolTable.end(); ++j) {
+      cout << "\t\t" << j->first << " : " << j->second->getType() << "(" << j->second->getOffset() << ")" << endl;
+    }
+  }
+}
+
 /**************************************************************************/
 /*                           Main of parser                               */
 /**************************************************************************/
@@ -372,13 +382,7 @@ void printState() {
 	filebuf << *i << endl;
   }
   // ---------------------------------
-  cout << "\tFunctions table:" << funcSymbols.size() << endl;
-  for(std::map<string, Function>::iterator f = funcSymbols.begin() ; f != funcSymbols.end() ; ++f) {
-    cout << "\targumants and variables of "<< f->first << " at " << to_string((f->second).address) <<": " << endl;
-    for(std::map<string, Variable*>::iterator j = (f->second).symbolTable.begin(); j != (f->second).symbolTable.end(); ++j) {
-      cout << "\t\t" << j->first << " : " << j->second->getType() << "(" << j->second->getOffset() << ")" << endl;
-    }
-  }
+  printFunctionsSymbolTable();
   // ---------------------------------
   cout << "\tDeftructs: " << endl;
   printStructTypeTable();

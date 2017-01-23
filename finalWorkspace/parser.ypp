@@ -124,8 +124,13 @@ MAIN_FUNCTION:
 BLK: 
                 M_blk DECLARATIONS {
 		  $$.declarationList = $2.declarationList;
+		  //cout << "inserting to Block's symbol table!!!!!!!!!!!!!!!!!!" << endl;
 		  currBlock->insertSymbolTable($2.declarationList);
 		  setSymbolTableOffsets(currBlock->symbolTable);
+		  //currBlock->printSymbolTable();
+		  //printFunctionsSymbolTable();
+		  //cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
 		  // TODO: uncomment this and change *offset* with the size required for the block's variables
 		  // emit("SUBTI I1 I1 " + currBlock->*offset*);
 		} '{' LIST '}' {
@@ -286,7 +291,6 @@ ASSN:
 		LVAL ASSIGN EXP ';' {
 		  // TODO: this code needs to be reused in READ, so a function might be in order
 		  cout << "<ASSN>" << endl;
-
 		  Variable* lvalVar;
 		  Variable* expVar;
 		  string errVar = "";
@@ -299,7 +303,7 @@ ASSN:
 		    if(!(lvalVar = currBlock->getScopeVariable($1.variableName))) {
 		      cout << "currFunction: " << currFunction->name << endl;
 		      printState();
-		      semanticError($1.variableName + " is not declared in this scope");
+		      semanticError($1.variableName + " is not declared in this scope (L-value)");
 		    }
 		  }
 
@@ -307,39 +311,23 @@ ASSN:
 		  if($3.path.size() > 0) { // EXP is STREF
 		    if(!(expVar = currBlock->getScopeDefstructStref($3.path)))
 		      semanticError((string)"Invalid Defstruct dereference on R-value");
-		  } else  { // EXP is ID (regular variable or struct)
-		    if(!(expVar = currBlock->getScopeVariable($3.variableName))) {
+		  } else  { // EXP is ID (regular variable or struct) or NUM !!!
+		    expVar = currBlock->getScopeVariable($3.variableName);
+		    // if EXP is number (variableName = "") it is not semantic error
+		    if($3.variableName != "" && !expVar) {
 		      cout << "currFunction: " << currFunction->name << endl;
 		      printState();
-		      semanticError($1.variableName + " is not declared in this scope");
+		      semanticError($1.variableName + " is not declared in this scope (R-value)");
 		    }
 		  }
 
-		  /*
-		  Variable* lvalVar;
-		  string errVar = "";
-		  // get LVAL's variable
-		  if($1.path.size() > 0) { // LVAL is STREF
-		    errVar = "struct reference (STREF)";
-		    if(!(lvalVar = currBlock->getScopeDefstructStref($1.path)))
-		      semanticError((string)"Invalid Defstruct dereference");
-		  } else  { // LVAL is ID (regular variable or struct)
-		    errVar = $1.variableName;
-		    lvalVar = currBlock->getScopeVariable($1.variableName);
+		  if(expVar) {
+		    $3.type = expVar->getType();
+		    if($3.type == "integer")
+		      $3.place = getIntReg();
+		    else
+		      $3.place = getRealReg();
 		  }
-		  // check LVAL was declared
-		  if(lvalVar == NULL) {
-		    cout << "currFunction: " << currFunction->name << endl;
-		    printState();
-		    semanticError(errVar + " was not declared in this scope");
-		  }
-		  */
-
-
-
-
-
-		  
 		  if(lvalVar->getType() != $3.type) {
 		    semanticError("type mismatch on assignment operation: trying to assign " +
 				  $3.type + " to " + lvalVar->getType());
@@ -359,9 +347,12 @@ ASSN:
 		    emit(STOR + " " + $3.place + " I2 " + to_string(-lvalVar->getOffset()));
 		  } else { // EXP is defstruct
 		    // EXP->place is offset from FP
-		    /*Defstruct* ds = dynamic_cast<Defstruct*>(lvalVar);
-		    assert(ds);
-		    copyStruct(ds, $3.place);*/
+		    //Defstruct* ds = dynamic_cast<Defstruct*>(lvalVar);
+		    //assert(ds);
+		    //copyStruct(ds, $3.place);
+
+
+		    //copyStruct(lvalVar, $3.place);
 		  }
 
 		  cout << "<\\ASSN>" << endl;
