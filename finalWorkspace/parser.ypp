@@ -109,7 +109,9 @@ MAIN_FUNCTION:
 		  emit("COPYI I2 999");
 		} BLK {
 		  funcSymbols.insert(std::pair<string, Function>("main", *currFunction));
-		  backpatch($4.nextList, nextquad());
+		  /* TODO: is it redundant? with this line the my_course.cmm falls.
+		     I think no one in the main BLK needs to know the BLK's context.*/
+		  //backpatch($4.nextList, nextquad());
 		  cout << "<\\MAIN_FUNCTION>" <<endl;
 		  $$.place = to_string(currFunction->address);
 		} 
@@ -284,12 +286,54 @@ ASSN:
 		LVAL ASSIGN EXP ';' {
 		  // TODO: this code needs to be reused in READ, so a function might be in order
 		  cout << "<ASSN>" << endl;
+
+
+
+
+
+		  /*
+		  Variable* lvalVar;
+		  Variable* expVar;
+		  string errVar = "";
+
+		  // get LVAL's variable
+		  if($1.path.size() > 0) { // LVAL is STREF
+		    if(!(lvalVar = currBlock->getScopeDefstructStref($1.path)))
+		      semanticError((string)"Invalid Defstruct dereference on L-value");
+		  } else  { // LVAL is ID (regular variable or struct)
+		    if(!(lvalVar = currBlock->getScopeVariable($1.variableName))) {
+		      cout << "currFunction: " << currFunction->name << endl;
+		      printState();
+		      semanticError($1.variableName + " is not declared in this scope");
+		    }
+		  }
+
+		  // get EXP's variable
+		  if($3.path.size() > 0) { // EXP is STREF
+		    if(!(expVar = currBlock->getScopeDefstructStref($3.path)))
+		      semanticError((string)"Invalid Defstruct dereference on R-value");
+		  } else  { // EXP is ID (regular variable or struct)
+		    if(!(expVar = currBlock->getScopeVariable($3.variableName))) {
+		      cout << "currFunction: " << currFunction->name << endl;
+		      printState();
+		      semanticError($1.variableName + " is not declared in this scope");
+		    }
+		  }
+*/
+
+
+
+
+
+
+
 		  Variable* lvalVar;
 		  string errVar = "";
 		  // get LVAL's variable
 		  if($1.path.size() > 0) { // LVAL is STREF
 		    errVar = "struct reference (STREF)";
-		    lvalVar = currBlock->getScopeDefstructStref($1.path);
+		    if(!(lvalVar = currBlock->getScopeDefstructStref($1.path)))
+		      semanticError((string)"Invalid Defstruct dereference");
 		  } else  { // LVAL is ID (regular variable or struct)
 		    errVar = $1.variableName;
 		    lvalVar = currBlock->getScopeVariable($1.variableName);
@@ -575,7 +619,8 @@ EXP:
 	|
 		STREF {
 		  cout << "<EXP 6>" << endl;
-		  
+		  $$.path = $1.path;
+		  $$.type = $1.type;
 		  cout << "<\\EXP 6>" << endl;
 		}
 	|
@@ -607,9 +652,8 @@ STREF:
 		  if(!var) {
 		    semanticError($1.tokenValue + (string)" is undeclared in this scope");
 		  }
-		  //cout << "^^^^^^^^^^^^^^^^^^^^ var->getType() = " + var->getType() << endl;
 		  if(isPrimitive(var->getType())) {
-		    semanticError($1.tokenValue + " of type " + var->getType() + " is not subscriptable");		    	     }
+		    semanticError($1.tokenValue + " of type " + var->getType() + " is not subscriptable");		    	                   }
 		  $$.path.push_back($1.tokenValue);
 		  $$.path.push_back($3.tokenValue);
 		}
@@ -617,6 +661,7 @@ STREF:
 		STREF '[' ID ']' {
 		  $$.path = $1.path;
 		  $$.path.push_back($3.tokenValue);
+		  //************************************************************************************************************
 		}
 ;	
 CALL: 

@@ -137,7 +137,8 @@ struct Defstruct : public Variable {
     i = fields.find(name);
     if(i != fields.end())
       return i->second;
-    assert(0);
+    cout << "getField() assertion failure --- " << name <<endl;
+    return NULL;
   }
 
   // get the inner Variable of the struct by the path to it
@@ -145,8 +146,10 @@ struct Defstruct : public Variable {
     //cout << "getStref() in " << this->getName() << " of type " << this->getType() << endl;
     assert(pathToRef.size() > 0);
     Variable* field = getField(pathToRef.front());
+    if(!field)
+      return NULL;
     if(pathToRef.size() == 1) {
-      cout << "FOUND THE WANTED STREFFFFFF it is of type " << field->getType() << endl;
+      cout << "FOUND THE WANTED STREFFFFFF it is " << field->getName() << " of type " << field->getType() << endl;
       return field;
     }
     // pathToRef.size() > 1
@@ -355,10 +358,10 @@ struct Stype {
   string offset;
   string variableName;
 
-  // for EXP and LVAL
+  // for EXP, LVAL and STREF
   string type;
 
-  // for STREF and LVAL
+  // for STREF, LVAL and EXP
   list<string> path;
   
   Stype(string v) : tokenValue(v) {}
@@ -480,6 +483,7 @@ void printDeclarationList(map<string, Variable*> dl);
 //void printStructTypeTableOnlyNames();
 void printString(string str);
 void setSymbolTableOffsets(map<string, Variable*> symbolTable);
+void printCodeBuffer();
 
 Function* getFunction(string name);
 void saveUsedRegisters();

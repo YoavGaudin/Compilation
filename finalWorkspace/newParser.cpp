@@ -31,6 +31,15 @@ void regSetInit() {
 
 // -----------------------------------------------------------------------------------------------
 
+void printCodeBuffer() {
+  cout << "\tCodeBuffer (size = " << codeBuffer.size() << ") : " << endl;
+  int j = 1;
+  for(std::vector<string>::iterator i = codeBuffer.begin() ; i != codeBuffer.end() ; ++i, ++j) {
+    cout << "\t\t" << j-4 << ": " << *i << endl;  
+    cout << *i << endl;
+  }
+}
+
 // returns unused register name and adds it to usedIntRegs set
 string getIntReg() {
   // 0,1,2 reserved from init
@@ -185,7 +194,16 @@ static bool subStrReplace(std::string& str, const std::string& from, const std::
    address - address to fill in the codeBuffer lines specified in 'toFill'
  */
 void backpatch(list<int> toFill, int address) {
-  for(std::list<int>::iterator i = toFill.begin(); i != toFill.end(); ++i) {
+  //cout << "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS" << endl;
+  //printCodeBuffer();
+  //cout << "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS" << endl;
+  
+  int j = 1;
+  for(std::list<int>::iterator i = toFill.begin(); i != toFill.end(); ++i, ++j) {
+    //cout << "backpatching: list element number " << j << endl;
+    //cout << "*i = " << *i << endl;
+    //cout << codeBuffer[*i] << " VS ";
+    //cout << codeBuffer[*i-1] << endl;
     subStrReplace(codeBuffer[*i-1], "___", to_string(address));
   }
 }
