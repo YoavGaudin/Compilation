@@ -61,7 +61,6 @@ FDEFS:
 		  cout << "<FDEFS 1>" << endl;
 		  cout << "\t" << $3.tokenValue << endl;
 		  
-		  currFunction->insertSymbolTable($7.declarationList);
 		  funcSymbols.insert(std::pair<string, Function>($3.tokenValue, *currFunction));
 
 		  backpatch($8.nextList, nextquad());
@@ -125,17 +124,16 @@ BLK:
                 M_blk DECLARATIONS {
 		  $$.declarationList = $2.declarationList;
 		  //cout << "inserting to Block's symbol table!!!!!!!!!!!!!!!!!!" << endl;
+		  // add declerations to current block
 		  currBlock->insertSymbolTable($2.declarationList);
-		  setSymbolTableOffsets(currBlock->symbolTable);
+		  //setSymbolTableOffsets(currBlock->symbolTable);
 		  //currBlock->printSymbolTable();
 		  //printFunctionsSymbolTable();
 		  //cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
 
-		  // TODO: uncomment this and change *offset* with the size required for the block's variables
-		  // emit("SUBTI I1 I1 " + currBlock->*offset*);
+		  int offset = currBlock->symbolTable.size();
+		  emit("SUBTI I1 I1 " + to_string(offset));
 		} '{' LIST '}' {
-		  // TODO: uncomment this and change *offset* with the size required for the block's variables
-		  // emit("ADD2I I1 I1 " + currBlock->*offset*);
 		  $$.nextList = $5.nextList;
 		  $5.declarationList = $2.declarationList;
 		  cout << "<\\BLK>" << endl;
@@ -144,8 +142,6 @@ BLK:
 DECLARATIONS:
 		Var DECLARLIST {
 		  cout << "<DECLARATIONS>" << endl;
-		  // add declerations to current block
-		  currBlock->insertSymbolTable($2.declarationList);
 		  $$.declarationList = $2.declarationList;
 		  cout << "<\\DECLARATIONS>" << endl;
 		}
@@ -302,7 +298,6 @@ ASSN:
 		  } else  { // LVAL is ID (regular variable or struct)
 		    if(!(lvalVar = currBlock->getScopeVariable($1.variableName))) {
 		      cout << "currFunction: " << currFunction->name << endl;
-		      printState();
 		      semanticError($1.variableName + " is not declared in this scope (L-value)");
 		    }
 		  }
@@ -316,7 +311,6 @@ ASSN:
 		    // if EXP is number (variableName = "") it is not semantic error
 		    if($3.variableName != "" && !expVar) {
 		      cout << "currFunction: " << currFunction->name << endl;
-		      printState();
 		      semanticError($1.variableName + " is not declared in this scope (R-value)");
 		    }
 		  }
@@ -574,7 +568,6 @@ EXP:
 		  Variable* var = currBlock->getScopeVariable($1.tokenValue);
 		  if(var == NULL) {
 		    cout << "currFunction: " << currFunction->name << endl;
-		    printState();
 		    semanticError($1.tokenValue + " was not declared in this scope");
 		  }
 

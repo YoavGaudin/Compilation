@@ -1,0 +1,12 @@
+integer foo(arg:integer)
+{
+  write(arg+5);
+  return(5);
+}
+
+main
+var a:integer;
+{
+  a = call foo (10);
+  write(a);
+}

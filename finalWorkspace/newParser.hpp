@@ -15,6 +15,7 @@ using namespace std;
 
 //#define YYDEBUG 1
 extern int yydebug;
+extern FILE* yyin;
 
 void emit(string const& singleInstruction);
 void printStructTypeTable();
@@ -271,6 +272,8 @@ struct Function : public Block {
   // for implemented functions
   int address;
   
+  set<string> usedIntRegs;
+  set<string> usedRealRegs;
   // the arguments are inserted straight into the symbol table in the constructor.
 
   // function with arguments
@@ -441,11 +444,6 @@ extern Block* currBlock;
 extern vector<string> codeBuffer;
 extern array<TypeEnum, 1000> memMap;
 
-// globals for the linker header
-extern string unimplemented;
-extern string implemented;
-
-
 // ----------------- Registers: ------------------
 extern set<string> usedIntRegs;
 extern set<string> usedRealRegs;
@@ -474,7 +472,7 @@ bool isReal(string& in);
 bool isIntegerVariable(string& in);
 bool isRealVariable(string& in);
 void Error(string& s);
-void printState();
+void printState(string file_name);
 void backpatch(list<int> toFill, int address);
 //bool isPrimitive(Variable* var);
 //bool isPrimitive(string type);

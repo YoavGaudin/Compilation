@@ -1,0 +1,7 @@
+main
+var a:real;
+{
+  write("first line\n");
+  write("second line\n");
+  write("\t indented line\n");
+}

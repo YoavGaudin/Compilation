@@ -1,9 +1,11 @@
 #include <iostream>
-#include <fstream>
+#include <cstdio>
 #include <string> //redundant?
 #include "newParser.hpp"
 #include <algorithm>
 #include <iterator>
+#include <regex>
+#include <cstdlib>
 
 extern int yyparse (void);
 
@@ -371,15 +373,17 @@ void printFunctionsSymbolTable() {
 /*                           Main of parser                               */
 /**************************************************************************/
 
-void printState() {
-  ofstream filebuf;
-  filebuf.open("a.rsk", ios::out);
+void printState(string file_name) {
+  std::regex e(".cmm$");
+  string out_file_name = std::regex_replace(file_name, e, ".rsk");
+  cout << "###output file " << out_file_name;
+  FILE* out = fopen(out_file_name.c_str(), "w");
   // ---------------------------------
   cout << "\tCodeBuffer (size = " << codeBuffer.size() << ") : " << endl;
-  int j = 1;
+  int j = -4;
   for(std::vector<string>::iterator i = codeBuffer.begin() ; i != codeBuffer.end() ; ++i, ++j) {
-    cout << "\t\t" << j-4 << ": " << *i << endl;  
-	filebuf << *i << endl;
+    cout << "\t\t" << j << ": " << *i << endl;  
+    fprintf(out, "%s\n", (*i).c_str());
   }
   // ---------------------------------
   printFunctionsSymbolTable();
@@ -395,11 +399,15 @@ int main(int argc, char *argv[])
 #if YYDEBUG
   yydebug=1;
 #endif
+  yyin = std::fopen(argv[1], "r");
+  if(!yyin) {
+    cerr << "Unable to open file " << argv[1] << endl;
+  }
   cout << "START Compilation of " << argv[0] << endl;
   rc = yyparse();
   if (rc == 0) { // Parsed successfully
     cout << "---------------- OK!!! ----------------" << endl;
     buildLinkerHeader();
-    printState(); 
+    printState(argv[1]); 
   }
 }
