@@ -14,6 +14,6 @@ parser.tab.cpp parser.tab.hpp: parser.ypp newParser.hpp
 # Utility targets
 .PHONY: clean test
 clean:
-	rm -f lexical.c lexical.h rx-cc parser.tab.*
+	rm -f lexical.c lexical.h rx-cc parser.tab.* *.rsk *.e
 test: rx-cc
 	./run_tests.sh

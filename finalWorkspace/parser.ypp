@@ -55,8 +55,9 @@ FDEFS:
 		FDEFS TYPE ID '(' FUNC_ARGLIST_FULL ')'
 		{
 		  currFunction = new Function($3.tokenValue, $2.tokenValue, true, $5.argsList);
-		  currBlock = currFunction;
+		  currFunction->printSymbolTable();
 		  currFunction->address =  nextquad();
+		  currBlock = currFunction;
 		} BLK {
 		  cout << "<FDEFS 1>" << endl;
 		  cout << "\t" << $3.tokenValue << endl;
@@ -101,8 +102,8 @@ MAIN_FUNCTION:
                 M_main Main {
 		  //cout << "<MAIN_FUNCTION>" <<endl;
 		  currFunction = new Function("main");
-		  currBlock = currFunction;
 		  currFunction->address =  nextquad();
+		  currBlock = currFunction;
 		  // initiate stack pointer and frame pointer
 		  emit("COPYI I1 999");
 		  emit("COPYI I2 999");
@@ -123,16 +124,18 @@ MAIN_FUNCTION:
 BLK: 
                 M_blk DECLARATIONS {
 		  $$.declarationList = $2.declarationList;
+		  //printDeclarationList($2.declarationList);
+		  currBlock = new Block(currBlock);
 		  //cout << "inserting to Block's symbol table!!!!!!!!!!!!!!!!!!" << endl;
 		  // add declerations to current block
+		  currBlock->printSymbolTable();
+		  cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
 		  currBlock->insertSymbolTable($2.declarationList);
+		  currBlock->printSymbolTable();
 		  //setSymbolTableOffsets(currBlock->symbolTable);
 		  //currBlock->printSymbolTable();
 		  //printFunctionsSymbolTable();
-		  //cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
-
-		  int offset = currBlock->symbolTable.size();
-		  emit("SUBTI I1 I1 " + to_string(offset));
+		  emit("SUBTI I1 I1 " + to_string(currBlock->offset+1));
 		} '{' LIST '}' {
 		  $$.nextList = $5.nextList;
 		  $5.declarationList = $2.declarationList;
@@ -318,9 +321,9 @@ ASSN:
 		  if(expVar) {
 		    $3.type = expVar->getType();
 		    if($3.type == "integer")
-		      $3.place = getIntReg();
+		      $3.place = currFunction->getIntReg();
 		    else
-		      $3.place = getRealReg();
+		      $3.place = currFunction->getRealReg();
 		  }
 		  if(lvalVar->getType() != $3.type) {
 		    semanticError("type mismatch on assignment operation: trying to assign " +
@@ -415,7 +418,7 @@ BEXP:
 	|
 		EXP REL_OP EXP {
 		  cout << "<BEXP 3>" << endl;
-		  string tempReg = getIntReg();
+		  string tempReg = currFunction->getIntReg();
 		  string SLET = "";
 		  string SGRT = "";
 		  string SEQU = "";
@@ -504,10 +507,10 @@ EXP:
 
 		  // EXP->place is always in register!
 		  if(isUsedIntReg($1.place) && isUsedIntReg($3.place)) {
-		    $$.place = getIntReg();
+		    $$.place = currFunction->getIntReg();
 		    emit("ADD2I " + $$.place + " " + $1.place + " " + $3.place);
 		  } else if(isUsedRealReg($1.place) && isUsedRealReg($3.place)) {
-		    $$.place = getRealReg();
+		    $$.place = currFunction->getRealReg();
 		    emit("ADD2R " + $$.place + " " + $1.place + " " + $2.place);
 		  } else {
 		    semanticError("type missmatch within add operation");
@@ -522,10 +525,10 @@ EXP:
 		  }
 
 		  if(isUsedIntReg($1.place) && isUsedIntReg($3.place)) {
-		    $$.place = getIntReg();
+		    $$.place = currFunction->getIntReg();
 		    emit("MULTI " + $$.place + " " + $1.place + " " + $2.place);
 		  } else if(isUsedRealReg($1.place) && isUsedRealReg($3.place)) {
-		    $$.place = getRealReg();
+		    $$.place = currFunction->getRealReg();
 		    emit("MULTR " + $$.place + " " + $1.place + " " + $2.place);
 		  } else {
 		    semanticError("type missmatch within mul operation");
@@ -546,14 +549,14 @@ EXP:
 		    if(isUsedIntReg($4.place)) {
 		      $$.place = $4.place;
 		    } else if(isUsedRealReg($4.place)) {
-		      $$.place = getIntReg();
+		      $$.place = currFunction->getIntReg();
 		      emit("CRTOI " + $$.place + " " + $4.place);
 		    }
 		  } else if($2.tokenValue == "Real") {
 		    if(isUsedRealReg($4.place)) {
 		      $$.place = $4.place;
 		    } else if(isUsedIntReg($4.place)) {
-		      $$.place = getRealReg();
+		      $$.place = currFunction->getRealReg();
 		      emit("CITOR " + $$.place + " " + $4.place);
 		    }
 		  } else {
@@ -576,11 +579,11 @@ EXP:
 		    string LOAD = "";
 		    if(var->getType() == "integer") {
 		      LOAD = "LOADI";
-		      $$.place = getIntReg();
+		      $$.place = currFunction->getIntReg();
 		    }
 		    else if(var->getType() == "real") {
 		      LOAD = "LOADR";
-		      $$.place = getRealReg();
+		      $$.place = currFunction->getRealReg();
 		    }
 		    else {
 		      assert(0);
@@ -607,12 +610,12 @@ EXP:
 		  cout << "<EXP 7>" << endl;
 		  if(isInteger($1.tokenValue)) {
 		    $$.type = "integer";
-		    $$.place = getIntReg();
+		    $$.place = currFunction->getIntReg();
 		    emit("COPYI " + $$.place + " " + $1.tokenValue);
 		  }
 		  else {
 		    $$.type = "real";
-		    $$.place = getRealReg();
+		    $$.place = currFunction->getRealReg();
 		    emit("COPYR " + $$.place + " " + $1.tokenValue);
 		  }
 		  cout << "<\\EXP 7>" << endl;
@@ -669,11 +672,11 @@ CALL:
 		  // after return (SP points to return value)
 		  string LOAD = "";
 		  if(func->returnType == "integer") {
-		    $$.place = getIntReg();
+		    $$.place = currFunction->getIntReg();
 			$$.type = "integer";
 			LOAD = "LOADI";
 	      } else if(func->returnType == "real") {
-		    $$.place = getRealReg();
+		    $$.place = currFunction->getRealReg();
 			$$.type = "real";
 			LOAD = "LOADR";
 		  }
@@ -681,7 +684,7 @@ CALL:
 		  emit("LOADI I2 I1 1");
 		  emit("LOADI I0 I1 2");
 		  emit("ADD2I I1 I1 3");
-		  
+		  restoreUsedRegisters();
 		  
 		}
 ;	

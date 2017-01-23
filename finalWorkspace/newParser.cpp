@@ -25,12 +25,6 @@ void currFunctionInit(string name) {
   currFunction = new Function(name);
 }
 
-void regSetInit() {
-  usedIntRegs.insert("I0"); // return address
-  usedIntRegs.insert("I1"); // stack pointer
-  usedIntRegs.insert("I2"); // frame pointer
-}
-
 // -----------------------------------------------------------------------------------------------
 
 void printCodeBuffer() {
@@ -42,49 +36,17 @@ void printCodeBuffer() {
   }
 }
 
-// returns unused register name and adds it to usedIntRegs set
-string getIntReg() {
-  // 0,1,2 reserved from init
-  for(int i = 3; i < 1000; ++i) {
-    string currReg = "I" + to_string(i);
-    // in c++ string.operator== and string.compare() is the same (unlike JAVA) so it should work fine
-    // return the first register name which is not used
-    if(usedIntRegs.count(currReg) == 0) {
-      usedIntRegs.insert(currReg);
-      return currReg;
-    }
-  }
-  // shouldn't get here - if got here, means we got out of tegisters!
-  assert(0);
-}
-
-// returns unused register name and adds it to usedRealRegs set
-string getRealReg() {
-  for(int i = 0; i < 1000; ++i) {
-    string currReg = "R" + to_string(i);
-    // in c++ string.operator== and string.compare() is the same (unlike JAVA) so it should work fine
-    // return the first register name which is not used
-    if(usedRealRegs.count(currReg) == 0) {
-      usedRealRegs.insert(currReg);
-      return currReg;
-    }
-  }
-  // shouldn't get here - if got here, means we got out of tegisters!
-  assert(0);
-}
-
-
 void emit(string const& singleInstruction) {
   cout << "\t" << singleInstruction << endl;
   codeBuffer.push_back(singleInstruction);
 }
 
 bool isUsedIntReg(string& in) {
-  return usedIntRegs.find(in) != usedIntRegs.end();
+  return currFunction->usedIntRegs.find(in) != currFunction->usedIntRegs.end();
 }
 
 bool isUsedRealReg(string& in) {
-  return usedRealRegs.find(in) != usedRealRegs.end();
+  return currFunction->usedRealRegs.find(in) != currFunction->usedRealRegs.end();
 }
 
 bool isIntegerVariable(string& in) {
@@ -139,7 +101,8 @@ void createVariablesFromDCL(Stype* DCL, Stype* DECLARLIST) {
   }
 }
 
-// iterate over the ids list and insert them with the relevant type to typedefList. Finally, typedefList will be used to create one new StructType and insert it into the structTypeTable!
+// iterate over the ids list and insert them with the relevant type to typedefList. 
+// Finally, typedefList will be used to create one new StructType and insert it into the structTypeTable!
 int createTypeFromDCL(Stype* DCL, Stype* DECLARLIST) {
   for(std::list<string>::iterator i = DCL->dcl_ids.begin(); i != DCL->dcl_ids.end(); ++i) {
     //cout << "DCL->dcl_type : " << DCL->dcl_type << endl;
@@ -148,7 +111,7 @@ int createTypeFromDCL(Stype* DCL, Stype* DECLARLIST) {
       DECLARLIST->typedefList.insert(std::pair<string, Type*>(*i, t));
     } else { // DCL->type is a name of some previously typedefined struct!
       if(!validateStructName(DCL->dcl_type))
-	return -1;
+		return -1;
       //cout << "field id : " << *i << endl;
       StructType& st = structTypeTable.find(DCL->dcl_type)->second;
       DECLARLIST->typedefList.insert(std::pair<string, Type*>(*i, &st));
@@ -161,7 +124,7 @@ int createTypeFromDCL(Stype* DCL, Stype* DECLARLIST) {
 void createArgumentsFromDCL(Stype* DCL, Stype* FUNC_ARGLIST) {
   for(std::list<string>::iterator i = (DCL->dcl_ids).begin() ; i != (DCL->dcl_ids).end() ; ++i) {
     Variable* v = new Variable(*i, DCL->dcl_type, 0);
-    FUNC_ARGLIST->argsList.push_back(*v);
+    FUNC_ARGLIST->argsList.push_back(v);
   }
 }
 
@@ -227,8 +190,8 @@ bool isPrimitive(Type& type) {
    reg - holds the offset from FP from where to copy
 */
 void copyStruct(Variable* lvalVar, string reg) {
-  string intTempReg = getIntReg();
-  string realTempReg = getRealReg();
+  string intTempReg = currFunction->getIntReg();
+  string realTempReg = currFunction->getRealReg();
   for(int i = 0; i < lvalVar->getSizeInMemory(); ++i) {
     string STOR = "";
     string LOAD = "";
@@ -258,22 +221,36 @@ Function* getFunction(string name) {
 
 void saveUsedRegisters() {
   int j = 0;
-  for(std::set<string>::iterator i = usedIntRegs.begin() ; i != usedIntRegs.end() ; ++i, ++j) {
-	emit("STORI " + *i + " I1 " + to_string(-j));
+  for(std::set<string>::iterator i = currFunction->usedIntRegs.begin() ; i != currFunction->usedIntRegs.end() ; ++i) {
+	if(*i != "I0" && *i != "I1" && *i != "I2") {
+		emit("STORI " + *i + " I1 " + to_string(-j));
+		currFunction->savedIntRegs.insert(*i);
+		++j;
+	}
   }
-  for(std::set<string>::iterator i = usedRealRegs.begin() ; i != usedRealRegs.end() ; ++i, ++j) {
+  for(std::set<string>::iterator i = currFunction->usedRealRegs.begin() ; i != currFunction->usedRealRegs.end() ; ++i, ++j) {
 	emit("STORR " + *i + " I1 " + to_string(-j));
+	currFunction->savedRealRegs.insert(*i);
   }
   emit("ADD2I I1 I1 " + to_string(-j));
 }
 
 void restoreUsedRegisters() {
   	int j = 0;
-  for(std::set<string>::iterator i = usedIntRegs.begin() ; i != usedIntRegs.end() ; ++i, ++j) {
-	emit("LOADI " + *i + " I1 " + to_string(j));
+	for(std::set<string>::iterator i = currFunction->usedIntRegs.begin() ; i != currFunction->usedIntRegs.end() ; ++i) {
+		std::set<string>::iterator reg = currFunction->savedIntRegs.find(*i);
+		if(*i != "I0" && *i != "I1" && *i != "I2" && reg != currFunction->savedIntRegs.end()){
+			emit("LOADI " + *i + " I1 " + to_string(j));
+			++j;
+			currFunction->savedIntRegs.erase(reg);
+		}
   }
-  for(std::set<string>::iterator i = usedRealRegs.begin() ; i != usedRealRegs.end() ; ++i, ++j) {
-	emit("LOADI " + *i + " I1 " + to_string(j));
+  for(std::set<string>::iterator i = currFunction->usedRealRegs.begin() ; i != currFunction->usedRealRegs.end() ; ++i, ++j) {
+	std::set<string>::iterator reg = currFunction->savedRealRegs.find(*i);
+	if(reg != currFunction->savedRealRegs.end()){
+		emit("LOADI " + *i + " I1 " + to_string(j));
+		currFunction->savedRealRegs.erase(reg);
+	}
   }
   emit("ADD2I I1 I1 " + to_string(j));
 }

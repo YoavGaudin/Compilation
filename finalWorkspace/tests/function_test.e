@@ -1,8 +1,3 @@
-<header>
-<main>
-<unimplemented> 
-<implemented>  foo,7 foo2,2 main,34
-</header>
 UJUMP 34
 SUBTI I1 I1 1
 COPYI I3 1

@@ -76,7 +76,7 @@ extern map<string, StructType> structTypeTable;
 // -------- Instances ---------
 
 class Variable {
-
+private:
   string name;
   string type;
   int offset;
@@ -84,7 +84,9 @@ class Variable {
   
 public:
   
-  Variable(const string name_, string type_, int offset_) : name(name_), type(type_), offset(offset_), sizeInMemory(1) {}
+  Variable(const string name_, string type_, int offset_) : name(name_), type(type_), offset(offset_), sizeInMemory(1) {
+	  cout << "new Variable: " << name << " at: " << this << endl;
+  }
 
   virtual ~Variable() {}
 
@@ -94,7 +96,7 @@ public:
   int getSizeInMemory()          { return this->sizeInMemory; }
 
   void setSizeInMemory(int size) { this->sizeInMemory = size; }
-  void setOffset(int offset)      { this->offset = offset; }
+  void setOffset(int offset)      { cout << "######\t" << name << " : " << offset <<endl ; this->offset = offset; }
 };
 
 
@@ -195,23 +197,31 @@ private:
 
 public:
   map<string, Variable*> symbolTable;
+  int offset = 0;
   
   Block() : parent(NULL) {}
 
   Block(Block* parent_): parent(parent_) { 
     // std::* containers should be automatically dynamically allocated on decleration
-    symbolTable = parent->symbolTable;
+	if(parent_)
+		symbolTable = parent_->symbolTable;
   }
 
   // find variable in block's symbol table
   Variable* getScopeVariable(string name) {
     //cout << "55555555555555555555555555555555555 getScopeVariable() name = " << name << endl;
     //this->printSymbolTable();
-    std::map<string, Variable*>::iterator i;
-    if((i = symbolTable.find(name)) != symbolTable.end()) {
-      return i->second;
-    }
-    return NULL; 
+	
+	// find variable recursively in parents
+	Block* p = this;
+	while(p != NULL){
+		std::map<string, Variable*>::iterator i;
+		if((i = p->symbolTable.find(name)) != p->symbolTable.end()) {
+		  return i->second;
+		}
+		p = p->parent;
+	}
+		return NULL; 
   }
 
   // find struct stref in block's symbol table
@@ -235,7 +245,14 @@ public:
       symbolTable.erase(i);
     symbolTable.insert(std::pair<string, Variable*>(name, v));
     // TODO wrong calculation
-    v->setOffset(symbolTable.size());
+	Block* p = this;
+	int var_offset = 0;
+	while(p){
+		var_offset += p->offset;
+		p = p->parent;
+	}
+    v->setOffset(var_offset);
+	++offset;
   }
   
   void insertSymbolTable(map<string, Variable*>& vars) {
@@ -244,17 +261,22 @@ public:
     }
   }
 
-  void insertSymbolTable(vector<Variable>& vars) {
-    for(std::vector<Variable>::iterator i = vars.begin(); i != vars.end(); ++i) {
+  void insertSymbolTable(vector<Variable*>& vars) {
+    for(std::vector<Variable*>::iterator i = vars.begin(); i != vars.end(); ++i) {
       //Variable* v = *i;
-      addVariable(i->getName(), &(*i));
+      addVariable((*i)->getName(), *i);
     }
   }
 
   void printSymbolTable() {
-    for(std::map<string, Variable*>::iterator i = symbolTable.begin(); i != symbolTable.end(); ++i) {
-      cout << i->first  + " is of type " + i->second->getType() << endl;
-    }
+	Block* p = this;
+	while(p != NULL){
+		for(std::map<string, Variable*>::iterator i = p->symbolTable.begin(); i != p->symbolTable.end(); ++i) {
+		  cout << "\t" << i->first  + " type: " + i->second->getType() << 
+		  ". offset: " << i->second->getOffset() << ". " << i->second << endl;
+		}
+		p = p->parent;
+	}
   }
 
 };
@@ -273,25 +295,66 @@ struct Function : public Block {
   int address;
   
   set<string> usedIntRegs;
+  set<string> savedIntRegs;
   set<string> usedRealRegs;
+  set<string> savedRealRegs;
   // the arguments are inserted straight into the symbol table in the constructor.
 
   // function with arguments
-  Function(string name_, string return_type_, bool implemented_ ,vector<Variable> arguments_) :
+  Function(string name_, string return_type_, bool implemented_ ,vector<Variable*> arguments_) :
     name(name_), returnType(return_type_), isImplemented(implemented_) {
+	this->regSetInit();
     insertSymbolTable(arguments_);
-	for(vector<Variable>::iterator i = arguments_.begin() ; i != arguments_.end() ; ++i) {
-	  arguments.push_back(i->getType());
+	for(vector<Variable*>::iterator i = arguments_.begin() ; i != arguments_.end() ; ++i) {
+	  arguments.push_back((*i)->getType());
 	}
   }
 
   // function without arguments
   Function(string name_) : name(name_) {
+	this->regSetInit();
 	if(name == "main") {
 	  isImplemented = true;
 	}
     // std::* containers should be automatically dynamically allocated on decleration
   }
+  
+	// returns unused register name and adds it to usedIntRegs set
+	string getIntReg() {
+	  // 0,1,2 reserved from init
+	  for(int i = 3; i < 1000; ++i) {
+		string currReg = "I" + to_string(i);
+		// in c++ string.operator== and string.compare() is the same (unlike JAVA) so it should work fine
+		// return the first register name which is not used
+		if(this->usedIntRegs.count(currReg) == 0) {
+		  this->usedIntRegs.insert(currReg);
+		  return currReg;
+		}
+	  }
+	  // shouldn't get here - if got here, means we got out of tegisters!
+	  assert(0);
+	}
+
+	// returns unused register name and adds it to usedRealRegs set
+	string getRealReg() {
+	  for(int i = 0; i < 1000; ++i) {
+		string currReg = "R" + to_string(i);
+		// in c++ string.operator== and string.compare() is the same (unlike JAVA) so it should work fine
+		// return the first register name which is not used
+		if(this->usedRealRegs.count(currReg) == 0) {
+		  this->usedRealRegs.insert(currReg);
+		  return currReg;
+		}
+	  }
+	  // shouldn't get here - if got here, means we got out of tegisters!
+	  assert(0);
+	}
+
+	void regSetInit() {
+		this->usedIntRegs.insert("I0"); // return address
+		this->usedIntRegs.insert("I1"); // stack pointer
+		this->usedIntRegs.insert("I2"); // frame pointer
+	}
   
   string validateCallArguments(vector<string> callArgsList) {
 	string err = "";
@@ -311,15 +374,15 @@ struct Function : public Block {
   }
   
   void putArgumentsOnStack(vector<string> args) {
-    for(vector<string>::iterator i = args.begin() ; i != args.end() ; ++i) {
+	  int j;
+    for(vector<string>::iterator i = args.begin(); i != args.end() ; ++i, ++j) {
 	  string STOR = "";
       if(i->front() == 'I') {
 		STOR = "STORI ";
 	  } else {
 	    STOR = "STORR ";
 	  }
-	  emit(STOR + *i + " I1 0");
-	  emit("ADD2I I1 I1 -1");
+	  emit(STOR + *i + " I1 " + to_string(j));
     }  
   }
   
@@ -349,7 +412,7 @@ struct Stype {
   list<int> trueList;
   
   // for FUNC_ARGLIST
-  vector<Variable> argsList;
+  vector<Variable*> argsList;
 
   // for CALL_ARGS
   vector<string> callArgsList;
