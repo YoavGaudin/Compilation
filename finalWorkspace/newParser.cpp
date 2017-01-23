@@ -194,16 +194,9 @@ static bool subStrReplace(std::string& str, const std::string& from, const std::
    address - address to fill in the codeBuffer lines specified in 'toFill'
  */
 void backpatch(list<int> toFill, int address) {
-  //cout << "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS" << endl;
-  //printCodeBuffer();
-  //cout << "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS" << endl;
   
   int j = 1;
   for(std::list<int>::iterator i = toFill.begin(); i != toFill.end(); ++i, ++j) {
-    //cout << "backpatching: list element number " << j << endl;
-    //cout << "*i = " << *i << endl;
-    //cout << codeBuffer[*i] << " VS ";
-    //cout << codeBuffer[*i-1] << endl;
     subStrReplace(codeBuffer[*i-1], "___", to_string(address));
   }
 }
@@ -340,7 +333,7 @@ void addToStructTypeTable(string structName, map<string, Type*> typeFields){
 void printStructTypeTable() {
   for(std::map<string, StructType>::iterator t = structTypeTable.begin() ; t != structTypeTable.end() ; ++t) {
     cout << "Defstruct " << t->second.getTypeName() << ":" << endl;
-    int i = 0;
+    int i = 1;
     StructType& st = t->second;
     cout << "\tsize : " << st.fieldTypes.size() << endl;
     for(std::map<string, Type*>::iterator t1 = st.fieldTypes.begin() ; t1 != st.fieldTypes.end() ; ++t1, ++i) {
@@ -360,7 +353,6 @@ void setSymbolTableOffsets(map<string, Variable*> symbolTable) {
   for(std::map<string, Variable*>::iterator i = symbolTable.begin() ; i != symbolTable.end() ; ++i) {
     Variable* v = i->second;
     v->setOffset(offset);
-    cout << v->getSizeInMemory() << "*****************************************************" << endl;
     offset += v->getSizeInMemory();
   }  
 }

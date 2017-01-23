@@ -287,11 +287,6 @@ ASSN:
 		  // TODO: this code needs to be reused in READ, so a function might be in order
 		  cout << "<ASSN>" << endl;
 
-
-
-
-
-		  /*
 		  Variable* lvalVar;
 		  Variable* expVar;
 		  string errVar = "";
@@ -319,14 +314,8 @@ ASSN:
 		      semanticError($1.variableName + " is not declared in this scope");
 		    }
 		  }
-*/
 
-
-
-
-
-
-
+		  /*
 		  Variable* lvalVar;
 		  string errVar = "";
 		  // get LVAL's variable
@@ -344,7 +333,13 @@ ASSN:
 		    printState();
 		    semanticError(errVar + " was not declared in this scope");
 		  }
+		  */
 
+
+
+
+
+		  
 		  if(lvalVar->getType() != $3.type) {
 		    semanticError("type mismatch on assignment operation: trying to assign " +
 				  $3.type + " to " + lvalVar->getType());
