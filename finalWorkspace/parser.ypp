@@ -135,7 +135,7 @@ BLK:
 		  //setSymbolTableOffsets(currBlock->symbolTable);
 		  //currBlock->printSymbolTable();
 		  //printFunctionsSymbolTable();
-		  emit("SUBTI I1 I1 " + to_string(currBlock->offset+1));
+		  emit("SUBTI I1 I1 " + to_string(currBlock->offset));
 		} '{' LIST '}' {
 		  $$.nextList = $5.nextList;
 		  $5.declarationList = $2.declarationList;
@@ -257,7 +257,7 @@ STMT_RETURN:
 		    semanticError("Ileagal type of return expression");
 		  }
 		  // fold stack back to FP
-		  emit("ADD2I I1 I2 -1");
+		  emit("ADD2I I1 I2 1");
 		  
 		  if($3.type == "integer") {
 		    emit("STORI " + $3.place + " I1 0");
@@ -660,14 +660,15 @@ CALL:
 		  // save I0 and I2, return address and Frame Pointer
 		  emit("STORI I0 I1 0"); // MEM[SP+0] = RA (return address)
 		  emit("STORI I2 I1 -1"); // MEM[SP+1] = FP
-		  emit("ADD2I I1 I1 -3"); // SP = SP-3 (2 registers and leave empty space for return value)
+		  emit("SUBTI I1 I1 3"); // SP = SP-3 (2 registers and leave empty space for return value)
 		  
 		  emit("COPYI I2 I1"); // FP = SP
-		  // TODO:put call parameters on the stack
+		  
 		  func->putArgumentsOnStack($4.callArgsList);
 		  if(!func->isImplemented) {
 		    func->functionCalls.push_back(nextquad());
   		  }
+		  emit("SUBTI I1 I1 1");
 		  emit("JLINK " + to_string(func->address));
 		  // after return (SP points to return value)
 		  string LOAD = "";
