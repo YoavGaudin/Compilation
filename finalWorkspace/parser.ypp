@@ -270,10 +270,12 @@ STMT_RETURN:
 WRITE: 
 		Write '(' EXP ')' ';' {
 		  string PRNT = "";
-		  if($3.type == "integer"){
+		  if($3.type == "integer") {
 		    PRNT = "PRNTI ";
-		  } else if($3.type == "real"){
+		  } else if($3.type == "real") {
 		    PRNT = "PRNTR ";
+		  } else if($3.path.size() > 0) {
+			Variable* expVar = getExpressionVar(&$3)
 		  }
 		  emit(PRNT + $3.place);
 		}
@@ -295,21 +297,21 @@ ASSN:
 		  string errVar = "";
 
 		  // get LVAL's variable
-		  if($1.path.size() > 0) { // LVAL is STREF
+		if($1.path.size() > 0) { // LVAL is STREF
 		    if(!(lvalVar = currBlock->getScopeDefstructStref($1.path)))
 		      semanticError((string)"Invalid Defstruct dereference on L-value");
-		  } else  { // LVAL is ID (regular variable or struct)
-		    if(!(lvalVar = currBlock->getScopeVariable($1.variableName))) {
-		      cout << "currFunction: " << currFunction->name << endl;
-		      semanticError($1.variableName + " is not declared in this scope (L-value)");
-		    }
-		  }
+		} else  { // LVAL is ID (regular variable or struct)
+			if(!(lvalVar = currBlock->getScopeVariable($1.variableName))) {
+				cout << "currFunction: " << currFunction->name << endl;
+				semanticError($1.variableName + " is not declared in this scope (L-value)");
+			}
+		}
 
 		  // get EXP's variable
 		  if($3.path.size() > 0) { // EXP is STREF
 		    if(!(expVar = currBlock->getScopeDefstructStref($3.path)))
 		      semanticError((string)"Invalid Defstruct dereference on R-value");
-		  } else  { // EXP is ID (regular variable or struct) or NUM !!!
+		  } else  { // EXP is ID (regular variable or struct) or NUM or any other expression!!!
 		    expVar = currBlock->getScopeVariable($3.variableName);
 		    // if EXP is number (variableName = "") it is not semantic error
 		    if($3.variableName != "" && !expVar) {
@@ -545,6 +547,9 @@ EXP:
 	|
 		'(' TYPE ')' EXP {
 		  cout << "<EXP 4>" << endl;
+		  if($4.type == "defstruct"){
+			semanticError("Cannot cast defstruct");
+		  }
 		  if($2.tokenValue == "Integer") {
 		    if(isUsedIntReg($4.place)) {
 		      $$.place = $4.place;
@@ -573,7 +578,7 @@ EXP:
 		    cout << "currFunction: " << currFunction->name << endl;
 		    semanticError($1.tokenValue + " was not declared in this scope");
 		  }
-
+	
 		  if(isPrimitive(var)) {
 		    // EXP's register will hold the variable's value!
 		    string LOAD = "";
@@ -603,6 +608,14 @@ EXP:
 		  cout << "<EXP 6>" << endl;
 		  $$.path = $1.path;
 		  $$.type = $1.type;
+			if($1.type == "integer"){
+				string tmpreg = currFunction->getIntReg();
+				emit("LOADI " + tmpreg + " I2 -" + $1.place);
+			}
+			if($1.type == "real") {
+				string tmpreg = currFunction->getRealReg();
+				emit("LOADR " + tmpreg + " I2 -" + $1.place);
+			}
 		  cout << "<\\EXP 6>" << endl;
 		}
 	|
@@ -638,11 +651,19 @@ STREF:
 		    semanticError($1.tokenValue + " of type " + var->getType() + " is not subscriptable");		    	                   }
 		  $$.path.push_back($1.tokenValue);
 		  $$.path.push_back($3.tokenValue);
+		  Variable* place = currBlock->getScopeDefstructStref($$.path);
+		  if(!place)
+			semanticError((string)"Invalid Defstruct dereference");
+		  $$.place = place->getOffset();
+		  $$.type = place->getType;
 		}
 |
 		STREF '[' ID ']' {
 		  $$.path = $1.path;
 		  $$.path.push_back($3.tokenValue);
+		  Variable* place = currBlock->getScopeDefstructStref($$.path);
+		  $$.place = place->getOffset();
+		  $$.type = place->getType;
 		  //************************************************************************************************************
 		}
 ;	

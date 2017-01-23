@@ -346,6 +346,32 @@ void printFunctionsSymbolTable() {
   }
 }
 
+Variable* getExpressionVar(Stype* EXP){
+	Variable* expVar;
+	if(EXP.path.size() > 0) { // EXP is STREF
+		if(!(expVar = currBlock->getScopeDefstructStref(EXP.path)))
+		    semanticError((string)"Invalid Defstruct dereference on R-value");
+	} else { // EXP is ID (regular variable or struct) or NUM !!!
+		expVar = currBlock->getScopeVariable($3.variableName);
+		if(EXP.variableName != "" && !expVar) {
+		    semanticError($1.variableName + " is not declared in this scope (R-value)");
+		}
+	}
+	return expVar;
+}
+
+Variable* getLvalVar(Stype* LVAL) {
+	Variable* lvalVar;
+	if($1.path.size() > 0) { // LVAL is STREF
+		    if(!(lvalVar = currBlock->getScopeDefstructStref($1.path)))
+		      semanticError((string)"Invalid Defstruct dereference on L-value");
+		} else  { // LVAL is ID (regular variable or struct)
+			if(!(lvalVar = currBlock->getScopeVariable($1.variableName))) {
+				cout << "currFunction: " << currFunction->name << endl;
+				semanticError($1.variableName + " is not declared in this scope (L-value)");
+			}
+		}
+}
 /**************************************************************************/
 /*                           Main of parser                               */
 /**************************************************************************/

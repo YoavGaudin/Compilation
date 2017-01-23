@@ -549,6 +549,9 @@ void setSymbolTableOffsets(map<string, Variable*> symbolTable);
 void printCodeBuffer();
 void printFunctionsSymbolTable();
 
+Variable* getExpressionVar(Stype* EXP);
+Variable* getLvalVar(Stype* LVAL);
+
 Function* getFunction(string name);
 void saveUsedRegisters();
 void restoreUsedRegisters();

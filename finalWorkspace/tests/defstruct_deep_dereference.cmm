@@ -20,6 +20,11 @@ var
    st3	  : MyStruct3;
    bigOFSSET,a : MyStruct3;
 {
-st3[s2][c] = 200;
-//st3[s2][c] = st1[a];
+	st1[a] = 5;
+	write("st1[a] = ");
+	write(st1[a]);
+	write("\n");
+	st3[s2][c] = 200;
+	st3[s2][c] = st1[a];
+	
 }
