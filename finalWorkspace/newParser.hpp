@@ -226,8 +226,10 @@ public:
   Block(Block* parent_): parent(parent_) { 
     // std::* containers should be automatically dynamically allocated on decleration
 	if(parent_) {
+		offset = parent->offset;
 		for(map<string, Variable*>::iterator i = parent_->symbolTable.begin() ; i != parent_->symbolTable.end() ; ++i) {
-			symbolTable[i->first] = new Variable(i->second);
+			Variable* v = new Variable(i->second);
+			addVariable(i->first, v);
 			//.insert(std::pair<string, Variable*>(i->first, i->second));
 		}
 	}

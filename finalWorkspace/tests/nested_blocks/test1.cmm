@@ -3,14 +3,11 @@ var a:integer;
 {
 
   a = 5;
-  write("\na1 should be 5\n");
   write(a);  
   var b:integer;
   {
 	a = 10;
-	write("\na2 should be 10\n");
     write(a);
   }
-  write("\na1 should be 5\n");
   write(a);  
 }
