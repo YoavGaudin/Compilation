@@ -122,7 +122,7 @@ MAIN_FUNCTION:
 		}
 ;		
 BLK: 
-                M_blk DECLARATIONS {
+        M_blk DECLARATIONS {
 		  $$.declarationList = $2.declarationList;
 		  //printDeclarationList($2.declarationList);
 		  currBlock = new Block(currBlock);
@@ -181,7 +181,6 @@ DECLARLIST:
 DCL: 
 		ID ':' TYPE {
 		  cout << "<DCL 1>" << endl;
-		  //cout << "\tvariable "+ $1.tokenValue +" of type "+ $3.tokenValue +" declared" << endl;
 		  $$.dcl_type = $3.tokenValue;
 		  $$.dcl_ids.push_front($1.tokenValue);
 		  cout << "<\\DCL 1>" << endl;
@@ -303,14 +302,11 @@ ASSN:
 		  // TODO: this code needs to be reused in READ, so a function might be in order
 		  cout << "<ASSN>" << endl;
 		  Variable* lvalVar;
-		  Variable* expVar;
-		  string errVar = "";
-
 		  if($1.type != $3.type){
 			semanticError("type mismatch on assignment operation: trying to assign " +
-				  $3.type + " to " + lvalVar->getType());
+				  $3.type + " to " + $1.type);
 		  }
-		  
+		
 		  string type = $1.type;
 		  if(isPrimitive(type)) {
 			if(type == "integer") {

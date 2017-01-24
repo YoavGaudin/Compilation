@@ -1,0 +1,6 @@
+main
+var a,b:integer;
+    c:real;
+{
+  a = 1.1;
+}

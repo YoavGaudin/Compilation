@@ -1,0 +1,23 @@
+main
+var re:real;
+    int:integer;
+{
+  read (re);
+  write (re);
+  write("\n");
+  read (int);
+  write (int);
+  write("\n");
+  
+  var a:integer;
+      b:real;
+  {
+	a = int;
+	b = re;
+	write("\ninside nested block level1\n");
+	write("inner variable a = ");
+	write(a);
+	write("\ninner variable b = ");
+	write(b);
+  }
+}

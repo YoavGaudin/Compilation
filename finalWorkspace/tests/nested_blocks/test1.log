@@ -1,0 +1,300 @@
+START Compilation of ../../rx-cc
+<PROGRAM>
+	UJUMP 0
+TDEFS to epsilon
+FDEFS to epsilon
+<MAIN_FUNCTION>
+	COPYI I1 999
+	COPYI I2 999
+<BLK>
+<DCL 1>
+<\DCL 1>
+<DECLARELIST 2>
+	real
+new Variable: re at: 0x1aa2ce0
+<\DECLARELIST 2>
+<DCL 1>
+<\DCL 1>
+<DECLARELIST 1>
+	integer
+new Variable: int at: 0x1aa3270
+<\DECLARELIST 1>
+<DECLARATIONS>
+<\DECLARATIONS>
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+######	int : 0
+######	re : 1
+	int type: integer. offset: 0. 0x1aa3270
+	re type: real. offset: 1. 0x1aa2ce0
+	SUBTI I1 I1 2
+<M>quad=5
+<LVAL 1>
+<\LVAL 1>
+	READR R0
+	STORR R0 I2 -1
+<\LIST>
+<M>quad=7
+<EXP 5>
+	LOADR R1 I2 -1
+<\EXP 5>
+	PRNTR R1
+<\LIST>
+<M>quad=9
+<LVAL 1>
+<\LVAL 1>
+	READI I3
+	STORI I3 I2 -0
+<\LIST>
+<M>quad=11
+<EXP 5>
+	LOADI I4 I2 0
+<\EXP 5>
+	PRNTI I4
+<\LIST>
+<M>quad=13
+<BLK>
+<DCL 1>
+<\DCL 1>
+<DECLARELIST 2>
+	integer
+new Variable: a at: 0x1aa39c0
+<\DECLARELIST 2>
+<DCL 1>
+<\DCL 1>
+<DECLARELIST 1>
+	real
+new Variable: b at: 0x1aa5290
+<\DECLARELIST 1>
+<DECLARATIONS>
+<\DECLARATIONS>
+	int type: integer. offset: 0. 0x1aa3270
+	re type: real. offset: 1. 0x1aa2ce0
+	int type: integer. offset: 0. 0x1aa3270
+	re type: real. offset: 1. 0x1aa2ce0
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+######	a : 2
+######	b : 3
+	a type: integer. offset: 2. 0x1aa39c0
+	b type: real. offset: 3. 0x1aa5290
+	int type: integer. offset: 0. 0x1aa3270
+	re type: real. offset: 1. 0x1aa2ce0
+	int type: integer. offset: 0. 0x1aa3270
+	re type: real. offset: 1. 0x1aa2ce0
+	SUBTI I1 I1 2
+<M>quad=14
+<LVAL 1>
+<\LVAL 1>
+<EXP 5>
+	LOADI I5 I2 0
+<\EXP 5>
+<ASSN>
+	STORI I5 I2 -2
+<\ASSN>
+<\LIST>
+<M>quad=16
+<LVAL 1>
+<\LVAL 1>
+<EXP 5>
+	LOADR R2 I2 -1
+<\EXP 5>
+<ASSN>
+	STORR R2 I2 -3
+<\ASSN>
+<\LIST>
+<M>quad=18
+printString: "\ninside nested block level1\n"
+	PRNTC 10
+	PRNTC 105
+	PRNTC 110
+	PRNTC 115
+	PRNTC 105
+	PRNTC 100
+	PRNTC 101
+	PRNTC 32
+	PRNTC 110
+	PRNTC 101
+	PRNTC 115
+	PRNTC 116
+	PRNTC 101
+	PRNTC 100
+	PRNTC 32
+	PRNTC 98
+	PRNTC 108
+	PRNTC 111
+	PRNTC 99
+	PRNTC 107
+	PRNTC 32
+	PRNTC 108
+	PRNTC 101
+	PRNTC 118
+	PRNTC 101
+	PRNTC 108
+	PRNTC 49
+	PRNTC 10
+<\LIST>
+<M>quad=46
+printString: "inner variable a = "
+	PRNTC 105
+	PRNTC 110
+	PRNTC 110
+	PRNTC 101
+	PRNTC 114
+	PRNTC 32
+	PRNTC 118
+	PRNTC 97
+	PRNTC 114
+	PRNTC 105
+	PRNTC 97
+	PRNTC 98
+	PRNTC 108
+	PRNTC 101
+	PRNTC 32
+	PRNTC 97
+	PRNTC 32
+	PRNTC 61
+	PRNTC 32
+<\LIST>
+<M>quad=65
+<EXP 5>
+	LOADI I7 I2 -2
+<\EXP 5>
+	PRNTI I7
+<\LIST>
+<M>quad=67
+printString: "\ninner variable b = "
+	PRNTC 10
+	PRNTC 105
+	PRNTC 110
+	PRNTC 110
+	PRNTC 101
+	PRNTC 114
+	PRNTC 32
+	PRNTC 118
+	PRNTC 97
+	PRNTC 114
+	PRNTC 105
+	PRNTC 97
+	PRNTC 98
+	PRNTC 108
+	PRNTC 101
+	PRNTC 32
+	PRNTC 98
+	PRNTC 32
+	PRNTC 61
+	PRNTC 32
+<\LIST>
+<M>quad=87
+<EXP 5>
+	LOADR R4 I2 -3
+<\EXP 5>
+	PRNTR R4
+<\LIST>
+<\BLK>
+<STMT 6>
+<\STMT 6>
+<\LIST>
+<\BLK>
+<\MAIN_FUNCTION>
+	HALT
+<\PROGRAM>
+---------------- OK!!! ----------------
+Add linker's header to codeBuffer...
+Writing codeBuffer to file...
+###output file test1.rsk	CodeBuffer (size = 94) : 
+		-4: <header>
+		-3: <main>
+		-2: <unimplemented>  main
+		-1: <implemented> 
+		0: </header>
+		1: UJUMP 2
+		2: COPYI I1 999
+		3: COPYI I2 999
+		4: SUBTI I1 I1 2
+		5: READR R0
+		6: STORR R0 I2 -1
+		7: LOADR R1 I2 -1
+		8: PRNTR R1
+		9: READI I3
+		10: STORI I3 I2 -0
+		11: LOADI I4 I2 0
+		12: PRNTI I4
+		13: SUBTI I1 I1 2
+		14: LOADI I5 I2 0
+		15: STORI I5 I2 -2
+		16: LOADR R2 I2 -1
+		17: STORR R2 I2 -3
+		18: PRNTC 10
+		19: PRNTC 105
+		20: PRNTC 110
+		21: PRNTC 115
+		22: PRNTC 105
+		23: PRNTC 100
+		24: PRNTC 101
+		25: PRNTC 32
+		26: PRNTC 110
+		27: PRNTC 101
+		28: PRNTC 115
+		29: PRNTC 116
+		30: PRNTC 101
+		31: PRNTC 100
+		32: PRNTC 32
+		33: PRNTC 98
+		34: PRNTC 108
+		35: PRNTC 111
+		36: PRNTC 99
+		37: PRNTC 107
+		38: PRNTC 32
+		39: PRNTC 108
+		40: PRNTC 101
+		41: PRNTC 118
+		42: PRNTC 101
+		43: PRNTC 108
+		44: PRNTC 49
+		45: PRNTC 10
+		46: PRNTC 105
+		47: PRNTC 110
+		48: PRNTC 110
+		49: PRNTC 101
+		50: PRNTC 114
+		51: PRNTC 32
+		52: PRNTC 118
+		53: PRNTC 97
+		54: PRNTC 114
+		55: PRNTC 105
+		56: PRNTC 97
+		57: PRNTC 98
+		58: PRNTC 108
+		59: PRNTC 101
+		60: PRNTC 32
+		61: PRNTC 97
+		62: PRNTC 32
+		63: PRNTC 61
+		64: PRNTC 32
+		65: LOADI I7 I2 -2
+		66: PRNTI I7
+		67: PRNTC 10
+		68: PRNTC 105
+		69: PRNTC 110
+		70: PRNTC 110
+		71: PRNTC 101
+		72: PRNTC 114
+		73: PRNTC 32
+		74: PRNTC 118
+		75: PRNTC 97
+		76: PRNTC 114
+		77: PRNTC 105
+		78: PRNTC 97
+		79: PRNTC 98
+		80: PRNTC 108
+		81: PRNTC 101
+		82: PRNTC 32
+		83: PRNTC 98
+		84: PRNTC 32
+		85: PRNTC 61
+		86: PRNTC 32
+		87: LOADR R4 I2 -3
+		88: PRNTR R4
+		89: HALT
+	Functions table:1
+	argumants and variables of main at 2: 
+	Deftructs: 
