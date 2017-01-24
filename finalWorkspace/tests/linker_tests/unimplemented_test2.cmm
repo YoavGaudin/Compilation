@@ -1,8 +1,11 @@
 integer foo1()
+var a,b,c: integer;
 {
   return (5);
 }
+
 real foo2(arg:integer)
 {
+  write(arg);
   return((real)arg);
 }

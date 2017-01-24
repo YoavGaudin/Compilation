@@ -252,7 +252,7 @@ public:
 		p = p->parent;
 	}
     v->setOffset(var_offset);
-	++offset;
+	++(this->offset);
   }
   
   void insertSymbolTable(map<string, Variable*>& vars) {
