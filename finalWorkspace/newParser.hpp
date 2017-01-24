@@ -395,6 +395,9 @@ struct Stype {
 
   // for tokens
   string tokenValue;
+
+  // for DECLARELIST
+  list<string> typesList;
   
   // for DECLARLIST and DECLARATIONS - contains the declared Variables 
   map<string, Variable*> declarationList;
@@ -423,6 +426,7 @@ struct Stype {
   // for LVAL
   string variableName;
   string offset;
+  Variable* variableInstance;
 
   // for EXP, LVAL and STREF
   string type;
@@ -537,7 +541,7 @@ void printState(string file_name);
 void backpatch(list<int> toFill, int address);
 //bool isPrimitive(Variable* var);
 //bool isPrimitive(string type);
-void copyStruct(string source_reg, string dest_offset, string dest_name);
+void copyStruct(string source_reg, string dest_offset, Variable* destVar);
 void copyVariableToRegister(Variable* var, Stype* s);
 void addToStructTypeTable(string structName, map<string, Type*>typeFields);
 void printDeclarationList(map<string, Variable*> dl);

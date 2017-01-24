@@ -2,6 +2,7 @@
 %{
   #include <stdio.h>
   #include <iostream>
+  #include <algorithm>
   #include "newParser.hpp"
   
   using namespace std;
@@ -44,7 +45,12 @@ PROGRAM:
 ;
 TDEFS: 
 		TDEFS Defstruct '{' DECLARLIST '}' ID ';' {
-		  cout << "<TDEFS>" << endl;
+		  cout << "<*************************TDEFS>" << endl;
+		  for(std::list<string>::iterator i = $4.typesList.begin(); i != $4.typesList.end(); ++i) {
+		    cout << *i << endl;
+		  }
+		  if((std::find($4.typesList.begin(), $4.typesList.end(), $6.tokenValue) != $4.typesList.end()))
+		    semanticError("struct can not contain field of his self type");
 		  addToStructTypeTable($6.tokenValue, $4.typedefList);
 		  cout << "<\\TDEFS>" << endl;
 		}		
@@ -165,6 +171,8 @@ DECLARLIST:
 		  if(createTypeFromDCL(&$2, &$1) == -1)
 		    semanticError((string)"undefined field type detected: " + $2.dcl_type);
 		  $$.typedefList = $1.typedefList;
+		  $$.typesList = $1.typesList;
+		  $$.typesList.push_back($2.dcl_type);
 		  cout << "<\\DECLARELIST 1>" << endl;
 		}
 	|
@@ -176,6 +184,7 @@ DECLARLIST:
 		  createVariablesFromDCL(&$1, &$$);
 		  // for DECLARLIST inside TDEFS - create Types and insert to structTypeTable
 		  createTypeFromDCL(&$1, &$$);
+		  $$.typesList.push_back($1.dcl_type);
 		  cout << "<\\DECLARELIST 2>" << endl;
 		}
 ;		
@@ -317,7 +326,7 @@ ASSN:
 				emit("STORR " + $3.place + " I2 -" + $1.offset);
 			}
 		  } else {
-			copyStruct($3.place, $1.offset, $1.variableName);
+		    copyStruct($3.place, $1.offset, $1.variableInstance);
 		  }
 		  cout << "<\\ASSN>" << endl;
 		}
@@ -331,6 +340,7 @@ LVAL:
 		  $$.type = lvalVar->getType();
 		  $$.offset = to_string(lvalVar->getOffset());
 		  $$.variableName = $1.tokenValue;
+		  $$.variableInstance = lvalVar;
 		  cout << "<\\LVAL 1>" << endl;
 		}
 	|
@@ -342,6 +352,7 @@ LVAL:
 		  $$.type = field->getType();
 		  $$.offset = to_string(field->getOffset());
 		  $$.variableName = field->getName();
+		  $$.variableInstance = field;
 		  cout << "<\\LVAL 2>" << endl;
 		}
 ;
