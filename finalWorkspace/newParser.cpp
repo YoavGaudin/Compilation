@@ -274,8 +274,9 @@ void buildLinkerHeader() {
 	string unimplemented = "<unimplemented> ";
 	string implemented = "<implemented> ";
 	for(std::map<string, Function>::iterator f = funcSymbols.begin() ; f != funcSymbols.end() ; ++f) {
-	  if(f->second.isImplemented && f->first != "main") {
-	    implemented += " " + f->first + "," + to_string(f->second.address);
+	  if(f->second.isImplemented) {
+		  if(f->first != "main")
+			implemented += " " + f->first + "," + to_string(f->second.address);
 	  } else {
 		unimplemented += " " + f->first;
 	    for(std::vector<int>::iterator i = f->second.functionCalls.begin() ; i != f->second.functionCalls.end() ; ++i) {

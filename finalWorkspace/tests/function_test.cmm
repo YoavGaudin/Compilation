@@ -8,10 +8,9 @@ var e:integer;
 	g:real;
 {
   write(c);
-  g = call foo2 ();
+  e = call foo2 ();
   e = e + c;
   write(e);
-  return (e);
 }
 
 main

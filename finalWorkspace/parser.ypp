@@ -61,7 +61,8 @@ FDEFS:
 		} BLK {
 		  cout << "<FDEFS 1>" << endl;
 		  cout << "\t" << $3.tokenValue << endl;
-		  
+		  // execute RETRN in any case (function might have ended without return
+		  emit("RETRN");
 		  funcSymbols.insert(std::pair<string, Function>($3.tokenValue, *currFunction));
 
 		  backpatch($8.nextList, nextquad());
@@ -494,7 +495,7 @@ EXP:
 			$$.type = "integer";
 		  } else if(isUsedRealReg($1.place) && isUsedRealReg($3.place)) {
 		    $$.place = currFunction->getRealReg();
-		    emit("ADD2R " + $$.place + " " + $1.place + " " + $2.place);
+		    emit("ADD2R " + $$.place + " " + $1.place + " " + $3.place);
 		  } else {
 		    semanticError("type missmatch within add operation");
 		  }
@@ -510,10 +511,10 @@ EXP:
 
 		  if(isUsedIntReg($1.place) && isUsedIntReg($3.place)) {
 		    $$.place = currFunction->getIntReg();
-		    emit("MULTI " + $$.place + " " + $1.place + " " + $2.place);
+		    emit("MULTI " + $$.place + " " + $1.place + " " + $3.place);
 		  } else if(isUsedRealReg($1.place) && isUsedRealReg($3.place)) {
 		    $$.place = currFunction->getRealReg();
-		    emit("MULTR " + $$.place + " " + $1.place + " " + $2.place);
+		    emit("MULTR " + $$.place + " " + $1.place + " " + $3.place);
 		  } else {
 		    semanticError("type missmatch within mul operation");
 		  }
@@ -533,20 +534,22 @@ EXP:
 		  if(!isPrimitive($4.type)){
 			semanticError("Cannot cast defstruct");
 		  }
-		  if($2.tokenValue == "Integer") {
+		  if($2.tokenValue == "integer") {
 		    if(isUsedIntReg($4.place)) {
 		      $$.place = $4.place;
 		    } else if(isUsedRealReg($4.place)) {
 		      $$.place = currFunction->getIntReg();
 		      emit("CRTOI " + $$.place + " " + $4.place);
 		    }
-		  } else if($2.tokenValue == "Real") {
+			$$.type = "integer";
+		  } else if($2.tokenValue == "real") {
 		    if(isUsedRealReg($4.place)) {
 		      $$.place = $4.place;
 		    } else if(isUsedIntReg($4.place)) {
 		      $$.place = currFunction->getRealReg();
 		      emit("CITOR " + $$.place + " " + $4.place);
 		    }
+			$$.type = "real";
 		  } else {
 		    semanticError("undefined explicit cast");
 		  }
