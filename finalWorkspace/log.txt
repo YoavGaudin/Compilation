@@ -22,29 +22,26 @@ DECLARATIONS to epsilon
 <\FDEFS 1>
 <DCL 1>
 <\DCL 1>
-new Variable: arg at: 0x1e17840
+new Variable: arg at: 0x18bf840
 ######	arg : 0
-	arg type: integer. offset: 0. 0x1e17840
+	arg type: integer. offset: 0. 0x18bf840
 <BLK>
 DECLARATIONS to epsilon
-	arg type: integer. offset: 0. 0x1e17840
-	arg type: integer. offset: 0. 0x1e17840
+	arg type: integer. offset: 0. 0x18bf840
+	arg type: integer. offset: 0. 0x18bf840
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	arg type: integer. offset: 0. 0x1e17840
-	arg type: integer. offset: 0. 0x1e17840
+	arg type: integer. offset: 0. 0x18bf840
+	arg type: integer. offset: 0. 0x18bf840
 	SUBTI I1 I1 0
 <M>quad=9
-<EXP 7>
-	COPYR R0 2.0
-<\EXP 7>
-<EXP 7>
-	COPYR R1 2.0
-<\EXP 7>
-<EXP 1>
-	ADD2R R2 R0 R1
-<\EXP 1>
+<EXP 5>
+	LOADI I3 I2 0
+<\EXP 5>
+<EXP 4>
+	CITOR R0 I3
+<\EXP 4>
 	ADD2I I1 I2 1
-	STORR R2 I1 0
+	STORR R0 I1 0
 	RETRN
 <\LIST>
 <\BLK>
@@ -58,7 +55,7 @@ MAIN_FUNCTION to epsilon
 ---------------- OK!!! ----------------
 Add linker's header to codeBuffer...
 Writing codeBuffer to file...
-###output file tests/linker_tests/unimplemented_test2.rsk	CodeBuffer (size = 21) : 
+###output file tests/linker_tests/unimplemented_test2.rsk	CodeBuffer (size = 20) : 
 		-4: <header>
 		-3: <empty>
 		-2: <unimplemented> 
@@ -72,14 +69,13 @@ Writing codeBuffer to file...
 		6: RETRN
 		7: RETRN
 		8: SUBTI I1 I1 0
-		9: COPYR R0 2.0
-		10: COPYR R1 2.0
-		11: ADD2R R2 R0 R1
-		12: ADD2I I1 I2 1
-		13: STORR R2 I1 0
+		9: LOADI I3 I2 0
+		10: CITOR R0 I3
+		11: ADD2I I1 I2 1
+		12: STORR R0 I1 0
+		13: RETRN
 		14: RETRN
-		15: RETRN
-		16: HALT
+		15: HALT
 	Functions table:2
 	argumants and variables of foo1 at 2: 
 	argumants and variables of foo2 at 8: 

@@ -532,20 +532,22 @@ EXP:
 		  if(!isPrimitive($4.type)){
 			semanticError("Cannot cast defstruct");
 		  }
-		  if($2.tokenValue == "Integer") {
+		  if($2.tokenValue == "integer") {
 		    if(isUsedIntReg($4.place)) {
 		      $$.place = $4.place;
 		    } else if(isUsedRealReg($4.place)) {
 		      $$.place = currFunction->getIntReg();
 		      emit("CRTOI " + $$.place + " " + $4.place);
 		    }
-		  } else if($2.tokenValue == "Real") {
+			$$.type = "integer";
+		  } else if($2.tokenValue == "real") {
 		    if(isUsedRealReg($4.place)) {
 		      $$.place = $4.place;
 		    } else if(isUsedIntReg($4.place)) {
 		      $$.place = currFunction->getRealReg();
 		      emit("CITOR " + $$.place + " " + $4.place);
 		    }
+			$$.type = "real";
 		  } else {
 		    semanticError("undefined explicit cast");
 		  }

@@ -4,5 +4,5 @@ integer foo1()
 }
 real foo2(arg:integer)
 {
-  return(2.0 + 2.0);
+  return((real)arg);
 }
