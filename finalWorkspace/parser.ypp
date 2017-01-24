@@ -317,7 +317,7 @@ ASSN:
 				emit("STORR " + $3.place + " I2 -" + $1.offset);
 			}
 		  } else {
-			copyStruct($3.place, $1.offset, $1.variableName);
+		    copyStruct($3.place, $1.offset, $1.variableInstance);
 		  }
 		  cout << "<\\ASSN>" << endl;
 		}
@@ -331,6 +331,7 @@ LVAL:
 		  $$.type = lvalVar->getType();
 		  $$.offset = to_string(lvalVar->getOffset());
 		  $$.variableName = $1.tokenValue;
+		  $$.variableInstance = lvalVar;
 		  cout << "<\\LVAL 1>" << endl;
 		}
 	|
@@ -342,6 +343,7 @@ LVAL:
 		  $$.type = field->getType();
 		  $$.offset = to_string(field->getOffset());
 		  $$.variableName = field->getName();
+		  $$.variableInstance = field;
 		  cout << "<\\LVAL 2>" << endl;
 		}
 ;
@@ -368,9 +370,9 @@ CNTRL:
 		M_while While M BEXP Do M STMT {
 		  //cout << "<CNTRL 3>" << endl;
 		  backpatch($4.trueList, $6.quad);
-		  backpatch($6.nextList, $3.quad);
-		  $$.nextList.insert($$.nextList.end(), $3.falseList.begin(), $3.falseList.end());
-		  emit((string)"UJUMP " + to_string($2.quad));
+		  backpatch($7.nextList, $3.quad);
+		  $$.nextList.insert($$.nextList.end(), $4.falseList.begin(), $4.falseList.end());
+		  emit((string)"UJUMP " + to_string($3.quad));
 		  cout << "<\\CNTRL 3>" << endl;
 		}
 ;	

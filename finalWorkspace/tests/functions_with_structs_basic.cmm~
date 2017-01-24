@@ -1,0 +1,51 @@
+defstruct {
+	  a:integer;
+} MyStruct1;
+defstruct {
+	  b:real;
+	  c:integer;
+} MyStruct2;
+defstruct {
+	  d:real;
+	  e:integer;
+	  s1:MyStruct1;
+	  s2:MyStruct2;
+} MyStruct3;
+
+
+integer foo()
+{
+	var structVar1 : MyStruct1;
+	    structVar2 : MyStruct2;
+	    structVar3 : MyStruct3;
+
+	structVar3[s2][b] = 1.1;
+	structVar3[s2][c] = 1;
+	write("\nstructVar3[s2][b] = ");
+	write(structVar3[s2][b]);
+	write("\nstructVar3[s2][c] = ");
+	write(structVar3[s2][c]);
+	write("\nenter integer number");
+	read(structVar3[s1][a]);
+	write("\nstructVar3[s1][a] = ");
+	write(structVar3[s1][a]);
+	write("\nchanged structVar3[s2][b] = ");
+	structVar2[b] = 100.1;
+	structVar2[c] = 100;
+	structVar3[s2] = structVar2;
+	write(structVar3[s2][b]);
+	write("\nenter integer number");
+	read(structVar1[a]);
+	write("\nchanged structVar3[s1][a] = ");
+	structVar3[s1] = structVar1;
+	write(structVar3[s1][a]);
+	// return 100
+	return (structVar3[s2][c]);
+}
+
+main
+var a:integer;
+{
+  a = call foo (5);
+  write(a);
+}

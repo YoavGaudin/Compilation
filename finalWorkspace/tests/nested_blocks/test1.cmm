@@ -15,9 +15,11 @@ var re:real;
 	a = int;
 	b = re;
 	write("\ninside nested block level1\n");
-	write("inner variable a = ");
-	write(a);
-	write("\ninner variable b = ");
+	{
+		write("inner variable a = ");
+		{write(a);}
+		write("\ninner variable b = ");
+	}
 	write(b);
   }
 }

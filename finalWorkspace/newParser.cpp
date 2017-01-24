@@ -187,34 +187,34 @@ bool isPrimitive(Type& type) {
 }
 
 /* 
-	source_reg - a register that holds the offset of the source data
-   reg - holds the offset from FP from where to copy
-   n - number of cells to copy
+   source_reg - a register that holds the offset of the source data
+   
 */
-void copyStruct(string source_reg, string dest_offset, string dest_name) {
-	// 
-	Variable* destVar = currBlock->getScopeVariable(dest_name);
-	
-	// end condition
-	if(isPrimitive(destVar->getType())) {
-		string intTempReg = currFunction->getIntReg();
-		string realTempReg = currFunction->getRealReg();
-		if(destVar->getType() == "integer") {
-			emit("LOADI " + intTempReg + " I2 " + source_reg);
-			emit("STORI " + intTempReg + " I2 " + dest_offset);
-		} else if (destVar->getType() == "real") {
-			emit("LOADR " + realTempReg + " I2 " + source_reg);
-			emit("STORR " + realTempReg + " I2 " + dest_offset);
-		}
-		return;
-	}
+void copyStruct(string source_reg, string dest_offset, Variable* destVar) {
+  cout << "************************ copyStruct() ****************************\ndest_name = " << destVar->getName() << endl; 
 	Defstruct* st = dynamic_cast<Defstruct*>(destVar);
+	assert(st);
+	int offset = 0;
 	for(map<string, Variable*>::iterator i = st->fields.begin() ; i != st->fields.end() ; ++i) {
-		// source offset = source_reg + dest_offset - destVar.offset
-		string intTempReg = currFunction->getIntReg();
-		emit("SUBTI " + intTempReg + " " + dest_offset + " " + to_string(st->getOffset()));
-		emit("ADD2I " + intTempReg + " " + source_reg + " " + intTempReg);
-		copyStruct(intTempReg , to_string(st->getOffset()), i->first);
+	  // source offset = source_reg + dest_offset - destVar.offset
+	  Variable *field = i->second;
+	  int fieldSize = field->getSizeInMemory();
+	  if(isPrimitive(field->getType())) {
+	    string intTempReg = currFunction->getIntReg();
+	    string realTempReg = currFunction->getRealReg();
+	    if(field->getType() == "integer") {
+	      emit("LOADI " + intTempReg + " I2 -" + source_reg);
+	      emit("STORI " + intTempReg + " I2 -" + dest_offset);
+	    } else {
+	      emit("LOADR " + realTempReg + " I2 -" + source_reg);
+	      emit("STORR " + realTempReg + " I2 -" + dest_offset);
+	    }
+	    emit((string)"ADD2I " + source_reg + " " + source_reg + " " + to_string(fieldSize));
+	    continue;
+	  }
+	  // field is Defstruct
+	  copyStruct(source_reg, to_string(st->getOffset()), field);
+	  emit((string)"ADD2I " + source_reg + " " + source_reg + " " + to_string(fieldSize));
 	}
 }
 

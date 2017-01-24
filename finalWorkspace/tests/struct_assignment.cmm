@@ -1,0 +1,58 @@
+defstruct {
+	  a:integer;
+} MyStruct1;
+defstruct {
+	  b:real;
+	  c:integer;
+	  a:integer;
+} MyStruct2;
+defstruct {
+	  d:real;
+	  e:integer;
+	  s1:MyStruct1;
+	  s2:MyStruct2;
+} MyStruct3;
+
+main
+var a:integer;
+{
+	var structVar1 : MyStruct1;
+	    structVar2,structVar2Target : MyStruct2;
+	    structVar3 : MyStruct3;
+	{
+	structVar2[b] = 1.1;
+	structVar2[c] = 1;
+	structVar2[a] = 37;
+
+	structVar2Target = structVar2;
+
+	write("\nstructVar2Target[b] = ");
+	write(structVar2Target[b]);
+	write("\nstructVar2Target[c] = ");
+	write(structVar2Target[c]);
+	write("\nstructVar2Target[a] = ");
+	write(structVar2Target[a]);
+
+write("\n\n");
+
+	structVar3[s2] = structVar2;
+
+	write("\nstructVar3[s2][b] = ");
+	write(structVar3[s2][b]);
+	write("\nstructVar3[s2][c] = ");
+	write(structVar3[s2][c]);
+	write("\nstructVar3[s2][a] = ");
+	write(structVar3[s2][a]);
+
+	a = 5;
+	
+write("\n");
+write("\n");
+
+	write(structVar3[s2][c] + a);
+
+write("\n");
+write("\n");
+
+	}
+}
