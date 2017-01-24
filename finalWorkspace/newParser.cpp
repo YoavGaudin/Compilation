@@ -186,29 +186,36 @@ bool isPrimitive(Type& type) {
   return isPrimitive(type.getTypeName());
 }
 
-/* lvalVar - holds all LVAL's information and specifically offset from FP where to copy
+/* 
+	source_reg - a register that holds the offset of the source data
    reg - holds the offset from FP from where to copy
+   n - number of cells to copy
 */
-void copyStruct(Variable* lvalVar, string reg) {
-  string intTempReg = currFunction->getIntReg();
-  string realTempReg = currFunction->getRealReg();
-  for(int i = 0; i < lvalVar->getSizeInMemory(); ++i) {
-    string STOR = "";
-    string LOAD = "";
-    string tempReg = "";
-    if(lvalVar->getType() == "integer") {
-      STOR = "STORI";
-      LOAD = "LOADI";
-      tempReg = intTempReg;
-    } else if (lvalVar->getType() == "real") {
-      STOR = "STORR";
-      LOAD = "LOADR";
-      tempReg = realTempReg;
-    } else assert(0);
-
-    emit(LOAD + " " + tempReg + " I1 " + to_string(atoi(reg.c_str()) + i));
-    emit(STOR + " " + tempReg + " I1 " + to_string(lvalVar->getOffset() + i));
-  }
+void copyStruct(string source_reg, string dest_offset, string dest_name) {
+	// 
+	Variable* destVar = currBlock->getScopeVariable(dest_name);
+	
+	// end condition
+	if(isPrimitive(destVar->getType())) {
+		string intTempReg = currFunction->getIntReg();
+		string realTempReg = currFunction->getRealReg();
+		if(destVar->getType() == "integer") {
+			emit("LOADI " + intTempReg + " I2 " + source_reg);
+			emit("STORI " + intTempReg + " I2 " + dest_offset);
+		} else if (destVar->getType() == "real") {
+			emit("LOADR " + realTempReg + " I2 " + source_reg);
+			emit("STORR " + realTempReg + " I2 " + dest_offset);
+		}
+		return;
+	}
+	Defstruct* st = dynamic_cast<Defstruct*>(destVar);
+	for(map<string, Variable*>::iterator i = st->fields.begin() ; i != st->fields.end() ; ++i) {
+		// source offset = source_reg + dest_offset - destVar.offset
+		string intTempReg = currFunction->getIntReg();
+		emit("SUBTI " + intTempReg + " " + dest_offset + " " + to_string(st->getOffset()));
+		emit("ADD2I " + intTempReg + " " + source_reg + " " + intTempReg);
+		copyStruct(intTempReg , to_string(st->getOffset()), i->first);
+	}
 }
 
 Function* getFunction(string name) {
@@ -346,31 +353,23 @@ void printFunctionsSymbolTable() {
   }
 }
 
-Variable* getExpressionVar(Stype* EXP){
-	Variable* expVar;
-	if(EXP.path.size() > 0) { // EXP is STREF
-		if(!(expVar = currBlock->getScopeDefstructStref(EXP.path)))
-		    semanticError((string)"Invalid Defstruct dereference on R-value");
-	} else { // EXP is ID (regular variable or struct) or NUM !!!
-		expVar = currBlock->getScopeVariable($3.variableName);
-		if(EXP.variableName != "" && !expVar) {
-		    semanticError($1.variableName + " is not declared in this scope (R-value)");
+void copyVariableToRegister(Variable* var, Stype* s) {
+	string LOAD = "", place = "";
+	if(isPrimitive(var->getType())) {
+		if(var->getType() == "integer") {
+		  LOAD = "LOADI";
+		  s->place = currFunction->getIntReg();
 		}
+		else if(var->getType() == "real") {
+		  LOAD = "LOADR";
+		  s->place = currFunction->getRealReg();
+		}
+		emit(LOAD + " " + s->place + " I2 " + to_string(-var->getOffset()));
+	} else {
+		s->place = currFunction->getIntReg();
+		emit("LOADI " + s->place + " I2 " + to_string(var->getOffset()));
 	}
-	return expVar;
-}
-
-Variable* getLvalVar(Stype* LVAL) {
-	Variable* lvalVar;
-	if($1.path.size() > 0) { // LVAL is STREF
-		    if(!(lvalVar = currBlock->getScopeDefstructStref($1.path)))
-		      semanticError((string)"Invalid Defstruct dereference on L-value");
-		} else  { // LVAL is ID (regular variable or struct)
-			if(!(lvalVar = currBlock->getScopeVariable($1.variableName))) {
-				cout << "currFunction: " << currFunction->name << endl;
-				semanticError($1.variableName + " is not declared in this scope (L-value)");
-			}
-		}
+	s->type = var->getType();
 }
 /**************************************************************************/
 /*                           Main of parser                               */

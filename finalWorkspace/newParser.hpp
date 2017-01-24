@@ -423,8 +423,8 @@ struct Stype {
   list<int> nextList;
 
   // for LVAL
-  string offset;
   string variableName;
+  string offset;
 
   // for EXP, LVAL and STREF
   string type;
@@ -539,7 +539,8 @@ void printState(string file_name);
 void backpatch(list<int> toFill, int address);
 //bool isPrimitive(Variable* var);
 //bool isPrimitive(string type);
-void copyStruct(Variable* lvalVar, string reg);
+void copyStruct(string source_reg, string dest_offset, string dest_name);
+void copyVariableToRegister(Variable* var, Stype* s);
 void addToStructTypeTable(string structName, map<string, Type*>typeFields);
 void printDeclarationList(map<string, Variable*> dl);
 //void printStructTypeTable();
@@ -548,9 +549,6 @@ void printString(string str);
 void setSymbolTableOffsets(map<string, Variable*> symbolTable);
 void printCodeBuffer();
 void printFunctionsSymbolTable();
-
-Variable* getExpressionVar(Stype* EXP);
-Variable* getLvalVar(Stype* LVAL);
 
 Function* getFunction(string name);
 void saveUsedRegisters();

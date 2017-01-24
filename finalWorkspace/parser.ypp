@@ -274,8 +274,6 @@ WRITE:
 		    PRNT = "PRNTI ";
 		  } else if($3.type == "real") {
 		    PRNT = "PRNTR ";
-		  } else if($3.path.size() > 0) {
-			Variable* expVar = getExpressionVar(&$3)
 		  }
 		  emit(PRNT + $3.place);
 		}
@@ -296,6 +294,27 @@ ASSN:
 		  Variable* expVar;
 		  string errVar = "";
 
+		  if($1.type != $3.type){
+			semanticError("type mismatch on assignment operation: trying to assign " +
+				  $3.type + " to " + lvalVar->getType());
+		  }
+		  
+		  string type = $1.type;
+		  if(isPrimitive(type)) {
+			if(type == "integer") {
+				string reg = currFunction->getIntReg();
+				emit("STORI " + $3.place + " I2 " + $1.offset);
+			} else {
+				string reg = currFunction->getRealReg();
+				emit("STORR " + $3.place + " I2 " + $1.offset);
+			}
+		  } else {
+			copyStruct($3.place, $1.offset, $1.variableName);
+		  }
+		 /* 
+		  
+		  
+		  
 		  // get LVAL's variable
 		if($1.path.size() > 0) { // LVAL is STREF
 		    if(!(lvalVar = currBlock->getScopeDefstructStref($1.path)))
@@ -353,20 +372,30 @@ ASSN:
 
 		    //copyStruct(lvalVar, $3.place);
 		  }
-
+			*/
 		  cout << "<\\ASSN>" << endl;
 		}
 ;
 LVAL: 
 		ID {
 		  cout << "<LVAL 1>" << endl;
+		  Variable* lvalVar = currBlock->getScopeVariable($1.tokenValue);
+		  if(!lvalVar)
+			semanticError($1.tokenValue + " is not declared in this scope");
+		  $$.type = lvalVar->getType();
+		  $$.offset = to_string(lvalVar->getOffset());
 		  $$.variableName = $1.tokenValue;
 		  cout << "<\\LVAL 1>" << endl;
 		}
 	|
 		STREF {
 		  cout << "<LVAL 2>" << endl;
-		  $$.path = $1.path;
+		  Variable* field = currBlock->getScopeDefstructStref($1.path);
+		  if(!field)
+			semanticError((string)"Invalid Defstruct dereference");
+		  $$.type = field->getType();
+		  $$.offset = to_string(field->getOffset());
+		  $$.variableName = field->getName();
 		  cout << "<\\LVAL 2>" << endl;
 		}
 ;
@@ -420,6 +449,9 @@ BEXP:
 	|
 		EXP REL_OP EXP {
 		  cout << "<BEXP 3>" << endl;
+		  if(!(isPrimitive($1.type) && isPrimitive($3.type))) {
+			semanticError("Cannot compare defstruct");
+		  }
 		  string tempReg = currFunction->getIntReg();
 		  string SLET = "";
 		  string SGRT = "";
@@ -427,12 +459,12 @@ BEXP:
 		  string SNEQ = "";
 		  string opCommand = "";
 		  
-		  if(isIntegerVariable($1.place) && isIntegerVariable($3.place)) {
+		  if($1.type == "integer" && $3.type == "integer") {
 		    SLET = "SLETI";
 		    SGRT = "SGRTI";
 		    SEQU = "SEQUI";
 		    SNEQ = "SNEQI";
-		  } else if(isRealVariable($1.place) && isRealVariable($3.place)) {
+		  } else if($1.type == "real" && $3.type == "real") {
 		    SLET = "SLETR";
 		    SGRT = "SGRTR";
 		    SEQU = "SEQUR";
@@ -511,12 +543,14 @@ EXP:
 		  if(isUsedIntReg($1.place) && isUsedIntReg($3.place)) {
 		    $$.place = currFunction->getIntReg();
 		    emit("ADD2I " + $$.place + " " + $1.place + " " + $3.place);
+			$$.type = "integer";
 		  } else if(isUsedRealReg($1.place) && isUsedRealReg($3.place)) {
 		    $$.place = currFunction->getRealReg();
 		    emit("ADD2R " + $$.place + " " + $1.place + " " + $2.place);
 		  } else {
 		    semanticError("type missmatch within add operation");
 		  }
+		  $$.type = $1.type;
 		  cout << "<\\EXP 1>" << endl;
 		}
 	|
@@ -536,6 +570,7 @@ EXP:
 		    semanticError("type missmatch within mul operation");
 		  }
 		  cout << "<\\EXP 2>" << endl;
+		  $$.type = $1.type;
 		}
 	|
 		'(' EXP ')' {
@@ -547,7 +582,7 @@ EXP:
 	|
 		'(' TYPE ')' EXP {
 		  cout << "<EXP 4>" << endl;
-		  if($4.type == "defstruct"){
+		  if(!isPrimitive($4.type)){
 			semanticError("Cannot cast defstruct");
 		  }
 		  if($2.tokenValue == "Integer") {
@@ -574,48 +609,18 @@ EXP:
 		  cout << "<EXP 5>" << endl;
 		  // make sure ID is a variable in current scope
 		  Variable* var = currBlock->getScopeVariable($1.tokenValue);
-		  if(var == NULL) {
-		    cout << "currFunction: " << currFunction->name << endl;
-		    semanticError($1.tokenValue + " was not declared in this scope");
-		  }
-	
-		  if(isPrimitive(var)) {
-		    // EXP's register will hold the variable's value!
-		    string LOAD = "";
-		    if(var->getType() == "integer") {
-		      LOAD = "LOADI";
-		      $$.place = currFunction->getIntReg();
-		    }
-		    else if(var->getType() == "real") {
-		      LOAD = "LOADR";
-		      $$.place = currFunction->getRealReg();
-		    }
-		    else {
-		      assert(0);
-		    }
-		    emit(LOAD + " " + $$.place + " I2 " + to_string(-var->getOffset()));
-		    $$.type = var->getType();
-		  }
-		  else { // var is struct
-		    // EXP's register will hold the defstruct's offset from FP!
-		    emit("ADD2I " + $$.place + " 0 " + to_string(var->getOffset()));
-		    $$.type = var->getType();
-		  }
+		  if(!var)
+			semanticError($1.tokenValue + " is not declared in this scope");
+		  copyVariableToRegister(var, &$$);
 		  cout << "<\\EXP 5>" << endl;
 		}
 	|
 		STREF {
 		  cout << "<EXP 6>" << endl;
-		  $$.path = $1.path;
-		  $$.type = $1.type;
-			if($1.type == "integer"){
-				string tmpreg = currFunction->getIntReg();
-				emit("LOADI " + tmpreg + " I2 -" + $1.place);
-			}
-			if($1.type == "real") {
-				string tmpreg = currFunction->getRealReg();
-				emit("LOADR " + tmpreg + " I2 -" + $1.place);
-			}
+		  Variable* field = currBlock->getScopeDefstructStref($1.path);
+		  if(!field)
+			semanticError((string)"Invalid Defstruct dereference");
+		  copyVariableToRegister(field, &$$);
 		  cout << "<\\EXP 6>" << endl;
 		}
 	|
@@ -648,22 +653,16 @@ STREF:
 		    semanticError($1.tokenValue + (string)" is undeclared in this scope");
 		  }
 		  if(isPrimitive(var->getType())) {
-		    semanticError($1.tokenValue + " of type " + var->getType() + " is not subscriptable");		    	                   }
+		    semanticError($1.tokenValue + " of type " + var->getType() + " is not subscriptable");	
+		  }
 		  $$.path.push_back($1.tokenValue);
 		  $$.path.push_back($3.tokenValue);
-		  Variable* place = currBlock->getScopeDefstructStref($$.path);
-		  if(!place)
-			semanticError((string)"Invalid Defstruct dereference");
-		  $$.place = place->getOffset();
-		  $$.type = place->getType;
 		}
 |
 		STREF '[' ID ']' {
 		  $$.path = $1.path;
 		  $$.path.push_back($3.tokenValue);
-		  Variable* place = currBlock->getScopeDefstructStref($$.path);
-		  $$.place = place->getOffset();
-		  $$.type = place->getType;
+		  
 		  //************************************************************************************************************
 		}
 ;	
