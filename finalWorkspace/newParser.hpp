@@ -134,6 +134,21 @@ struct Defstruct : public Variable {
     }
   }
 
+  // shifts all offset for variables of this instance
+  void setStructOffset(int offset) {
+	this->setOffset(offset);
+	for(std::map<string, Variable*>::iterator i = this->fields.begin() ; i != this->fields.end() ; ++i) {
+		if(isPrimitive(i->second->getType())) {
+			i->second->setOffset(offset++);
+		} else {
+			Defstruct* st = dynamic_cast<Defstruct*>(i->second);
+			st->setStructOffset(offset);
+			offset += st->getSizeInMemory();
+		}
+    }	
+	printStructure();
+  }
+  
   // gets only valid field names, if not valid field name passed, falls with assertion failure
   Variable* getField(string name) {
     std::map<string, Variable*>::iterator i;
@@ -244,15 +259,13 @@ public:
     if((i = symbolTable.find(name)) != symbolTable.end())
       symbolTable.erase(i);
     symbolTable.insert(std::pair<string, Variable*>(name, v));
-    // TODO wrong calculation
-	Block* p = this;
-	int var_offset = 0;
-	while(p){
-		var_offset += p->offset;
-		p = p->parent;
+	if(isPrimitive(v->getType())) {
+		v->setOffset(this->offset);
+	} else {
+		Defstruct* st = dynamic_cast<Defstruct*>(v);
+		st->setStructOffset(this->offset);
 	}
-    v->setOffset(var_offset);
-	++(this->offset);
+	this->offset += v->getSizeInMemory();
   }
   
   void insertSymbolTable(map<string, Variable*>& vars) {

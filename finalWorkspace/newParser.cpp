@@ -194,23 +194,21 @@ void copyStruct(string source_reg, Variable* destVar) {
   cout << "************************ copyStruct() ****************************\ndest_name = " << destVar->getName() << endl; 
 	Defstruct* st = dynamic_cast<Defstruct*>(destVar);
 	assert(st);
-	int offset = 0;
-	emit((string)"PRNTI " + source_reg);
 	for(map<string, Variable*>::iterator i = st->fields.begin() ; i != st->fields.end() ; ++i) {
-	  // source offset = source_reg + dest_offset - destVar.offset
 	  Variable *field = i->second;
 	  int fieldSize = field->getSizeInMemory();
 	  if(isPrimitive(field->getType())) {
 	    string intTempReg = currFunction->getIntReg();
 	    string realTempReg = currFunction->getRealReg();
+		emit("PRNTI " + source_reg);
 	    if(field->getType() == "integer") {
 	      emit("LOADI " + intTempReg + " I2 " + source_reg);
-	      emit("STORI " + intTempReg + " I2 -" + to_string(destVar->getOffset()));
+	      emit("STORI " + intTempReg + " I2 -" + to_string(field->getOffset()));
 	    } else {
 	      emit("LOADR " + realTempReg + " I2 " + source_reg);
-	      emit("STORR " + realTempReg + " I2 -" + to_string(destVar->getOffset()));
+	      emit("STORR " + realTempReg + " I2 -" + to_string(field->getOffset()));
 	    }
-	    emit((string)"ADD2I " + source_reg + " " + source_reg + " " + to_string(fieldSize));
+	    emit((string)"SUBTI " + source_reg + " " + source_reg + " " + to_string(fieldSize));
 	    continue;
 	  }
 	  // field is Defstruct
