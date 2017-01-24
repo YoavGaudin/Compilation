@@ -357,20 +357,18 @@ struct Function : public Block {
 	}
   
   string validateCallArguments(vector<string> callArgsList) {
-	string err = "";
 	int size1 = callArgsList.size();
-	int size2 = arguments.size();
+	int size2 = this->arguments.size();
 	if(size1 != size2) {
-	  err = "wrong number of arguments: got " + to_string(size1) + " but requierd " + to_string(size2);
+	  return "wrong number of arguments: got " + to_string(size1) + " but requierd " + to_string(size2);
     }
 	for(int i = 0 ; i < size1 ; ++i) {
 	  if((arguments[i] == "integer" && callArgsList[i].front() == 'R')
           || (arguments[i] == "real" && callArgsList[i].front() == 'I')){
-		err = "wrong type of argument at " + to_string(i) + ", should be " + arguments[i]; 
-		break;
+		return "wrong type of argument at " + to_string(i) + ", should be " + arguments[i]; 
 	  }
 	}
-	return err;
+	return "";
   }
   
   void putArgumentsOnStack(vector<string> args) {

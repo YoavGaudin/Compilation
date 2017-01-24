@@ -1,0 +1,8 @@
+integer foo1()
+{
+  return (5);
+}
+real foo2(arg:integer)
+{
+  return(2.0);
+}

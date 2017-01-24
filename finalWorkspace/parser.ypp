@@ -635,10 +635,11 @@ CALL:
 		  emit("COPYI I2 I1"); // FP = SP
 		  
 		  func->putArgumentsOnStack($4.callArgsList);
+		  emit("SUBTI I1 I1 1");
+		  
 		  if(!func->isImplemented) {
 		    func->functionCalls.push_back(nextquad());
   		  }
-		  emit("SUBTI I1 I1 1");
 		  emit("JLINK " + to_string(func->address));
 		  // after return (SP points to return value)
 		  string LOAD = "";
@@ -669,7 +670,7 @@ CALL_ARGS_FULL:
 CALL_ARGS:
 		EXP {
 		  // TODO: make sure CALL_ARGS.place is register with expression value
-		  if($1.type == "deftruct") {
+		  if(!isPrimitive($1.type)) {
 		    semanticError("Can't pass 'defstruct' as function parameter");
 		  }
 		  cout << "argument type " << $1.type << endl;
@@ -677,9 +678,10 @@ CALL_ARGS:
 		}
 	|
 		CALL_ARGS ',' EXP {
-		  if($3.type == "deftruct") {
+		  if(!isPrimitive($3.type)) {
 		    semanticError("Can't pass 'defstruct' as function parameter");
 		  }
+		  cout << "argument type " << $1.type << endl;
 		  $1.callArgsList.push_back($3.place);
 		  $$.callArgsList = $1.callArgsList;
 		}

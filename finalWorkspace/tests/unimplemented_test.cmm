@@ -1,0 +1,7 @@
+extern integer foo1();
+extern real foo2(arg:integer);
+main
+{
+  write(call foo1());
+  write(call foo2(5));
+}
