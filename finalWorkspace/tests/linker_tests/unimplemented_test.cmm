@@ -2,6 +2,15 @@ extern integer foo1();
 extern real foo2(arg:integer);
 main
 {
-  write(call foo1());
-  write(call foo2(5));
+  
+  var i:integer;
+  {
+    i = 0;
+    while i < 10 do
+	{
+      write(call foo2(i));
+	  write("\n");
+	  i = i +1;
+	}
+  }
 }

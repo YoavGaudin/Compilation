@@ -239,27 +239,30 @@ void saveUsedRegisters() {
 	emit("STORR " + *i + " I1 " + to_string(-j));
 	currFunction->savedRealRegs.insert(*i);
   }
-  emit("ADD2I I1 I1 " + to_string(-j));
+  emit("SUBTI I1 I1 " + to_string(j));
 }
 
 void restoreUsedRegisters() {
   	int j = 0;
-	for(std::set<string>::iterator i = currFunction->usedIntRegs.begin() ; i != currFunction->usedIntRegs.end() ; ++i) {
+	for(std::set<string>::reverse_iterator i = currFunction->usedRealRegs.rbegin() ; i != currFunction->usedRealRegs.rend() ; ++i) {
+		std::set<string>::iterator reg = currFunction->savedRealRegs.find(*i);
+		if(reg != currFunction->savedRealRegs.end()){
+			emit("LOADI " + *i + " I1 " + to_string(j));
+			currFunction->savedRealRegs.erase(reg);
+			++j;
+		}
+	}
+	j = 0;
+	for(std::set<string>::reverse_iterator i = currFunction->usedIntRegs.rbegin() ; i != currFunction->usedIntRegs.rend() ; ++i) {
 		std::set<string>::iterator reg = currFunction->savedIntRegs.find(*i);
 		if(*i != "I0" && *i != "I1" && *i != "I2" && reg != currFunction->savedIntRegs.end()){
 			emit("LOADI " + *i + " I1 " + to_string(j));
 			++j;
 			currFunction->savedIntRegs.erase(reg);
 		}
-  }
-  for(std::set<string>::iterator i = currFunction->usedRealRegs.begin() ; i != currFunction->usedRealRegs.end() ; ++i, ++j) {
-	std::set<string>::iterator reg = currFunction->savedRealRegs.find(*i);
-	if(reg != currFunction->savedRealRegs.end()){
-		emit("LOADI " + *i + " I1 " + to_string(j));
-		currFunction->savedRealRegs.erase(reg);
 	}
-  }
-  emit("ADD2I I1 I1 " + to_string(j));
+
+  emit("ADD2I I1 I1 " + to_string(j-1));
 }
 
 void buildLinkerHeader() {
@@ -348,10 +351,7 @@ void setSymbolTableOffsets(map<string, Variable*> symbolTable) {
 void printFunctionsSymbolTable() {
   cout << "\tFunctions table:" << funcSymbols.size() << endl;
   for(std::map<string, Function>::iterator f = funcSymbols.begin() ; f != funcSymbols.end() ; ++f) {
-    cout << "\targumants and variables of "<< f->first << " at " << to_string((f->second).address) <<": " << endl;
-    for(std::map<string, Variable*>::iterator j = (f->second).symbolTable.begin(); j != (f->second).symbolTable.end(); ++j) {
-      cout << "\t\t" << j->first << " : " << j->second->getType() << "(" << j->second->getOffset() << ")" << endl;
-    }
+	f->second.printSymbolTable();
   }
 }
 

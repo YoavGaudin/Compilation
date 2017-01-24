@@ -125,21 +125,20 @@ MAIN_FUNCTION:
 BLK: 
         M_blk DECLARATIONS {
 		  $$.declarationList = $2.declarationList;
-		  //printDeclarationList($2.declarationList);
+		  printDeclarationList($2.declarationList);
 		  currBlock = new Block(currBlock);
-		  //cout << "inserting to Block's symbol table!!!!!!!!!!!!!!!!!!" << endl;
 		  // add declerations to current block
 		  currBlock->printSymbolTable();
 		  cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
-		  currBlock->insertSymbolTable($2.declarationList);
+		  currBlock->insertSymbolTable($$.declarationList);
 		  currBlock->printSymbolTable();
 		  //setSymbolTableOffsets(currBlock->symbolTable);
 		  //currBlock->printSymbolTable();
 		  //printFunctionsSymbolTable();
 		  emit("SUBTI I1 I1 " + to_string(currBlock->offset));
-		} '{' LIST '}' {
-		  $$.nextList = $5.nextList;
-		  $5.declarationList = $2.declarationList;
+		} '{' LIST M '}' {
+		  backpatch($5.nextList, $6.quad);
+		  //$5.declarationList = $2.declarationList;
 		  cout << "<\\BLK>" << endl;
 		}
 ;	
@@ -152,6 +151,7 @@ DECLARATIONS:
 	|
 		/*epsilon*/ {
 		  cout << "DECLARATIONS to epsilon" << endl;
+		  $$.declarationList.clear();
 		}
 ;		
 DECLARLIST:
@@ -252,7 +252,6 @@ STMT:
 ;	
 STMT_RETURN: 
 		Return '(' EXP ')' ';' {
-		/* 1	2	3	4	5 */
 		  if($3.type != currFunction->returnType) {
 		    semanticError("Ileagal type of return expression");
 		  }
@@ -369,9 +368,9 @@ CNTRL:
 		M_while While M BEXP Do M STMT {
 		  //cout << "<CNTRL 3>" << endl;
 		  backpatch($4.trueList, $6.quad);
-		  backpatch($6.nextList, $3.quad);
-		  $$.nextList.insert($$.nextList.end(), $3.falseList.begin(), $3.falseList.end());
-		  emit((string)"UJUMP " + to_string($2.quad));
+		  backpatch($7.nextList, $3.quad);
+		  $$.nextList.insert($$.nextList.end(), $4.falseList.begin(), $4.falseList.end());
+		  emit((string)"UJUMP " + to_string($3.quad));
 		  cout << "<\\CNTRL 3>" << endl;
 		}
 ;	
@@ -442,7 +441,7 @@ BEXP:
 		  emit("BNEQZ " + tempReg + " ___");
 		  if(equalsFlag) {
 		    // if tempReg == 0 we should continue down the flow (no jump needed)
-		    emit(SEQU + " " + tempReg + " " + $1.place + " " + $2.place);
+		    emit(SEQU + " " + tempReg + " " + $1.place + " " + $3.place);
 		    $$.trueList.push_back(nextquad());
 		    emit("BNEQZ " + tempReg + " ___");
 		  }
