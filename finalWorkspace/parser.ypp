@@ -578,6 +578,8 @@ EXP:
 		  if(!field)
 			semanticError((string)"Invalid Defstruct dereference");
 		  copyVariableToRegister(field, &$$);
+		  cout << field->getType() << endl;
+		  $$.type = field->getType();
 		  cout << "<\\EXP 6>" << endl;
 		}
 	|

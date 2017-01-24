@@ -370,7 +370,7 @@ void copyVariableToRegister(Variable* var, Stype* s) {
 		emit(LOAD + " " + s->place + " I2 " + to_string(-var->getOffset()));
 	} else {
 		s->place = currFunction->getIntReg();
-		emit("LOADI " + s->place + " I2 " + to_string(var->getOffset()));
+		emit("COPYI " + s->place + " " + to_string(var->getOffset()));
 	}
 	s->type = var->getType();
 }
