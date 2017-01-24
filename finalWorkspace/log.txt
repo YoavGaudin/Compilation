@@ -1,0 +1,87 @@
+START Compilation of ./rx-cc
+<PROGRAM>
+	UJUMP 0
+TDEFS to epsilon
+FDEFS to epsilon
+<BLK>
+DECLARATIONS to epsilon
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	SUBTI I1 I1 0
+<M>quad=3
+<EXP 7>
+	COPYI I3 5
+<\EXP 7>
+	ADD2I I1 I2 1
+	STORI I3 I1 0
+	RETRN
+<\LIST>
+<\BLK>
+<FDEFS 1>
+	foo1
+	RETRN
+<\FDEFS 1>
+<DCL 1>
+<\DCL 1>
+new Variable: arg at: 0x1e17840
+######	arg : 0
+	arg type: integer. offset: 0. 0x1e17840
+<BLK>
+DECLARATIONS to epsilon
+	arg type: integer. offset: 0. 0x1e17840
+	arg type: integer. offset: 0. 0x1e17840
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+	arg type: integer. offset: 0. 0x1e17840
+	arg type: integer. offset: 0. 0x1e17840
+	SUBTI I1 I1 0
+<M>quad=9
+<EXP 7>
+	COPYR R0 2.0
+<\EXP 7>
+<EXP 7>
+	COPYR R1 2.0
+<\EXP 7>
+<EXP 1>
+	ADD2R R2 R0 R1
+<\EXP 1>
+	ADD2I I1 I2 1
+	STORR R2 I1 0
+	RETRN
+<\LIST>
+<\BLK>
+<FDEFS 1>
+	foo2
+	RETRN
+<\FDEFS 1>
+MAIN_FUNCTION to epsilon
+	HALT
+<\PROGRAM>
+---------------- OK!!! ----------------
+Add linker's header to codeBuffer...
+Writing codeBuffer to file...
+###output file tests/linker_tests/unimplemented_test2.rsk	CodeBuffer (size = 21) : 
+		-4: <header>
+		-3: <empty>
+		-2: <unimplemented> 
+		-1: <implemented>  foo1,2 foo2,8
+		0: </header>
+		1: UJUMP 0
+		2: SUBTI I1 I1 0
+		3: COPYI I3 5
+		4: ADD2I I1 I2 1
+		5: STORI I3 I1 0
+		6: RETRN
+		7: RETRN
+		8: SUBTI I1 I1 0
+		9: COPYR R0 2.0
+		10: COPYR R1 2.0
+		11: ADD2R R2 R0 R1
+		12: ADD2I I1 I2 1
+		13: STORR R2 I1 0
+		14: RETRN
+		15: RETRN
+		16: HALT
+	Functions table:2
+	argumants and variables of foo1 at 2: 
+	argumants and variables of foo2 at 8: 
+		arg : integer(0)
+	Deftructs: 

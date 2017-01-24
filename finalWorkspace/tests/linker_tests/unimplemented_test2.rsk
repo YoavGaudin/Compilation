@@ -1,7 +1,7 @@
 <header>
 <empty>
 <unimplemented> 
-<implemented>  foo1,2 foo2,7
+<implemented>  foo1,2 foo2,8
 </header>
 UJUMP 0
 SUBTI I1 I1 0
@@ -9,9 +9,13 @@ COPYI I3 5
 ADD2I I1 I2 1
 STORI I3 I1 0
 RETRN
+RETRN
 SUBTI I1 I1 0
 COPYR R0 2.0
+COPYR R1 2.0
+ADD2R R2 R0 R1
 ADD2I I1 I2 1
-STORR R0 I1 0
+STORR R2 I1 0
+RETRN
 RETRN
 HALT
