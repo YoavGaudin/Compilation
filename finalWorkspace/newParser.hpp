@@ -395,6 +395,9 @@ struct Stype {
 
   // for tokens
   string tokenValue;
+
+  // for DECLARELIST
+  list<string> typesList;
   
   // for DECLARLIST and DECLARATIONS - contains the declared Variables 
   map<string, Variable*> declarationList;

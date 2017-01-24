@@ -1,0 +1,27 @@
+defstruct {
+	  a:integer;
+} MyStruct1;
+
+
+defstruct {
+	  s1:MyStruct1;
+} MyStruct1;
+
+
+main
+var 
+    structVar1 : MyStruct1;
+    structVar2 : MyStruct2;
+{
+	
+	structVar1[a] = 37;
+
+		      write("\n\n");
+
+	structVar1[s2] = structVar2;
+
+	write("\nstructVar2[s1][a] = ");
+	write(structVar2[s1][a]);
+	
+		write("\n\n");
+}
