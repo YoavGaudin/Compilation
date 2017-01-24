@@ -45,7 +45,7 @@ PROGRAM:
 ;
 TDEFS: 
 		TDEFS Defstruct '{' DECLARLIST '}' ID ';' {
-		  cout << "<*************************TDEFS>" << endl;
+		  cout << "<TDEFS>" << endl;
 		  for(std::list<string>::iterator i = $4.typesList.begin(); i != $4.typesList.end(); ++i) {
 		    cout << *i << endl;
 		  }
@@ -131,17 +131,11 @@ MAIN_FUNCTION:
 BLK: 
         M_blk DECLARATIONS {
 		  $$.declarationList = $2.declarationList;
-		  //printDeclarationList($2.declarationList);
 		  currBlock = new Block(currBlock);
-		  //cout << "inserting to Block's symbol table!!!!!!!!!!!!!!!!!!" << endl;
 		  // add declerations to current block
 		  currBlock->printSymbolTable();
-		  cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
 		  currBlock->insertSymbolTable($2.declarationList);
 		  currBlock->printSymbolTable();
-		  //setSymbolTableOffsets(currBlock->symbolTable);
-		  //currBlock->printSymbolTable();
-		  //printFunctionsSymbolTable();
 		  emit("SUBTI I1 I1 " + to_string(currBlock->offset));
 		} '{' LIST '}' {
 		  $$.nextList = $5.nextList;
@@ -326,8 +320,9 @@ ASSN:
 				string reg = currFunction->getRealReg();
 				emit("STORR " + $3.place + " I2 -" + $1.offset);
 			}
-		  } else {
-		    copyStruct($3.place, $1.offset, $1.variableInstance);
+		  } else { // Defstructs assignment
+		    emit((string)"MULTI " + $3.place + " " + $3.place + " -1");
+		    copyStruct($3.place, $1.variableInstance);
 		  }
 		  cout << "<\\ASSN>" << endl;
 		}
@@ -494,7 +489,7 @@ EXP:
 		EXP ADD_OP EXP {
 		  cout << "<EXP 1>" << endl;
 		  if(!isPrimitive($1.type) || !isPrimitive($3.type)) {
-		    semanticError("can not perform add operation on defstruct");
+		    semanticError((string)"can not perform add/sub operation on " + $1.type + " and " + $3.type);
 		  }
 
 		  // EXP->place is always in register!
@@ -515,7 +510,7 @@ EXP:
 		EXP MUL_OP EXP {
 		  cout << "<EXP 2>" << endl;
 		  if(!isPrimitive($1.type) || !isPrimitive($3.type)) {
-		    semanticError("can not perform add operation on defstruct");
+		    semanticError("can not perform mul/div operation on defstruct");
 		  }
 
 		  if(isUsedIntReg($1.place) && isUsedIntReg($3.place)) {

@@ -190,11 +190,12 @@ bool isPrimitive(Type& type) {
    source_reg - a register that holds the offset of the source data
    
 */
-void copyStruct(string source_reg, string dest_offset, Variable* destVar) {
+void copyStruct(string source_reg, Variable* destVar) {
   cout << "************************ copyStruct() ****************************\ndest_name = " << destVar->getName() << endl; 
 	Defstruct* st = dynamic_cast<Defstruct*>(destVar);
 	assert(st);
 	int offset = 0;
+	emit((string)"PRNTI " + source_reg);
 	for(map<string, Variable*>::iterator i = st->fields.begin() ; i != st->fields.end() ; ++i) {
 	  // source offset = source_reg + dest_offset - destVar.offset
 	  Variable *field = i->second;
@@ -203,18 +204,18 @@ void copyStruct(string source_reg, string dest_offset, Variable* destVar) {
 	    string intTempReg = currFunction->getIntReg();
 	    string realTempReg = currFunction->getRealReg();
 	    if(field->getType() == "integer") {
-	      emit("LOADI " + intTempReg + " I2 -" + source_reg);
-	      emit("STORI " + intTempReg + " I2 -" + dest_offset);
+	      emit("LOADI " + intTempReg + " I2 " + source_reg);
+	      emit("STORI " + intTempReg + " I2 -" + to_string(destVar->getOffset()));
 	    } else {
-	      emit("LOADR " + realTempReg + " I2 -" + source_reg);
-	      emit("STORR " + realTempReg + " I2 -" + dest_offset);
+	      emit("LOADR " + realTempReg + " I2 " + source_reg);
+	      emit("STORR " + realTempReg + " I2 -" + to_string(destVar->getOffset()));
 	    }
 	    emit((string)"ADD2I " + source_reg + " " + source_reg + " " + to_string(fieldSize));
 	    continue;
 	  }
 	  // field is Defstruct
-	  copyStruct(source_reg, to_string(st->getOffset()), field);
-	  emit((string)"ADD2I " + source_reg + " " + source_reg + " " + to_string(fieldSize));
+	  copyStruct(source_reg, field);
+	  emit((string)"SUBTI " + source_reg + " " + source_reg + " " + to_string(fieldSize));
 	}
 }
 

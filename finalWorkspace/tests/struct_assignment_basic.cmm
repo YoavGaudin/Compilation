@@ -5,7 +5,7 @@ defstruct {
 
 defstruct {
 	  s1:MyStruct1;
-} MyStruct1;
+} MyStruct2;
 
 
 main
@@ -16,9 +16,12 @@ var
 	
 	structVar1[a] = 37;
 
-		      write("\n\n");
+	write("\nstructVar1[a] = ");
+	write(structVar1[a]);
+	
+		write("\n\n");
 
-	structVar1[s2] = structVar2;
+	structVar2[s1] = structVar1;
 
 	write("\nstructVar2[s1][a] = ");
 	write(structVar2[s1][a]);
