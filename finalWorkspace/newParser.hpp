@@ -87,7 +87,14 @@ public:
   Variable(const string name_, string type_, int offset_) : name(name_), type(type_), offset(offset_), sizeInMemory(1) {
 	  cout << "new Variable: " << name << " at: " << this << endl;
   }
-
+  
+  Variable(Variable* v) {
+	 name = v->getName();
+	type = v->getType();
+	offset = v->getOffset();
+	sizeInMemory = v->getSizeInMemory();
+  }
+  
   virtual ~Variable() {}
 
   int getOffset()                 { return this->offset; }
@@ -218,8 +225,12 @@ public:
 
   Block(Block* parent_): parent(parent_) { 
     // std::* containers should be automatically dynamically allocated on decleration
-	if(parent_)
-		symbolTable = parent_->symbolTable;
+	if(parent_) {
+		for(map<string, Variable*>::iterator i = parent_->symbolTable.begin() ; i != parent_->symbolTable.end() ; ++i) {
+			symbolTable[i->first] = new Variable(i->second);
+			//.insert(std::pair<string, Variable*>(i->first, i->second));
+		}
+	}
   }
 
   // find variable in block's symbol table

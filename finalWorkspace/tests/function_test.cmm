@@ -5,7 +5,6 @@ integer foo2()
 
 integer foo(c: integer)
 var e:integer;
-	g:real;
 {
   write(c);
   e = call foo2 ();

@@ -1,6 +1,5 @@
 %{
 #include <stdio.h>
-#include "parser.h"
 #include "newParser.hpp"
 #include "parser.tab.hpp"
 void printErr();
