@@ -25,6 +25,11 @@ var
 	write(st1[a]);
 	write("\n");
 	st3[s2][c] = 200;
+	write("st3[s2][c] = ");
+	write(st3[s2][c]);
+	write("\n");
 	st3[s2][c] = st1[a];
-	
+	write("st3[s2][c] = ");
+	write(st3[s2][c]);
+	write("\n");
 }

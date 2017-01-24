@@ -263,6 +263,7 @@ void restoreUsedRegisters() {
 }
 
 void buildLinkerHeader() {
+	cout << "Add linker's header to codeBuffer..." << endl;
   	vector<string> lines;
 	lines.push_back("<header>");
 	if(funcSymbols.find("main") != funcSymbols.end()) {
@@ -376,6 +377,7 @@ void copyVariableToRegister(Variable* var, Stype* s) {
 /**************************************************************************/
 
 void printState(string file_name) {
+	cout << "Writing codeBuffer to file..." << endl;
   std::regex e(".cmm$");
   string out_file_name = std::regex_replace(file_name, e, ".rsk");
   cout << "###output file " << out_file_name;

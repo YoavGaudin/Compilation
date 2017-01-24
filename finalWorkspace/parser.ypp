@@ -303,10 +303,10 @@ ASSN:
 		  if(isPrimitive(type)) {
 			if(type == "integer") {
 				string reg = currFunction->getIntReg();
-				emit("STORI " + $3.place + " I2 " + $1.offset);
+				emit("STORI " + $3.place + " I2 -" + $1.offset);
 			} else {
 				string reg = currFunction->getRealReg();
-				emit("STORR " + $3.place + " I2 " + $1.offset);
+				emit("STORR " + $3.place + " I2 -" + $1.offset);
 			}
 		  } else {
 			copyStruct($3.place, $1.offset, $1.variableName);
