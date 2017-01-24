@@ -200,7 +200,6 @@ void copyStruct(string source_reg, Variable* destVar) {
 	  if(isPrimitive(field->getType())) {
 	    string intTempReg = currFunction->getIntReg();
 	    string realTempReg = currFunction->getRealReg();
-		emit("PRNTI " + source_reg);
 	    if(field->getType() == "integer") {
 	      emit("LOADI " + intTempReg + " I2 " + source_reg);
 	      emit("STORI " + intTempReg + " I2 -" + to_string(field->getOffset()));
