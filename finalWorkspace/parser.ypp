@@ -131,19 +131,12 @@ MAIN_FUNCTION:
 BLK: 
         M_blk DECLARATIONS {
 		  $$.declarationList = $2.declarationList;
-<<<<<<< HEAD
-		  currBlock = new Block(currBlock);
-		  // add declerations to current block
-		  currBlock->printSymbolTable();
-		  currBlock->insertSymbolTable($2.declarationList);
-=======
 		  printDeclarationList($2.declarationList);
 		  currBlock = new Block(currBlock);
 		  // add declerations to current block
 		  currBlock->printSymbolTable();
-		  cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+		  //cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
 		  currBlock->insertSymbolTable($$.declarationList);
->>>>>>> 68f75fe3dd07b5ab2a8b524a98a25cf4495ccd4a
 		  currBlock->printSymbolTable();
 		  emit("SUBTI I1 I1 " + to_string(currBlock->offset));
 		} '{' LIST M '}' {
