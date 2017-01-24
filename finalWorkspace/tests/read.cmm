@@ -1,0 +1,10 @@
+main
+var re:real;
+    int:integer;
+{
+  read (re);
+  write (re);
+
+  read (int);
+  write (int);
+}

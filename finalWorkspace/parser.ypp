@@ -284,6 +284,18 @@ WRITE:
 ;	
 READ: 
 		Read '(' LVAL ')' ';' {
+			if(!isPrimitive($3.type)) {
+				semanticError("Cannot read input into a non-primitive destination");
+			}
+			if($3.type == "integer") {
+				string reg = currFunction->getIntReg();
+				emit("READI " + reg);
+				emit("STORI " + reg + " I2 -" + $3.offset);
+			} else {
+				string reg = currFunction->getRealReg();
+				emit("READR " + reg);
+				emit("STORR " + reg + " I2 -" + $3.offset);
+			}
 		}
 ;	
 ASSN: 
@@ -311,68 +323,6 @@ ASSN:
 		  } else {
 			copyStruct($3.place, $1.offset, $1.variableName);
 		  }
-		 /* 
-		  
-		  
-		  
-		  // get LVAL's variable
-		if($1.path.size() > 0) { // LVAL is STREF
-		    if(!(lvalVar = currBlock->getScopeDefstructStref($1.path)))
-		      semanticError((string)"Invalid Defstruct dereference on L-value");
-		} else  { // LVAL is ID (regular variable or struct)
-			if(!(lvalVar = currBlock->getScopeVariable($1.variableName))) {
-				cout << "currFunction: " << currFunction->name << endl;
-				semanticError($1.variableName + " is not declared in this scope (L-value)");
-			}
-		}
-
-		  // get EXP's variable
-		  if($3.path.size() > 0) { // EXP is STREF
-		    if(!(expVar = currBlock->getScopeDefstructStref($3.path)))
-		      semanticError((string)"Invalid Defstruct dereference on R-value");
-		  } else  { // EXP is ID (regular variable or struct) or NUM or any other expression!!!
-		    expVar = currBlock->getScopeVariable($3.variableName);
-		    // if EXP is number (variableName = "") it is not semantic error
-		    if($3.variableName != "" && !expVar) {
-		      cout << "currFunction: " << currFunction->name << endl;
-		      semanticError($1.variableName + " is not declared in this scope (R-value)");
-		    }
-		  }
-
-		  if(expVar) {
-		    $3.type = expVar->getType();
-		    if($3.type == "integer")
-		      $3.place = currFunction->getIntReg();
-		    else
-		      $3.place = currFunction->getRealReg();
-		  }
-		  if(lvalVar->getType() != $3.type) {
-		    semanticError("type mismatch on assignment operation: trying to assign " +
-				  $3.type + " to " + lvalVar->getType());
-		  }
-		  
-		  if(isPrimitive($3.type)) {
-		    // EXP->place is the name of the register holding the actual value
-		    string STOR = "";
-		    if(isUsedIntReg($3.place)) {
-		      STOR = "STORI";
-		    } else if(isUsedRealReg($3.place)) {
-		      STOR = "STORR";
-		    } else {
-		      assert(0);
-		    }
-		    // this STORE assumes that on declaration there was allocated memory on stack (SP was moved)
-		    emit(STOR + " " + $3.place + " I2 " + to_string(-lvalVar->getOffset()));
-		  } else { // EXP is defstruct
-		    // EXP->place is offset from FP
-		    //Defstruct* ds = dynamic_cast<Defstruct*>(lvalVar);
-		    //assert(ds);
-		    //copyStruct(ds, $3.place);
-
-
-		    //copyStruct(lvalVar, $3.place);
-		  }
-			*/
 		  cout << "<\\ASSN>" << endl;
 		}
 ;
